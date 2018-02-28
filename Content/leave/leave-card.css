@@ -1,0 +1,38 @@
+﻿table {
+    color: teal;
+}
+
+thead {
+    background-color: #a0c7ef;
+}
+
+tbody > tr:hover {
+    background-color: #E3F2FD;
+    color: #0000cd;
+}
+
+div.panel {
+    -webkit-box-shadow: 4px 4px 5px 0px #90CAF9;
+    -ms-box-shadow: 4px 4px 5px 0px #90CAF9;
+    box-shadow: 4px 4px 5px 0px #90CAF9;
+}
+
+@media all and (max-width: 768px) {
+    
+    tbody > tr:hover {
+        background-color: #E3F2FD;
+        color: #0000cd;
+    }
+
+    #leave-card-table {
+        overflow: auto;
+        overflow-y: hidden;
+    }
+
+    div.panel {
+        -webkit-font-size-adjust: .30;
+        -ms-font-size-adjust: .30;
+        -o-font-size-adjust: .30;
+        font-size-adjust: .30;
+    }
+}

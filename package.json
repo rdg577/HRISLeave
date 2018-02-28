@@ -1,0 +1,39 @@
+{
+    "name": "LeaveModule",
+    "version": "1.0.0",
+    "description": "HRISv2 Leave Administration Module",
+    "main": "gulpfile.js",
+    "devDependencies": {
+        "babel-preset-es2015": "^6.13.2",
+        "browserify": "^13.0.0",
+        "fs-path": "^0.0.22",
+        "gulp": "^3.9.1",
+        "gulp-babel": "^6.1.2",
+        "gulp-sourcemaps": "^1.6.0",
+        "gulp-uglify": "^2.0.0",
+        "gulp-util": "^3.0.7",
+        "vinyl-buffer": "^1.0.0",
+        "vinyl-source-stream": "^1.1.0",
+        "watchify": "^3.7.0"
+    },
+    "dependencies": {
+        "angular": "^1.6.7",
+        "axios": "^0.17.1",
+        "bootbox": "^4.4.0",
+        "bootstrap": "^3.3.7",
+        "jquery": "^1.8.2",
+        "kendo-ui-core": "^2017.3.1206",
+        "moment": "^2.20.1",
+        "moment-business-days": "^1.0.6",
+        "numeral": "^2.0.6",
+        "sweetalert": "^2.1.0",
+        "vue": "^1.0.28",
+        "vuejs-dialog": "^0.4.7",
+        "vuejs-sui-confirmation": "0.0.2"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "rdg577@gmail.com",
+    "license": "DavNor eGovernance"
+}

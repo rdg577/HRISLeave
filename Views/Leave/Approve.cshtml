@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "Approve";
+}
+
+<style>
+    tbody > tr:hover {
+        background-color: #E3F2FD;
+        color: #000000;
+    }
+
+    div.panel {
+        box-shadow: 4px 4px 5px 0px #90CAF9;
+    }
+
+    button {
+        box-shadow: 3px 3px 2px 0px #dcdcdc;
+    }
+</style>
+
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <strong>LEAVE REQUEST THAT NEEDS YOUR ACTION</strong>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div v-for="(key, leave) in leaveRequestsForApproval" style="padding-bottom: 1em;">
+
+            <div class="leaveDetail" style="border: solid 0.5px; border-color: #E3F2FD; -ms-border-radius: 1%; border-radius: 1%; padding-left: 1em; padding-right: 1em;">
+
+                <div class="row" style="background-color: #E3F2FD; -ms-border-radius: 1%; border-radius: 1%;">
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                        <div class="form-group">
+                            <label for="empName" style="font-size: 8pt; color: teal;">ID # / Name(Last, First)</label>
+                            <p id="empName">{{ leave.profile.idNo }} {{ leave.profile.fullnameLast }}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                        <div class="form-group">
+                            <label for="position" style="font-size: 8pt; color: teal;">Position</label>
+                            <p id="position">{{ leave.profile.fullDescription }}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2">
+                        <div class="form-group">
+                            <label for="sg" style="font-size: 8pt; color: teal;">SG Level</label>
+                            <p id="sg">{{ leave.profile.sg }}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="form-group">
+                            <label for="officeName" style="font-size: 8pt; color: teal;">Office</label>
+                            <p id="officeName">{{ leave.profile.officeName }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                        <div class="form-group">
+                            <label for="type" style="font-size: 8pt; color: teal;">LEAVE TYPE</label>
+                            <p id="type">{{ leave.LeaveDescription }}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                        <div class="form-group">
+                            <label for="location" style="font-size: 8pt; color: teal;">WHERE LEAVE WILL BE SPENT</label>
+                            <p id="location">{{ leave.place }} {{ leave.location }}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                        <div class="form-group">
+                            <label for="commutation" style="font-size: 8pt; color: teal;">COMMUTATION REQUESTED?</label>
+                            <p id="commutation">{{ leave.commutation == 1 ? "YES" : "NO" }}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                        <div class="form-group">
+                            <label for="applyDay" style="font-size: 8pt; color: teal;">DAYS APPLIED</label>
+                            <p id="applyDay">{{ leave.applyDay }}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                        <div class="form-group">
+                            <label for="periodFrom" style="font-size: 8pt; color: teal;">PERIOD: FROM</label>
+                            <p id="periodFrom">{{ leave.periodFrom|redenDateFormat }}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                        <div class="form-group">
+                            <label for="periodTo" style="font-size: 8pt; color: teal;">PERIOD: TO</label>
+                            <p id="periodTo">{{ leave.periodTo|redenDateFormat }}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                        <div class="form-group">
+                            <label for="status" style="font-size: 8pt; color: teal;">STATUS</label>
+                            <p id="status" v-if="leave.IsRecommendedAtHR==true"><b>RECOMMENDED</b></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                        <div class="form-group">
+                            <button class="btn btn-danger btn-sm" v-on:click="showRemark(leave)">DISAPPROVE</button>
+                            <button class="btn btn-success btn-sm" v-on:click="approve(leave, true)">APPROVE</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="commentModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width: 80%">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="color: white; background-color: #002984;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">DISAPPROVAL REMARK</h4>
+            </div>
+
+            <div class="modal-body">
+                <label for="disapprovalRemark">Please enter your reason for its disapproval..</label>
+                <textarea id="disapprovalRemark"rows="10" style="width: 100%;"></textarea>
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">CANCEL</button>
+                    <button class="btn btn-danger" v-on:click="approve(null, false)">SUBMIT DISAPPROVAL DETAIL</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@{
+    var controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+    var serverUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+    var controllerUrl = Url.Content("~") + controllerName;
+}
+@Scripts.Render("~/Scripts/app/" + controllerName + "/approve.js")
+
+@Scripts.Render("~/Scripts/app/" + controllerName + "/vue-approve.js")

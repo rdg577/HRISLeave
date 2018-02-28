@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "LeaveCard";
+}
+<link href="~/Content/leave/leave-card.css" rel="stylesheet"/>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <div class="panel-title"><b>Leave Card</b>
+        </div>
+    </div>
+    <div id="leave-card-table">
+        <table class="table table-bordered panel-body">
+            <thead>
+                <tr>
+                    <td rowspan="2" width="130px" style="vertical-align: middle;">Period</td>
+                    <td rowspan="2" width="270px" style="vertical-align: middle;">Particulars</td>
+                    <td colspan="4" style="vertical-align: middle;">Vacation Leave</td>
+                    <td colspan="4" style="vertical-align: middle;">Sick Leave</td>
+                    <td rowspan="2" style="vertical-align: middle;">Total</td>
+                </tr>
+                <tr>
+                    <td width="100px" style="vertical-align: top;">Earned</td>
+                    <td width="100px" style="vertical-align: top;">Abs/Und With Pay</td>
+                    <td width="100px" style="vertical-align: top;">Balance</td>
+                    <td width="100px" style="vertical-align: top;">Abs/Und Without Pay</td>
+                    <td width="100px" style="vertical-align: top;">Earned</td>
+                    <td width="100px" style="vertical-align: top;">Abs/Und With Pay</td>
+                    <td width="100px" style="vertical-align: top;">Balance</td>
+                    <td width="100px" style="vertical-align: top;">Abs/Und Without Pay</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(itemObjKey, data) in leavecard">
+                    <td>{{data.Period | dateFormat}}</td>
+                    <td>{{data.Particular}} {{data.SubParticular}}</td>
+                    <td class="text-right">{{data.VLEarned}}</td>
+                    <td class="text-right">{{data.VL_ABS_UND_WP}}</td>
+                    <td class="text-right">{{VLtotal[itemObjKey]}}</td>
+                    <td class="text-right">{{data.VL_ABS_UND_WOP}}</td>
+                    <td class="text-right">{{data.SLEarned}}</td>
+                    <td class="text-right">{{data.SL_ABS_UND_WP}}</td>
+                    <td class="text-right">{{SLtotal[itemObjKey]}}</td>
+                    <td class="text-right">{{data.SL_ABS_UND_WOP}}</td>
+                    <td class="text-right">{{getTotal[itemObjKey]}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@{
+    var controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+    var serverUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+    var controllerUrl = Url.Content("~") + controllerName;
+}
+@Scripts.Render("~/Scripts/app/" + controllerName + "/leave-card.js")
+
+@Scripts.Render("~/Scripts/app/" + controllerName + "/vue-leave-card.js")
