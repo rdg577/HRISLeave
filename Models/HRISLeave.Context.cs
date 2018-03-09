@@ -50,15 +50,6 @@ namespace LeaveModule.Models
         public DbSet<vLeaveApp> vLeaveApps { get; set; }
         public DbSet<tappOffice> tappOffices { get; set; }
     
-        public virtual ObjectResult<spLeaveCardGenerate_Result> spLeaveCardGenerate(string eIC)
-        {
-            var eICParameter = eIC != null ?
-                new ObjectParameter("EIC", eIC) :
-                new ObjectParameter("EIC", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spLeaveCardGenerate_Result>("spLeaveCardGenerate", eICParameter);
-        }
-    
         public virtual ObjectResult<spEmployeeLeaveBalance_Result> spEmployeeLeaveBalance(string eIC, Nullable<System.DateTime> dateBegin, Nullable<System.DateTime> dateEnd, string sbl, string stl, string ml, string pl, string spl, string slp, string rl, string vawc, string sel, string mone, string fl, string magnacarta)
         {
             var eICParameter = eIC != null ?
@@ -122,6 +113,15 @@ namespace LeaveModule.Models
                 new ObjectParameter("magnacarta", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spEmployeeLeaveBalance_Result>("spEmployeeLeaveBalance", eICParameter, dateBeginParameter, dateEndParameter, sblParameter, stlParameter, mlParameter, plParameter, splParameter, slpParameter, rlParameter, vawcParameter, selParameter, moneParameter, flParameter, magnacartaParameter);
+        }
+    
+        public virtual ObjectResult<spLeaveCardGenerate_Result> spLeaveCardGenerate(string eIC)
+        {
+            var eICParameter = eIC != null ?
+                new ObjectParameter("EIC", eIC) :
+                new ObjectParameter("EIC", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spLeaveCardGenerate_Result>("spLeaveCardGenerate", eICParameter);
         }
     }
 }

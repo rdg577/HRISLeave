@@ -13,15 +13,23 @@ namespace LeaveModule.Models
     
     public partial class spLeaveCardGenerate_Result
     {
+        public int Id { get; set; }
         public Nullable<System.DateTime> Period { get; set; }
         public string DTRId { get; set; }
+        public string DTRPeriod { get; set; }
         public string Particular { get; set; }
         public string SubParticular { get; set; }
         public Nullable<double> VLEarned { get; set; }
         public Nullable<double> VL_ABS_UND_WP { get; set; }
+        public Nullable<double> running_vl { get; set; }
+        public Nullable<double> running_vl_abs_und_wp { get; set; }
+        public Nullable<double> runningVLBalance { get; set; }
         public Nullable<double> VL_ABS_UND_WOP { get; set; }
         public Nullable<double> SLEarned { get; set; }
         public Nullable<double> SL_ABS_UND_WP { get; set; }
+        public Nullable<double> running_sl { get; set; }
+        public Nullable<double> running_sl_abs_und_wp { get; set; }
+        public Nullable<double> runningSLBalance { get; set; }
         public Nullable<double> SL_ABS_UND_WOP { get; set; }
     }
 }

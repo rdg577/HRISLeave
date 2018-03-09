@@ -138,13 +138,13 @@ gulp.task('build', function () {
             compileJSVue2(scriptsPath + "//" + folder + "//vue-main.js", "Scripts//app//" + folder, "vue-main.js");
         }*/
 
-        // for create leave
+        /*// for create leave
         if (fs.existsSync(scriptsPath + "//" + folder + "//create.js")) {
             compileJSVue2(scriptsPath + "//" + folder + "//create.js", "Scripts//app//" + folder, "create.js");
         }
         if (fs.existsSync(scriptsPath + "//" + folder + "//vue-create.js")) {
             compileJSVue2(scriptsPath + "//" + folder + "//vue-create.js", "Scripts//app//" + folder, "vue-create.js");
-        }
+        }*/
 
         /*// for leave recommendation
         if (fs.existsSync(scriptsPath + "//" + folder + "//recommend.js")) {
@@ -162,13 +162,13 @@ gulp.task('build', function () {
             compileJSVue2(scriptsPath + "//" + folder + "//vue-approve.js", "Scripts//app//" + folder, "vue-approve.js");
         }*/
 
-        /*// for leave-card
+        // for leave-card
         if (fs.existsSync(scriptsPath + "//" + folder + "//leave-card.js")) {
             compileJSVue2(scriptsPath + "//" + folder + "//leave-card.js", "Scripts//app//" + folder, "leave-card.js");
         }
         if (fs.existsSync(scriptsPath + "//" + folder + "//vue-leave-card.js")) {
             compileJSVue2(scriptsPath + "//" + folder + "//vue-leave-card.js", "Scripts//app//" + folder, "vue-leave-card.js");
-        }*/
+        }
     });
 });
 

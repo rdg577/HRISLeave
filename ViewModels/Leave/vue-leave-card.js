@@ -1,9 +1,14 @@
 ﻿const Vue = require("vue")
 const Moment = require("moment")
 const axios = require("axios")
+const numeral = require("numeral")
 
 Vue.filter("dateFormat", function (value) {
     return Moment(value).format("MM-DD-YYYY");
+});
+
+Vue.filter("redenNumberFormat", function (value) {
+    return value == null ? "" : numeral(value).format("0.0000"); // displaying other groupings/separators is possible, look at the docs
 });
 
 var v = new Vue({

@@ -97,6 +97,9 @@
                             <p id="applyDay">{{ leave.applyDay }}</p>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <div class="form-group">
                             <label for="periodFrom" style="font-size: 8pt; color: teal;">PERIOD: FROM</label>
@@ -119,9 +122,15 @@
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <div class="form-group">
-                            <button class="btn btn-danger btn-sm" v-on:click="denyHR(leave)" v-if="leave.IsRecommendedAtHR==true || leave.IsRecommendedAtHR==null"><span class="glyphicon glyphicon-thumbs-down"></span> DENY</button>
-                            <button class="btn btn-success btn-sm" v-on:click="recommendHR(leave)" v-if="leave.IsRecommendedAtHR==false || leave.IsRecommendedAtHR==null"><span class="glyphicon glyphicon-thumbs-up"></span> RECOMMEND</button>
-                            @*<button class="btn btn-default btn-sm" v-on:click="editLeave(leave)" v-if="leave.IsRecommendedAtHR==null">EDIT</button>*@
+                            <label for="actions" style="font-size: 8pt; color: teal;">ACTION</label>
+                            <p id="actions">
+                                <button class="btn btn-danger btn-sm" v-on:click="denyHR(leave)" v-if="leave.IsRecommendedAtHR==true || leave.IsRecommendedAtHR==null">
+                                    <span class="glyphicon glyphicon-thumbs-down"></span> DENY
+                                </button>
+                                <button class="btn btn-success btn-sm" v-on:click="recommendHR(leave)" v-if="leave.IsRecommendedAtHR==false || leave.IsRecommendedAtHR==null">
+                                    <span class="glyphicon glyphicon-thumbs-up"></span> RECOMMEND
+                                </button>   
+                            </p>@*<button class="btn btn-default btn-sm" v-on:click="editLeave(leave)" v-if="leave.IsRecommendedAtHR==null">EDIT</button>*@
                         </div>
                     </div>
                 </div>
@@ -185,6 +194,9 @@
                             <p id="applyDay">{{ leave.applyDay }}</p>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <div class="form-group">
                             <label for="periodFrom" style="font-size: 8pt; color: teal;">PERIOD: FROM</label>

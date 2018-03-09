@@ -227,6 +227,12 @@
       <DependentUpon>HRISLeave.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\LeaveCreditReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\LeaveCreditReport.Designer.cs">
+      <DependentUpon>LeaveCreditReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reports\LeaveRequestReport.aspx.cs">
       <DependentUpon>LeaveRequestReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -12422,6 +12428,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\LeaveCreditReport.resx">
+      <DependentUpon>LeaveCreditReport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\LeaveRequestReport.resx">
       <DependentUpon>LeaveRequestReport.cs</DependentUpon>
     </EmbeddedResource>

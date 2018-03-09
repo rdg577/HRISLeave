@@ -535,9 +535,7 @@ namespace LeaveModule.Controllers
             // select all DTRs that is not yet processed
             var DTRsForPosting = DTRs.Where(r => !DTRsAtLeaveLedger.Contains(r.DtrID)).OrderBy(r=>r.EIC).ThenBy(r => r.Year).ThenBy(r => r.Month).ThenBy(r => r.Period);
 
-            var LeaveCreditEarned = 0.0;
-            var VLCreditEarned = 0.0;
-            var SLCreditEarned = 0.0;
+            
             
             try
             {
@@ -545,14 +543,17 @@ namespace LeaveModule.Controllers
                 var EICs = EICsWithForwardedLeaveCredits.Distinct().ToList();
                 foreach (var EIC in EICs)
                 {
+                    var PetsaKaron = DateTime.Now;
+
                     // set balances to 0 in every employee
                     double VLBalance = 0.0, SLBalance = 0.0;
 
                     // get the standing credit balance
                     tLeaveAppLedgerMaster LastBalanceRecord = null;
 
-                    LastBalanceRecord = db.tLeaveAppLedgerMasters.OrderByDescending(r => r.Timestamp).First(r => r.EIC == EIC);
+                    LastBalanceRecord = db.tLeaveAppLedgerMasters.OrderByDescending(r => r.Id).First(r => r.EIC == EIC);
 
+                    // null, kung wala pa jud ma.proseso ang iyang dtr para sa leave ledger
                     if (LastBalanceRecord != null)
                     {
                         // get the date the balance has been forwarded which
@@ -560,6 +561,7 @@ namespace LeaveModule.Controllers
                         // DTRs for Posting
                         var balanceForwardedRec = db.tLeaveBalanceForwardeds.Where(r => r.EIC == EIC).Select(r => r.AsOf).Take(1).ToList();
                         var baseDate = balanceForwardedRec[0].Date;
+
                         // test if baseDate is the last day of the year
                         var baseDateIsLastDayOfTheYear = baseDate.Month == 12 && baseDate.Day == 31;
 
@@ -587,10 +589,14 @@ namespace LeaveModule.Controllers
                         
                         foreach (var DTR in DTRListForPost)
                         {
+                            var LeaveCreditEarned = 0.0;
+                            var VLCreditEarned = 0.0;
+                            var SLCreditEarned = 0.0;
+
                             int year = 0, month = 0;
 
-                            year = DTR.Year ?? DateTime.Now.Year;
-                            month = DTR.Month ?? DateTime.Now.Month;
+                            year = DTR.Year ?? PetsaKaron.Year;
+                            month = DTR.Month ?? PetsaKaron.Month;
 
                             // original base date
                             baseDate = balanceForwardedRec[0].Date;
@@ -650,7 +656,7 @@ namespace LeaveModule.Controllers
                                 DTRId = DTR.DtrID,
                                 LedgerCode = "103",
                                 Value = Convert.ToDouble(VLCreditEarned),
-                                Timestamp = DateTime.Now
+                                Timestamp = PetsaKaron
                             });
                             
                             // post SL to ledger
@@ -660,7 +666,7 @@ namespace LeaveModule.Controllers
                                 DTRId = DTR.DtrID,
                                 LedgerCode = "104",
                                 Value = Convert.ToDouble(SLCreditEarned),
-                                Timestamp = DateTime.Now
+                                Timestamp = PetsaKaron
                             });
 
                             // update VL/SL Balance
@@ -690,7 +696,7 @@ namespace LeaveModule.Controllers
                                         DTRId = DTR.DtrID,
                                         LedgerCode = "106B1",
                                         Value = Convert.ToDouble(equivalentDaysTU),
-                                        Timestamp = DateTime.Now
+                                        Timestamp = PetsaKaron
                                     });
                                 }
                                 else
@@ -702,7 +708,7 @@ namespace LeaveModule.Controllers
                                         DTRId = DTR.DtrID,
                                         LedgerCode = "106A1",
                                         Value = Convert.ToDouble(equivalentDaysTU),
-                                        Timestamp = DateTime.Now
+                                        Timestamp = PetsaKaron
                                     });
                                 }
 
@@ -762,7 +768,7 @@ namespace LeaveModule.Controllers
                                             LedgerCode = "105B1",
                                             Value = Convert.ToDouble(daysAbsent),
                                             Referrence = Convert.ToString(leave.recNo),
-                                            Timestamp = DateTime.Now
+                                            Timestamp = PetsaKaron
                                         });
                                     }
                                     else
@@ -775,7 +781,7 @@ namespace LeaveModule.Controllers
                                             LedgerCode = "105A1",
                                             Value = Convert.ToDouble(daysAbsent),
                                             Referrence = Convert.ToString(leave.recNo),
-                                            Timestamp = DateTime.Now
+                                            Timestamp = PetsaKaron
                                         });
                                     }
                                 }
@@ -794,7 +800,7 @@ namespace LeaveModule.Controllers
                                             LedgerCode = "105B2",
                                             Value = Convert.ToDouble(daysAbsent),
                                             Referrence = Convert.ToString(leave.recNo),
-                                            Timestamp = DateTime.Now
+                                            Timestamp = PetsaKaron
                                         });
                                     }
                                     else
@@ -807,7 +813,7 @@ namespace LeaveModule.Controllers
                                             LedgerCode = "105A2",
                                             Value = Convert.ToDouble(daysAbsent),
                                             Referrence = Convert.ToString(leave.recNo),
-                                            Timestamp = DateTime.Now
+                                            Timestamp = PetsaKaron
                                         });
                                     }
                                 }
@@ -820,7 +826,7 @@ namespace LeaveModule.Controllers
                                         LedgerCode = "105C",
                                         Value = Convert.ToDouble(daysAbsent),
                                         Referrence = Convert.ToString(leave.recNo),
-                                        Timestamp = DateTime.Now
+                                        Timestamp = PetsaKaron
                                     });
                                 }
 
@@ -834,7 +840,7 @@ namespace LeaveModule.Controllers
                                 DTRId = DTR.DtrID,
                                 SLCreditBalance = SLBalance,
                                 VLCreditBalance = VLBalance,
-                                Timestamp = DateTime.Now
+                                Timestamp = PetsaKaron
                             });
                             db.SaveChanges();
                         } // end - foreach (var DTR in DTRListForPost)

@@ -673,9 +673,6 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <EntitySet Name="tLeaveApps" EntityType="HRISLeaveModel.tLeaveApp" />
           <EntitySet Name="vLeaveApps" EntityType="HRISLeaveModel.vLeaveApp" />
           <EntitySet Name="tappOffices" EntityType="HRISLeaveModel.tappOffice" />
-          <FunctionImport Name="spLeaveCardGenerate" ReturnType="Collection(HRISLeaveModel.spLeaveCardGenerate_Result)">
-          <Parameter Name="EIC" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="spEmployeeLeaveBalance" ReturnType="Collection(HRISLeaveModel.spEmployeeLeaveBalance_Result)">
             <Parameter Name="EIC" Mode="In" Type="String" />
             <Parameter Name="dateBegin" Mode="In" Type="DateTime" />
@@ -692,6 +689,9 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
             <Parameter Name="mone" Mode="In" Type="String" />
             <Parameter Name="fl" Mode="In" Type="String" />
             <Parameter Name="magnacarta" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spLeaveCardGenerate" ReturnType="Collection(HRISLeaveModel.spLeaveCardGenerate_Result)">
+            <Parameter Name="EIC" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="tapp212Image">
@@ -980,18 +980,6 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="sortTag" Type="Int32" />
           <Property Name="tagRemarks" Type="Int32" />
         </EntityType>
-        <ComplexType Name="spLeaveCardGenerate_Result">
-          <Property Type="DateTime" Name="Period" Nullable="true" Precision="23" />
-          <Property Type="String" Name="DTRId" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="Particular" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="SubParticular" Nullable="true" MaxLength="50" />
-          <Property Type="Double" Name="VLEarned" Nullable="true" />
-          <Property Type="Double" Name="VL_ABS_UND_WP" Nullable="true" />
-          <Property Type="Double" Name="VL_ABS_UND_WOP" Nullable="true" />
-          <Property Type="Double" Name="SLEarned" Nullable="true" />
-          <Property Type="Double" Name="SL_ABS_UND_WP" Nullable="true" />
-          <Property Type="Double" Name="SL_ABS_UND_WOP" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="spEmployeeLeaveBalance_Result">
           <Property Type="Int64" Name="Id" Nullable="true" />
           <Property Type="String" Name="EIC" Nullable="true" MaxLength="20" />
@@ -1012,6 +1000,26 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Type="Double" Name="MonetizedLeave" Nullable="true" />
           <Property Type="Double" Name="ForcedLeave" Nullable="true" />
           <Property Type="Double" Name="MagnaCartaForWomenLeave" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="spLeaveCardGenerate_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="DateTime" Name="Period" Nullable="true" Precision="23" />
+          <Property Type="String" Name="DTRId" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="DTRPeriod" Nullable="true" />
+          <Property Type="String" Name="Particular" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SubParticular" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="VLEarned" Nullable="true" />
+          <Property Type="Double" Name="VL_ABS_UND_WP" Nullable="true" />
+          <Property Type="Double" Name="running_vl" Nullable="true" />
+          <Property Type="Double" Name="running_vl_abs_und_wp" Nullable="true" />
+          <Property Type="Double" Name="runningVLBalance" Nullable="true" />
+          <Property Type="Double" Name="VL_ABS_UND_WOP" Nullable="true" />
+          <Property Type="Double" Name="SLEarned" Nullable="true" />
+          <Property Type="Double" Name="SL_ABS_UND_WP" Nullable="true" />
+          <Property Type="Double" Name="running_sl" Nullable="true" />
+          <Property Type="Double" Name="running_sl_abs_und_wp" Nullable="true" />
+          <Property Type="Double" Name="runningSLBalance" Nullable="true" />
+          <Property Type="Double" Name="SL_ABS_UND_WOP" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1396,22 +1404,6 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="spLeaveCardGenerate" FunctionName="HRISLeaveModel.Store.spLeaveCardGenerate">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="HRISLeaveModel.spLeaveCardGenerate_Result">
-                <ScalarProperty Name="Period" ColumnName="Period" />
-                <ScalarProperty Name="DTRId" ColumnName="DTRId" />
-                <ScalarProperty Name="Particular" ColumnName="Particular" />
-                <ScalarProperty Name="SubParticular" ColumnName="SubParticular" />
-                <ScalarProperty Name="VLEarned" ColumnName="VLEarned" />
-                <ScalarProperty Name="VL_ABS_UND_WP" ColumnName="VL_ABS_UND_WP" />
-                <ScalarProperty Name="VL_ABS_UND_WOP" ColumnName="VL_ABS_UND_WOP" />
-                <ScalarProperty Name="SLEarned" ColumnName="SLEarned" />
-                <ScalarProperty Name="SL_ABS_UND_WP" ColumnName="SL_ABS_UND_WP" />
-                <ScalarProperty Name="SL_ABS_UND_WOP" ColumnName="SL_ABS_UND_WOP" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="spEmployeeLeaveBalance" FunctionName="HRISLeaveModel.Store.spEmployeeLeaveBalance">
             <ResultMapping>
               <ComplexTypeMapping TypeName="HRISLeaveModel.spEmployeeLeaveBalance_Result">
@@ -1434,6 +1426,30 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
                 <ScalarProperty Name="MonetizedLeave" ColumnName="MonetizedLeave" />
                 <ScalarProperty Name="ForcedLeave" ColumnName="ForcedLeave" />
                 <ScalarProperty Name="MagnaCartaForWomenLeave" ColumnName="MagnaCartaForWomenLeave" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spLeaveCardGenerate" FunctionName="HRISLeaveModel.Store.spLeaveCardGenerate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRISLeaveModel.spLeaveCardGenerate_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Period" ColumnName="Period" />
+                <ScalarProperty Name="DTRId" ColumnName="DTRId" />
+                <ScalarProperty Name="DTRPeriod" ColumnName="DTRPeriod" />
+                <ScalarProperty Name="Particular" ColumnName="Particular" />
+                <ScalarProperty Name="SubParticular" ColumnName="SubParticular" />
+                <ScalarProperty Name="VLEarned" ColumnName="VLEarned" />
+                <ScalarProperty Name="VL_ABS_UND_WP" ColumnName="VL_ABS_UND_WP" />
+                <ScalarProperty Name="running_vl" ColumnName="running_vl" />
+                <ScalarProperty Name="running_vl_abs_und_wp" ColumnName="running_vl_abs_und_wp" />
+                <ScalarProperty Name="runningVLBalance" ColumnName="runningVLBalance" />
+                <ScalarProperty Name="VL_ABS_UND_WOP" ColumnName="VL_ABS_UND_WOP" />
+                <ScalarProperty Name="SLEarned" ColumnName="SLEarned" />
+                <ScalarProperty Name="SL_ABS_UND_WP" ColumnName="SL_ABS_UND_WP" />
+                <ScalarProperty Name="running_sl" ColumnName="running_sl" />
+                <ScalarProperty Name="running_sl_abs_und_wp" ColumnName="running_sl_abs_und_wp" />
+                <ScalarProperty Name="runningSLBalance" ColumnName="runningSLBalance" />
+                <ScalarProperty Name="SL_ABS_UND_WOP" ColumnName="SL_ABS_UND_WOP" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

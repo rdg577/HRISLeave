@@ -211,6 +211,10 @@
                 <button type="button" class="btn btn-danger btn-sm" title="Cancel this leave request." v-if="item.IsApproved==null" v-on:click="cancelLeaveRequest(item, this)">
                     <span class="glyphicon glyphicon-remove"></span> Cancel
                 </button>
+                <button type="button" class="btn btn-info btn-sm" title="Print this leave request."
+                        v-if="item.IsRecommendedAtOffice==true" v-on:click="printPreview(item)">
+                    <span class="glyphicon glyphicon-print"></span> Print
+                </button>
             </div>
         </div>
 
@@ -230,7 +234,7 @@
     </div>
     <div id="my-leave-history" class="panel-collapse" v-if="leaveHistory">
 
-        <div class="Rtable Rtable--6cols Rtable--collapse" v-for="(key,item) in getApprovedLeave(leaveHistory)">
+        <div class="Rtable Rtable--5cols Rtable--collapse" v-for="(key,item) in getApprovedLeave(leaveHistory)">
             <div class="Rtable-cell Rtable-cell--head">
                 <b>{{ item.LeaveDescription }}</b>
             </div>
@@ -248,12 +252,6 @@
             </div>
             <div class="Rtable-cell" v-else>
                 {{ item.place }} - {{ item.location }}
-            </div>
-            <div class="Rtable-cell">
-                <button type="button" class="btn btn-info btn-sm" title="Print this leave request." 
-                        v-if="item.IsApproved==true" v-on:click="printPreview(item)">
-                    <span class="glyphicon glyphicon-print"></span> Print
-                </button>
             </div>
         </div>
 
