@@ -7,13 +7,30 @@ using System.Web;
 using System.Web.Mvc;
 using LeaveModule.Models;
 using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json;
 
 namespace LeaveModule.Controllers
 {
     public class LeaveController : Controller
     {
         private HRISEntities db = new HRISEntities();
+
+        [HttpPost]
+        public ActionResult SetLeaveCreditsForPrintPreview(int recNo)
+        {
+            // 12Mar2018@0209 SetLeaveCreditsForPrintPreview
+            // can add logic that only the owner of the leave request can print preview
+            var UserEIC = Session["EIC"].ToString();
+
+            // query for leave record
+            var leave = db.tLeaveApps.SingleOrDefault(r => r.recNo == recNo);
+            if (leave != null)
+            {
+                Session["TargetLeaveRequestOwnerEIC"] = leave.EIC;
+                Session["TargetLeaveRequest"] = leave.recNo;
+            }
+
+            return View();
+        }
 
         [ActionName("LeaveLedger")]
         public ActionResult LeaveCard()
@@ -137,6 +154,7 @@ namespace LeaveModule.Controllers
                                 r.IsRecommendedAtHR,
                                 r.IsApproved,
                                 r.ApprovalEIC,
+                                r.IsVLUsedAsSL,
                                 profile = db.vEmployeeCompleteFields.FirstOrDefault(g => g.EIC == r.EIC)
                             })
                             .OrderBy(r=>r.IsApproved)

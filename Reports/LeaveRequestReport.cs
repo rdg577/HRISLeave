@@ -1,16 +1,11 @@
+using Telerik.Reporting;
+
 namespace LeaveModule.Reports
 {
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using Telerik.Reporting;
-    using Telerik.Reporting.Drawing;
-
     /// <summary>
     /// Summary description for LeaveRequestReport.
     /// </summary>
-    public partial class LeaveRequestReport : Telerik.Reporting.Report
+    public partial class LeaveRequestReport : Report
     {
         public LeaveRequestReport()
         {

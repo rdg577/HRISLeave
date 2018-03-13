@@ -80,8 +80,13 @@
                 </thead>
                 <tbody v-for="(key, leave) in itemViewed">
                     <tr>
-                        <td>{{ leave.LeaveDescription }}
-                            <span v-if="leave.IsVLUsedAsSL==true"><br />(Used as SICK LEAVE)</span></td>
+                        <td v-if="leave.IsVLUsedAsSL==true">
+                            <b>SICK LEAVE</b>
+                            <br />(Using VACATION LEAVE CREDIT)
+                        </td>
+                        <td v-else>
+                            {{ leave.LeaveDescription }}
+                        </td>
                         <td>Fr: {{ leave.periodFrom|redenDateFormat }}<br />To: {{ leave.periodTo|redenDateFormat }}</td>
                         <td>{{ leave.applyDay }}</td>
                         <td>{{ leave.place + " " + leave.location }}</td>

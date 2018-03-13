@@ -60,7 +60,13 @@
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <div class="form-group">
                             <label for="type" style="font-size: 8pt; color: teal;">LEAVE TYPE</label>
-                            <p id="type">{{ leave.LeaveDescription }}</p>
+                            <p id="type" v-if="leave.IsVLUsedAsSL==true">
+                                <b>SICK LEAVE</b>
+                                <br />(Using VACATION LEAVE CREDIT)
+                            </p>
+                            <p id="type" v-else>
+                                <b>{{ leave.LeaveDescription }}</b>
+                            </p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3">
@@ -81,6 +87,9 @@
                             <p id="applyDay">{{ leave.applyDay }}</p>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <div class="form-group">
                             <label for="periodFrom" style="font-size: 8pt; color: teal;">PERIOD: FROM</label>
@@ -101,8 +110,9 @@
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <div class="form-group">
-                            <button class="btn btn-danger btn-sm" v-on:click="showRemark(leave)"><span class="glyphicon glyphicon-thumbs-down"></span> DISAPPROVE</button>
-                            <button class="btn btn-success btn-sm" v-on:click="approve(leave, true)"><span class="glyphicon glyphicon-thumbs-up"></span> APPROVE</button>
+                            <label for="" style="font-size: 8pt; color: teal;">ACTION</label>
+                            <button class="btn btn-success btn-block btn-sm" v-on:click="approve(leave, true)"><span class="glyphicon glyphicon-thumbs-up"></span> APPROVE</button>
+                            <button class="btn btn-danger btn-block btn-sm" v-on:click="showRemark(leave)"><span class="glyphicon glyphicon-thumbs-down"></span> DISAPPROVE</button>
                         </div>
                     </div>
                 </div>

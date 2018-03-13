@@ -123,5 +123,15 @@ namespace LeaveModule.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spLeaveCardGenerate_Result>("spLeaveCardGenerate", eICParameter);
         }
+    
+        [EdmFunction("HRISEntities", "fnLeaveLedgerGenerator")]
+        public virtual IQueryable<fnLeaveLedgerGenerator_Result> fnLeaveLedgerGenerator(string eIC)
+        {
+            var eICParameter = eIC != null ?
+                new ObjectParameter("EIC", eIC) :
+                new ObjectParameter("EIC", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<fnLeaveLedgerGenerator_Result>("[HRISEntities].[fnLeaveLedgerGenerator](@EIC)", eICParameter);
+        }
     }
 }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LeaveModule.Reports {
+namespace LeaveModule.ReportWebForms {
     
     
     public partial class LeaveRequestReport1 {

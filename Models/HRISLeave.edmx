@@ -380,6 +380,26 @@ warning 6002: The table/view 'HRISLeave.dbo.vrefLeaveTypeAndAllotment' does not 
           <Property Name="Allotment" Type="int" />
           <Property Name="IsCalendarDays" Type="bit" />
         </EntityType>
+        <Function Name="fnLeaveLedgerGenerator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EIC" Type="nvarchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Id" Type="int" Nullable="false" />
+                <Property Name="Period" Type="datetime" />
+                <Property Name="DTRId" Type="nvarchar" MaxLength="20" />
+                <Property Name="Particular" Type="nvarchar" MaxLength="50" />
+                <Property Name="SubParticular" Type="nvarchar" MaxLength="50" />
+                <Property Name="VLEarned" Type="float" />
+                <Property Name="VL_ABS_UND_WP" Type="float" />
+                <Property Name="VL_ABS_UND_WOP" Type="float" />
+                <Property Name="SLEarned" Type="float" />
+                <Property Name="SL_ABS_UND_WP" Type="float" />
+                <Property Name="SL_ABS_UND_WOP" Type="float" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
         <Function Name="spEmployeeLeaveBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EIC" Type="varchar" Mode="In" />
           <Parameter Name="dateBegin" Type="date" Mode="In" />
@@ -691,6 +711,9 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
             <Parameter Name="magnacarta" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spLeaveCardGenerate" ReturnType="Collection(HRISLeaveModel.spLeaveCardGenerate_Result)">
+          <Parameter Name="EIC" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="fnLeaveLedgerGenerator" IsComposable="true" ReturnType="Collection(HRISLeaveModel.fnLeaveLedgerGenerator_Result)">
             <Parameter Name="EIC" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
@@ -1019,6 +1042,19 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Type="Double" Name="running_sl" Nullable="true" />
           <Property Type="Double" Name="running_sl_abs_und_wp" Nullable="true" />
           <Property Type="Double" Name="runningSLBalance" Nullable="true" />
+          <Property Type="Double" Name="SL_ABS_UND_WOP" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="fnLeaveLedgerGenerator_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="DateTime" Name="Period" Nullable="true" Precision="23" />
+          <Property Type="String" Name="DTRId" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Particular" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SubParticular" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="VLEarned" Nullable="true" />
+          <Property Type="Double" Name="VL_ABS_UND_WP" Nullable="true" />
+          <Property Type="Double" Name="VL_ABS_UND_WOP" Nullable="true" />
+          <Property Type="Double" Name="SLEarned" Nullable="true" />
+          <Property Type="Double" Name="SL_ABS_UND_WP" Nullable="true" />
           <Property Type="Double" Name="SL_ABS_UND_WOP" Nullable="true" />
         </ComplexType>
       </Schema>
@@ -1449,6 +1485,23 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
                 <ScalarProperty Name="running_sl" ColumnName="running_sl" />
                 <ScalarProperty Name="running_sl_abs_und_wp" ColumnName="running_sl_abs_und_wp" />
                 <ScalarProperty Name="runningSLBalance" ColumnName="runningSLBalance" />
+                <ScalarProperty Name="SL_ABS_UND_WOP" ColumnName="SL_ABS_UND_WOP" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="fnLeaveLedgerGenerator" FunctionName="HRISLeaveModel.Store.fnLeaveLedgerGenerator">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRISLeaveModel.fnLeaveLedgerGenerator_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Period" ColumnName="Period" />
+                <ScalarProperty Name="DTRId" ColumnName="DTRId" />
+                <ScalarProperty Name="Particular" ColumnName="Particular" />
+                <ScalarProperty Name="SubParticular" ColumnName="SubParticular" />
+                <ScalarProperty Name="VLEarned" ColumnName="VLEarned" />
+                <ScalarProperty Name="VL_ABS_UND_WP" ColumnName="VL_ABS_UND_WP" />
+                <ScalarProperty Name="VL_ABS_UND_WOP" ColumnName="VL_ABS_UND_WOP" />
+                <ScalarProperty Name="SLEarned" ColumnName="SLEarned" />
+                <ScalarProperty Name="SL_ABS_UND_WP" ColumnName="SL_ABS_UND_WP" />
                 <ScalarProperty Name="SL_ABS_UND_WOP" ColumnName="SL_ABS_UND_WOP" />
               </ComplexTypeMapping>
             </ResultMapping>

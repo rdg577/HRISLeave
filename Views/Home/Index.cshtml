@@ -1,21 +1,80 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+<style>
+    .jumbotron {
+        margin-top: 20px;
+        background-image: url('../../Content/img/e_leave.jpg');
+        -ms-background-size: cover;
+        background-size: cover;
+        background-position: 0% 25%;
+        background-repeat: no-repeat;
+        color: white;
+        -ms-text-shadow: black 0.3em 0.3em 0.3em;
+        text-shadow: black 0.3em 0.3em 0.3em;
+    }
+</style>
 
 <div class="jumbotron">
-    <h1>Leave Administration</h1>
+    <h1>e-Leave Administration</h1>
     <p class="lead">A module of DavNor HRIS v.2 for Leave Administration.</p>
 </div>
 
 <div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4">
+        <div class="form-group">
+            <label for="employee">L O G I N</label><br/>
+            <input id="employee" style="width: 300px;"/>
+
+        </div>
+        <div class="form-group">
+            <button id="btnLoginEIC" class="btn btn-success">
+                <span class="glyphicon glyphicon-log-in"></span> Submit
+            </button>
+        </div>
+
+        @*<div class="form-group">
+            <label for="userName">Username</label>
+            <input id="userName" class="form-control" placeholder="Enter username" autocomplete="off" required autofocus />
+        </div>
+        <div class="form-group">
+            <label for="userName">Password</label>
+            <input type="password" id="passWord" class="form-control" placeholder="Enter password" required />
+        </div>
+        <div class="form-group">
+            <button id="btnLogin" class="btn btn-success">
+                <span class="glyphicon glyphicon-log-in"></span> Submit
+            </button>
+        </div>*@
+    </div>
+    <div class="col-lg-8 col-md-8 col-sm-8">
+        <p style="font-size-adjust: .40;">
+            e-Leave is a web-based Leave Management Sub-system of DavNor Human Resource Information System
+            that streamlines communication between HR
+            and employees and facilitates simple yet efficient management of employee leave.
+        </p>
+        <p style="font-size-adjust: .40;">
+            For employees, this system allows them to easily determine their vacation availability (from any point-in-time) and
+            request leave online.
+        </p>
+        <p style="font-size-adjust: .40;">
+            For managers, leave approval no longer involves trails of paperwork. e-leave ensures
+            that all leaves taken and leave requests are properly monitored, where everybody can apply and view leave
+            records without the hassle and delay of going through the admin staff - it's all at your fingertips with
+            anytime, anywhere access.
+        </p>
+    </div>
+</div>
+
+@*<div class="row">
     <div class="col-lg-10 col-md-10 col-sm-10">
-        <div class="form-group form-inline">
+        <div class="form-group">
             <label for="employee">Logged as </label><br/>
             <input id="employee" style="width: 300px;"/>
             <button id="btnLoginEIC" class="btn btn-default">Go</button>
         </div>
     </div>
-</div>
+</div>*@
 
 @*<div class="row">
     <div class="col-md-4">
@@ -46,4 +105,4 @@
 window.ServerUrl = '@serverUrl';
 window.VueRouterUrl = '@controllerUrl';
 </script>
-@Scripts.Render("~/Scripts/app/" + controllerName + "/bundle.js")
+@Scripts.Render("~/Scripts/app/" + controllerName + "/main.js")

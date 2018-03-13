@@ -201,12 +201,18 @@ const v = new Vue({
         },
         getActedByHR: function(leaves) {
             return leaves.filter(function(leave) { return leave.IsRecommendedAtHR!=null });
+        },
+        printPreview: function(leave) {
+            console.log(leave.recNo);
+            
+            $.ajax({
+                url: '../Leave/SetLeaveCreditsForPrintPreview',
+                type: 'POST',
+                data: { recNo : leave.recNo }
+            });
+            
+            window.open("../ReportWebForms/LeaveCreditReport.aspx");
         }
-        /*editLeave: function(item) {
-            // 31Jan2018@2330
-            this.leaveEdit = item;
-            $("#leaveEditModal").modal("toggle"); 
-        }*/
     }
 });
 

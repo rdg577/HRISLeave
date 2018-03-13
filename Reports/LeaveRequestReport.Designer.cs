@@ -1,3 +1,5 @@
+using Telerik.Reporting;
+
 namespace LeaveModule.Reports
 {
     partial class LeaveRequestReport
@@ -96,6 +98,7 @@ namespace LeaveModule.Reports
             this.textBox72 = new Telerik.Reporting.TextBox();
             this.textBox73 = new Telerik.Reporting.TextBox();
             this.sqlDSLeaveRequest = new Telerik.Reporting.SqlDataSource();
+            this.textBox22 = new Telerik.Reporting.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // detail
@@ -183,7 +186,8 @@ namespace LeaveModule.Reports
             this.textBox70,
             this.textBox71,
             this.textBox72,
-            this.textBox73});
+            this.textBox73,
+            this.textBox22});
             this.detail.Name = "detail";
             // 
             // textBox1
@@ -209,6 +213,7 @@ namespace LeaveModule.Reports
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2.5793144702911377D), Telerik.Reporting.Drawing.Unit.Inch(0.19999998807907105D));
             this.textBox3.Style.Font.Bold = false;
+            this.textBox3.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(8D);
             this.textBox3.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right;
             this.textBox3.Value = "=\"Ctrl No: \" + Fields.controlNo";
             // 
@@ -465,9 +470,11 @@ namespace LeaveModule.Reports
             this.textBox30.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(2.6041667461395264D), Telerik.Reporting.Drawing.Unit.Inch(3.1145832538604736D));
             this.textBox30.Name = "textBox30";
             this.textBox30.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(0.76958340406417847D), Telerik.Reporting.Drawing.Unit.Inch(0.19999998807907105D));
+            this.textBox30.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.textBox30.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.textBox30.Style.Font.Bold = true;
             this.textBox30.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
-            this.textBox30.Style.Font.Underline = true;
+            this.textBox30.Style.Font.Underline = false;
             this.textBox30.Value = "= Fields.applyDay";
             // 
             // textBox31
@@ -547,10 +554,10 @@ namespace LeaveModule.Reports
             this.textBox39.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(4.5104165077209473D), Telerik.Reporting.Drawing.Unit.Inch(4.1770834922790527D));
             this.textBox39.Name = "textBox39";
             this.textBox39.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(2.7381942272186279D), Telerik.Reporting.Drawing.Unit.Inch(0.19999998807907105D));
-            this.textBox39.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.None;
+            this.textBox39.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
             this.textBox39.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.textBox39.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(10D);
-            this.textBox39.Style.Font.Underline = true;
+            this.textBox39.Style.Font.Underline = false;
             this.textBox39.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Center;
             this.textBox39.Value = "= Fields.Fullname";
             // 
@@ -626,7 +633,7 @@ namespace LeaveModule.Reports
             this.textBox43.Name = "textBox43";
             this.textBox43.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.2799999713897705D), Telerik.Reporting.Drawing.Unit.Inch(0.19999998807907105D));
             this.textBox43.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(10D);
-            this.textBox43.Value = "=IIf(Fields.IsApproved= False, \"[x] Disapproved\", \"[ ] Disapproved\")";
+            this.textBox43.Value = "=IIf(Fields.IsRecommendedAtOffice= False, \"[x] Disapproved\", \"[ ] Disapproved\")";
             // 
             // textBox44
             // 
@@ -643,7 +650,7 @@ namespace LeaveModule.Reports
             this.textBox45.Name = "textBox45";
             this.textBox45.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(0.98833328485488892D), Telerik.Reporting.Drawing.Unit.Inch(0.19999998807907105D));
             this.textBox45.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(10D);
-            this.textBox45.Value = "=IIf(Fields.IsApproved=True, \"[x] Approved\", \"[ ] Approved\")";
+            this.textBox45.Value = "=IIf(Fields.IsRecommendedAtOffice=True, \"[x] Approved\", \"[ ] Approved\")";
             // 
             // textBox46
             // 
@@ -679,7 +686,7 @@ namespace LeaveModule.Reports
             this.textBox48.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(10D);
             this.textBox48.Style.Font.Underline = false;
             this.textBox48.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Center;
-            this.textBox48.Value = "= Fields.HRRecommender";
+            this.textBox48.Value = "= Fields.DivisionHead";
             // 
             // textBox49
             // 
@@ -691,7 +698,7 @@ namespace LeaveModule.Reports
             this.textBox49.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(8D);
             this.textBox49.Style.Font.Underline = false;
             this.textBox49.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Center;
-            this.textBox49.Value = "PG Dept. Head / Authorized Official";
+            this.textBox49.Value = " Authorized Official";
             // 
             // textBox50
             // 
@@ -943,6 +950,16 @@ namespace LeaveModule.Reports
             this.sqlDSLeaveRequest.ProviderName = "System.Data.SqlClient";
             this.sqlDSLeaveRequest.SelectCommand = resources.GetString("sqlDSLeaveRequest.SelectCommand");
             // 
+            // textBox22
+            // 
+            this.textBox22.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(2.2208335399627686D), Telerik.Reporting.Drawing.Unit.Inch(8.3020830154418945D));
+            this.textBox22.Name = "textBox22";
+            this.textBox22.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(3.0769357681274414D), Telerik.Reporting.Drawing.Unit.Inch(0.23745080828666687D));
+            this.textBox22.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.None;
+            this.textBox22.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.textBox22.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Center;
+            this.textBox22.Value = "By the authority of the Governor";
+            // 
             // LeaveRequestReport
             // 
             this.DataSource = this.sqlDSLeaveRequest;
@@ -970,89 +987,90 @@ namespace LeaveModule.Reports
         }
         #endregion
 
-        private Telerik.Reporting.DetailSection detail;
-        private Telerik.Reporting.SqlDataSource sqlDSLeaveRequest;
-        private Telerik.Reporting.TextBox textBox1;
-        private Telerik.Reporting.TextBox textBox2;
-        private Telerik.Reporting.TextBox textBox3;
-        private Telerik.Reporting.TextBox textBox4;
-        private Telerik.Reporting.Shape shape1;
-        private Telerik.Reporting.Shape shape2;
-        private Telerik.Reporting.TextBox textBox5;
-        private Telerik.Reporting.TextBox textBox6;
-        private Telerik.Reporting.TextBox textBox7;
-        private Telerik.Reporting.TextBox textBox8;
-        private Telerik.Reporting.TextBox textBox9;
-        private Telerik.Reporting.TextBox textBox10;
-        private Telerik.Reporting.Shape shape3;
-        private Telerik.Reporting.TextBox textBox11;
-        private Telerik.Reporting.TextBox textBox12;
-        private Telerik.Reporting.TextBox textBox13;
-        private Telerik.Reporting.TextBox textBox14;
-        private Telerik.Reporting.TextBox textBox15;
-        private Telerik.Reporting.TextBox textBox16;
-        private Telerik.Reporting.Shape shape4;
-        private Telerik.Reporting.TextBox textBox17;
-        private Telerik.Reporting.TextBox textBox18;
-        private Telerik.Reporting.TextBox textBox19;
-        private Telerik.Reporting.TextBox textBox20;
-        private Telerik.Reporting.TextBox textBox21;
-        private Telerik.Reporting.TextBox textBox23;
-        private Telerik.Reporting.TextBox textBox24;
-        private Telerik.Reporting.TextBox textBox25;
-        private Telerik.Reporting.TextBox textBox26;
-        private Telerik.Reporting.TextBox textBox27;
-        private Telerik.Reporting.TextBox textBox28;
-        private Telerik.Reporting.TextBox textBox29;
-        private Telerik.Reporting.TextBox textBox30;
-        private Telerik.Reporting.TextBox textBox31;
-        private Telerik.Reporting.TextBox textBox32;
-        private Telerik.Reporting.TextBox textBox33;
-        private Telerik.Reporting.TextBox textBox34;
-        private Telerik.Reporting.TextBox textBox35;
-        private Telerik.Reporting.TextBox textBox36;
-        private Telerik.Reporting.TextBox textBox37;
-        private Telerik.Reporting.TextBox textBox38;
-        private Telerik.Reporting.TextBox textBox39;
-        private Telerik.Reporting.TextBox textBox40;
-        private Telerik.Reporting.Shape shape5;
-        private Telerik.Reporting.Shape shape6;
-        private Telerik.Reporting.TextBox textBox41;
-        private Telerik.Reporting.Shape shape7;
-        private Telerik.Reporting.Shape shape8;
-        private Telerik.Reporting.TextBox textBox42;
-        private Telerik.Reporting.TextBox textBox43;
-        private Telerik.Reporting.TextBox textBox44;
-        private Telerik.Reporting.TextBox textBox45;
-        private Telerik.Reporting.TextBox textBox46;
-        private Telerik.Reporting.TextBox textBox47;
-        private Telerik.Reporting.TextBox textBox48;
-        private Telerik.Reporting.TextBox textBox49;
-        private Telerik.Reporting.TextBox textBox50;
-        private Telerik.Reporting.TextBox textBox51;
-        private Telerik.Reporting.TextBox textBox52;
-        private Telerik.Reporting.TextBox textBox53;
-        private Telerik.Reporting.TextBox textBox54;
-        private Telerik.Reporting.TextBox textBox55;
-        private Telerik.Reporting.TextBox textBox56;
-        private Telerik.Reporting.TextBox textBox57;
-        private Telerik.Reporting.TextBox textBox58;
-        private Telerik.Reporting.TextBox textBox59;
-        private Telerik.Reporting.TextBox textBox60;
-        private Telerik.Reporting.TextBox textBox61;
-        private Telerik.Reporting.Shape shape9;
-        private Telerik.Reporting.Shape shape10;
-        private Telerik.Reporting.TextBox textBox62;
-        private Telerik.Reporting.TextBox textBox63;
-        private Telerik.Reporting.TextBox textBox64;
-        private Telerik.Reporting.TextBox textBox65;
-        private Telerik.Reporting.TextBox textBox66;
-        private Telerik.Reporting.TextBox textBox67;
-        private Telerik.Reporting.TextBox textBox68;
-        private Telerik.Reporting.TextBox textBox69;
-        private Telerik.Reporting.TextBox textBox70;
-        private Telerik.Reporting.TextBox textBox71;
-        private Telerik.Reporting.TextBox textBox72;
-        private Telerik.Reporting.TextBox textBox73;
+        private DetailSection detail;
+        private SqlDataSource sqlDSLeaveRequest;
+        private TextBox textBox1;
+        private TextBox textBox2;
+        private TextBox textBox3;
+        private TextBox textBox4;
+        private Shape shape1;
+        private Shape shape2;
+        private TextBox textBox5;
+        private TextBox textBox6;
+        private TextBox textBox7;
+        private TextBox textBox8;
+        private TextBox textBox9;
+        private TextBox textBox10;
+        private Shape shape3;
+        private TextBox textBox11;
+        private TextBox textBox12;
+        private TextBox textBox13;
+        private TextBox textBox14;
+        private TextBox textBox15;
+        private TextBox textBox16;
+        private Shape shape4;
+        private TextBox textBox17;
+        private TextBox textBox18;
+        private TextBox textBox19;
+        private TextBox textBox20;
+        private TextBox textBox21;
+        private TextBox textBox23;
+        private TextBox textBox24;
+        private TextBox textBox25;
+        private TextBox textBox26;
+        private TextBox textBox27;
+        private TextBox textBox28;
+        private TextBox textBox29;
+        private TextBox textBox30;
+        private TextBox textBox31;
+        private TextBox textBox32;
+        private TextBox textBox33;
+        private TextBox textBox34;
+        private TextBox textBox35;
+        private TextBox textBox36;
+        private TextBox textBox37;
+        private TextBox textBox38;
+        private TextBox textBox39;
+        private TextBox textBox40;
+        private Shape shape5;
+        private Shape shape6;
+        private TextBox textBox41;
+        private Shape shape7;
+        private Shape shape8;
+        private TextBox textBox42;
+        private TextBox textBox43;
+        private TextBox textBox44;
+        private TextBox textBox45;
+        private TextBox textBox46;
+        private TextBox textBox47;
+        private TextBox textBox48;
+        private TextBox textBox49;
+        private TextBox textBox50;
+        private TextBox textBox51;
+        private TextBox textBox52;
+        private TextBox textBox53;
+        private TextBox textBox54;
+        private TextBox textBox55;
+        private TextBox textBox56;
+        private TextBox textBox57;
+        private TextBox textBox58;
+        private TextBox textBox59;
+        private TextBox textBox60;
+        private TextBox textBox61;
+        private Shape shape9;
+        private Shape shape10;
+        private TextBox textBox62;
+        private TextBox textBox63;
+        private TextBox textBox64;
+        private TextBox textBox65;
+        private TextBox textBox66;
+        private TextBox textBox67;
+        private TextBox textBox68;
+        private TextBox textBox69;
+        private TextBox textBox70;
+        private TextBox textBox71;
+        private TextBox textBox72;
+        private TextBox textBox73;
+        private TextBox textBox22;
     }
 }

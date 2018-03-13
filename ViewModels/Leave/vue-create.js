@@ -24,7 +24,8 @@ var mgaHolidays = function() {
 
 businessMoment.locale('us', {
     holidays: mgaHolidays,
-    holidayFormat: "MM-DD-YYYY"
+    holidayFormat: "MM-DD-YYYY",
+    workingWeekdays: [1,2,3,4,5]
 });
 
 
@@ -56,7 +57,7 @@ const v = new Vue({
         getWorkingDays: function (begin, end) {
             // return moment(p1).diff(moment(p2), "days");
             var daysDiff = businessMoment(end, 'MM-DD-YYYY').businessDiff(businessMoment(begin, 'MM-DD-YYYY'));
-            return (daysDiff == 0, 1, daysDiff);
+            return (daysDiff) + 1;
         },
         getCalendarDays: function (begin, end) {
             return moment(end).diff(moment(begin), "days");
@@ -237,17 +238,21 @@ const v = new Vue({
             $("#myModal").modal("toggle");  
         },
         addToLeaveRequest: function () {
+            var yelemError = true;
+
             this.isLateFiled = false;
             this.isAdvanceFiled = false;
 
             var leaveTypeId = $("#leaveType").data("kendoComboBox").value();
             var dateBegin = $("#dateBegin").data("kendoDatePicker").value();
             var dateEnd = $("#dateEnd").data("kendoDatePicker").value();
+
+            var isVLUsedAsSL = $("#useVLasSL").is(":checked") ? true : false;
             
             // late filing determination
             // on VL - 5 working days advance
             if (leaveTypeId == "40301") {
-                if (this.$options.computed.getWorkingDays(dateBegin, this.serverDateTime) < 5) {
+                if (this.$options.computed.getWorkingDays(dateBegin, this.serverDateTime) < 5 && isVLUsedAsSL == false) {
                     this.isLateFiled = true;
                 }
             }
@@ -268,6 +273,7 @@ const v = new Vue({
 
             // no leave type has been selected
             if (!leaveTypeId) {
+                yelemError = false;
 
                 $("#mgaMensahe").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
@@ -283,6 +289,7 @@ const v = new Vue({
             }
             // no location specified
             else if ($("#placeLocation").val() == "") {
+                yelemError = false;
 
                 $("#mgaMensahe").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
@@ -300,6 +307,7 @@ const v = new Vue({
             } 
             // no starting date has been selected
             else if (dateBegin == null) {
+                yelemError = false;
 
                 $("#mgaMensahe").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
@@ -317,6 +325,7 @@ const v = new Vue({
             }
             // no ending date has been selected
             else if (dateEnd == null) {
+                yelemError = false;
 
                 $("#mgaMensahe").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
@@ -334,6 +343,7 @@ const v = new Vue({
             }
             // incorrect date leave period
             else if (dateEnd < dateBegin) {
+                yelemError = false;
 
                 $("#mgaMensahe").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
@@ -349,23 +359,27 @@ const v = new Vue({
             }
             // remark has not been filled when it is late on VL
             else if (leaveTypeId == "40301" && this.isLateFiled && this.remark == "") {
+                yelemError = false;
 
-                $("#mgaMensahe").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
-                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                    '<strong>Late Filing of Vacation Leave! Please explain why at remark field.</div>');
+                //if($("#useVLasSL").is(":checked") == false) {
+                    $("#mgaMensahe").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                        '<strong>Late Filing of Vacation Leave! Please explain why at remark field.</div>');
 
-                $("#remarkSection").show();
+                    $("#remarkSection").show();
 
-                // auto-dismissal of alert
-                setTimeout(function () {
-                    $(".alert-warning").fadeTo(300, 0).slideUp(300, function () {
-                        $(this).remove();
-                    });
-                }, 5000);
-                
+                    // auto-dismissal of alert
+                    setTimeout(function () {
+                        $(".alert-warning").fadeTo(300, 0).slideUp(300, function () {
+                            $(this).remove();
+                        });
+                    }, 5000);
+                //}
+
             }
             // remark has not been filled when it is late on SL
             else if (leaveTypeId == "40302" && this.isLateFiled==true && this.remark == "") {
+                yelemError = false;
 
                 $("#mgaMensahe").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
@@ -383,6 +397,7 @@ const v = new Vue({
             }
             // remark has not been filled when it is filed in advance on SL
             else if (leaveTypeId == "40302" && this.isAdvanceFiled==true && this.remark == "") {
+                yelemError = false;
 
                 $("#mgaMensahe").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
@@ -401,6 +416,8 @@ const v = new Vue({
             // conflict with unsubmitted leave request
             // 04Feb2018@1445
             else if (!this.editMode && this.checkConflictScheduleOnTheFly(dateBegin, dateEnd) == 1) {
+                yelemError = false;
+
                 $("#mgaMensahe").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
                     '<strong>Please review your leave request and/or change your leave period; Conflict with your previous leave request. </div>');
@@ -414,6 +431,7 @@ const v = new Vue({
             }
             // conflict with previously submitted leave
             else if (this.checkConflictSchedule(dateBegin, dateEnd) == 1) {
+                yelemError = false;
 
                 $("#mgaMensahe").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
@@ -520,7 +538,8 @@ const v = new Vue({
                 this.resetFields();
 
                 $("#myModal").modal("toggle");
-                
+
+                return yelemError;
             }
         },
         editLeaveRequest: function (item) {
@@ -557,8 +576,11 @@ const v = new Vue({
             $("#myModal").modal("toggle");
         },
         updateLeaveRequest: function () {
-            this.addToLeaveRequest();
-            this.editMode = false;
+            const noError = true;
+
+            if (this.addToLeaveRequest() === noError) {
+                this.editMode = false;
+            }
         },
         submitLeaveRequest: function(kini) {
             

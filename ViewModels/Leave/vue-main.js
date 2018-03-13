@@ -181,7 +181,7 @@ const v = new Vue({
                 type: 'POST',
                 data: { recNo : leave.recNo }
             });
-            window.open("../Reports/LeaveRequestReport.aspx");
+            window.open("../ReportWebForms/LeaveRequestReport.aspx");
         }
     }
 });

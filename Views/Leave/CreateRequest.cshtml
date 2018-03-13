@@ -37,9 +37,12 @@
             </div>
         </div>
         <div class="Rtable Rtable--8cols Rtable--collapse" v-for="item in leaveRequests">
-            <div class="Rtable-cell Rtable-cell--head">
+            <div class="Rtable-cell Rtable-cell--head" v-if="item.isVLUsedAsSL==true">
+                <b>SICK LEAVE</b>
+                <span><br />(Using VACATION LEAVE CREDIT)</span>
+            </div>
+            <div class="Rtable-cell Rtable-cell--head" v-else>
                 <b>{{ item.leaveDescription }}</b>
-                <span v-if="item.IsVLUsedAsSL==true"><br/>(Used as SICK LEAVE)</span>
             </div>
             <div class="Rtable-cell">{{ item.dateBegin | redenDateFormat }} to<br/>{{ item.dateEnd | redenDateFormat }}</div>
             <div class="Rtable-cell">{{ item.daysAbsent }} day/s</div>

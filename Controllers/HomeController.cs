@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using LeaveModule.Models;
+using Security;
+
 
 namespace LeaveModule.Controllers
 {
     public class HomeController : Controller
     {
+        GENERALEntities dbGeneral = new GENERALEntities();
+
         [HttpPost]
         public ActionResult LoginEIC(string EIC)
         {
@@ -22,6 +27,30 @@ namespace LeaveModule.Controllers
             {
                 return Content("1");
             }
+        }
+
+        [HttpPost]
+        public ActionResult Login(string userName, string passWord)
+        {
+            try
+            {
+                var encryptedPassWord = Security.Security.Encrypt(passWord.ToUpper());
+                /*return Content(encryptedPassWord);*/
+
+                var user =
+                    dbGeneral.tlogUsers.SingleOrDefault(r => r.userName == userName && r.passWord == encryptedPassWord);
+
+                if (user != null)
+                {
+                    Session["EIC"] = user.EIC;
+                    return Content("0");
+                }
+            }
+            catch (Exception exception)
+            {
+                return Content(exception.Message);
+            }
+            return Content("1");
         }
 
         public ActionResult Index()
