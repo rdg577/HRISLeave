@@ -124,27 +124,22 @@ gulp.task('build', function () {
     var folders = getFolders(scriptsPath);
     gutil.log(folders);
     folders.map(function (folder) {
-        /*compileJS(scriptsPath + "//" + folder + "//main.js", "Scripts//app//" + folder);
-        
-        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-main.js")) {
-            compileJSVue(scriptsPath + "//" + folder + "//vue-main.js", "Scripts//app//" + folder);
-        }*/
 
-        /*// for my-leave
+        // for my-leave and settings
         if (fs.existsSync(scriptsPath + "//" + folder + "//main.js")) {
             compileJSVue2(scriptsPath + "//" + folder + "//main.js", "Scripts//app//" + folder, "main.js");
         }
         if (fs.existsSync(scriptsPath + "//" + folder + "//vue-main.js")) {
             compileJSVue2(scriptsPath + "//" + folder + "//vue-main.js", "Scripts//app//" + folder, "vue-main.js");
-        }*/
+        }
 
-        // for create leave
+        /*// for create leave
         if (fs.existsSync(scriptsPath + "//" + folder + "//create.js")) {
             compileJSVue2(scriptsPath + "//" + folder + "//create.js", "Scripts//app//" + folder, "create.js");
         }
         if (fs.existsSync(scriptsPath + "//" + folder + "//vue-create.js")) {
             compileJSVue2(scriptsPath + "//" + folder + "//vue-create.js", "Scripts//app//" + folder, "vue-create.js");
-        }
+        }*/
 
         /*// for leave recommendation
         if (fs.existsSync(scriptsPath + "//" + folder + "//recommend.js")) {

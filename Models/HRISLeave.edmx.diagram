@@ -26,6 +26,7 @@
         <EntityTypeShape EntityType="HRISLeaveModel.tLeaveApp" Width="1.5" PointX="8.375" PointY="12.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.vLeaveApp" Width="1.5" PointX="10.375" PointY="12.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.tappOffice" Width="1.5" PointX="12.375" PointY="12.75" />
+        <EntityTypeShape EntityType="HRISLeaveModel.tLeaveInutang" Width="1.5" PointX="14.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

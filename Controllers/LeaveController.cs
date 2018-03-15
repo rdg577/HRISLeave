@@ -14,6 +14,168 @@ namespace LeaveModule.Controllers
     {
         private HRISEntities db = new HRISEntities();
 
+        public void CheckAdvanceLeaveCreditExpiration()
+        {
+            // 15Mar2018@1411
+            /*
+             * this will set the advance leave credit record inactive
+             * negate all leave ledger entries
+             * update leave master ledger
+             */
+
+            var petsaKaron = DateTime.Now;
+
+            // fetch all expired records
+            var expired = db.tLeaveInutangs.Where(r => r.DateTo < petsaKaron);
+            foreach (var item in expired)
+            {
+                // inutang Id
+                var idInutang = item.Id;
+
+                // make it inactive
+                item.IsActive = false;
+                db.SaveChanges();
+
+                // fetch the ledger detail entry
+                var ledgerDetail =
+                    db.tLeaveAppLedgers.SingleOrDefault(
+                        r => r.LedgerCode.Equals("100") && r.Referrence.Equals(idInutang.ToString()));
+
+                if (ledgerDetail != null)
+                {
+                    var EIC = ledgerDetail.EIC;
+                    var LedgerCode = ledgerDetail.LedgerCode;
+                    var Value = Math.Round(ledgerDetail.Value*(-1), 4);
+                    var Referrence = ledgerDetail.Referrence;
+
+                    // negate the ledger detail entry
+                    var negateLedgerDetail = new tLeaveAppLedger
+                    {
+                        EIC = EIC,
+                        LedgerCode = LedgerCode,
+                        Value = Value,
+                        Referrence = Referrence,
+                        Timestamp = petsaKaron
+                    };
+                    db.tLeaveAppLedgers.Add(negateLedgerDetail);
+                    db.SaveChanges();
+
+                    // update the master ledger
+                    var balance = db.tLeaveAppLedgerMasters.OrderByDescending(r => r.Id).First(r => r.EIC.Equals(EIC));
+                    var vlBalance = balance.VLCreditBalance;
+                    var slBalance = balance.SLCreditBalance;
+
+                    var update = new tLeaveAppLedgerMaster
+                    {
+                        EIC = EIC,
+                        VLCreditBalance = vlBalance - (Value / 2),
+                        SLCreditBalance = slBalance - (Value / 2),
+                        Reference = idInutang.ToString(),
+                        Remark = "ADVANCE LEAVE CREDIT",
+                        Timestamp = petsaKaron
+                    };
+                    db.tLeaveAppLedgerMasters.Add(update);
+                    db.SaveChanges();
+
+                }
+            }
+        }
+
+        public ActionResult SaveAdvanceLeaveCredit(string EIC, string DateFrom, string DateTo, 
+            int NumDays, float EquivalentDays)
+        {
+            // 15Mar2018@0900
+
+            try
+            {
+                if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
+
+                // get the last balances
+                var balances = db.tLeaveAppLedgerMasters.OrderByDescending(r => r.Id).FirstOrDefault(r => r.EIC == EIC);
+                if (balances == null) return Content("1 - no balance");  // exit with error
+
+                var vlBalance = balances.VLCreditBalance;
+                var slBalance = balances.SLCreditBalance;
+
+                var petsaKaron = DateTime.Now;
+
+                // fetch EIC of the user
+                var userEIC = Session["EIC"].ToString();
+
+                var inutang = new tLeaveInutang
+                {
+                    EIC = EIC,
+                    DateFrom = Convert.ToDateTime(DateFrom).Date,
+                    DateTo = Convert.ToDateTime(DateTo).Date,
+                    NumDays = NumDays,
+                    EquivalentDays = EquivalentDays,
+                    PostedByEIC = userEIC,
+                    DatePosted = petsaKaron,
+                    IsActive = true
+                };
+                db.tLeaveInutangs.Add(inutang);
+                db.SaveChanges();
+
+                // get Id of the new added record
+                var newIdInutang = inutang.Id;
+
+                // log entry to ledger details
+                var ledgerDetail = new tLeaveAppLedger
+                {
+                    EIC = EIC,
+                    LedgerCode = "100",
+                    Value = Math.Round(EquivalentDays, 4),
+                    Referrence = newIdInutang.ToString(),
+                    Timestamp = petsaKaron
+                };
+                db.tLeaveAppLedgers.Add(ledgerDetail);
+                db.SaveChanges();
+
+                var newIdLedgerDetail = ledgerDetail.Id;
+                var credit = EquivalentDays / 2;
+
+                // log entry to ledger master
+                db.tLeaveAppLedgerMasters.Add(new tLeaveAppLedgerMaster
+                {
+                    EIC = EIC,
+                    VLCreditBalance = Math.Round( vlBalance + credit, 4),
+                    SLCreditBalance = Math.Round(slBalance + credit, 4),
+                    Reference = newIdLedgerDetail.ToString(),
+                    Remark = "ADVANCE LEAVE CREDIT",
+                    Timestamp = petsaKaron
+                });
+                db.SaveChanges();
+            }
+            catch (Exception exception)
+            {
+                return Content(exception.Message);    // exit with error
+            }
+
+            return Content("0");
+        }
+
+        public ActionResult Reports()
+        {
+            // 
+            if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
+
+            var EIC = Session["EIC"].ToString();
+
+            // check if one of the HR BWD Officer
+            var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin")).SingleOrDefault(r => r.EIC == EIC);
+
+            if (HROfficer == null)
+            {
+                ViewBag.ModuleAdmin = false;
+            }
+            else
+            {
+                ViewBag.ModuleAdmin = true;
+            }
+
+            return View();
+        }
+
         [HttpPost]
         public ActionResult SetLeaveCreditsForPrintPreview(int recNo)
         {
@@ -172,7 +334,17 @@ namespace LeaveModule.Controllers
 
             // check if one of the HR BWD Officer
             var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ApprovingOfficer")).SingleOrDefault(r => r.EIC == EIC);
-            return HROfficer != null ? (ActionResult) View() : RedirectToAction("Index", "Home");
+
+            if (HROfficer == null)
+            {
+                ViewBag.ModuleAdmin = false;
+            }
+            else
+            {
+                ViewBag.ModuleAdmin = true;
+            }
+
+            return View();
 
         }
 
@@ -333,20 +505,41 @@ namespace LeaveModule.Controllers
             return Json(list.ToList(), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Recommend()
+        public ActionResult Posting()
         {
-            // 22Jan2018@0900
-            if(Session["EIC"]==null) return RedirectToAction("Index", "Home");
+            // if out of session, re-login
+            if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
 
             var EIC = Session["EIC"].ToString();
 
             // check if one of the HR BWD Officer
             var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin")).SingleOrDefault(r => r.EIC == EIC);
-            return HROfficer != null ? View("HRRecommend") : View();
+
+            if (HROfficer == null)
+            {
+                ViewBag.ModuleAdmin = false;
+            }
+            else
+            {
+                ViewBag.ModuleAdmin = true;
+            }
+            return View("HRRecommend");
+        }
+
+        public ActionResult Recommend()
+        {
+            // 22Jan2018@0900
+            // if out of session, re-login
+            if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
+
+            return View();
         }
 
         public ActionResult CancelLeaveRequest(int Id)
         {
+            // if out of session, re-login
+            if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
+
             // 18Jan2018@0930
             var leave = db.tLeaveApps.SingleOrDefault(r => r.recNo == Id);
             if (leave != null)
@@ -361,6 +554,9 @@ namespace LeaveModule.Controllers
         [HttpPost]
         public ActionResult ProcessLeaveRequest(IEnumerable<LeaveRequestModel> leaveRequests )
         {
+            // if out of session, re-login
+            if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
+
             // 16jan2018@1200
             // Save leave requests of the applicant
             try
@@ -480,6 +676,8 @@ namespace LeaveModule.Controllers
                 {
                     var sessionEIC = (string) (Session["EIC"]);
 
+                    var petsaKaron = DateTime.Now;
+
                     // STORE FORWARDED BALANCE AS POINT OF ORIGIN
                     var t = new tLeaveBalanceForwarded();
                     t.EIC = EIC;
@@ -488,7 +686,7 @@ namespace LeaveModule.Controllers
                     t.SLBalanceForwarded = Convert.ToDouble(SLBalanceForwarded);
                     t.TotalBalanceForwarded = (Convert.ToDouble(VLBalanceForwarded) + Convert.ToDouble(SLBalanceForwarded));
                     t.EICForwardedBy = sessionEIC;
-                    t.DateForwarded = DateTime.Now;
+                    t.DateForwarded = petsaKaron;
 
                     db.tLeaveBalanceForwardeds.Add(t);
 
@@ -497,7 +695,8 @@ namespace LeaveModule.Controllers
                     m.EIC = EIC;
                     m.SLCreditBalance = Convert.ToDouble(SLBalanceForwarded);
                     m.VLCreditBalance = Convert.ToDouble(VLBalanceForwarded);
-                    m.Timestamp=DateTime.Now;
+                    m.Remark = "FORWARDED BALANCE";
+                    m.Timestamp = petsaKaron;
                     db.tLeaveAppLedgerMasters.Add(m);
 
                     // STORE FORWARDED BALANCE IN THE LEDGER
@@ -539,6 +738,14 @@ namespace LeaveModule.Controllers
 
         public ActionResult LedgerPosting()
         {
+            if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
+
+            /*
+             * Firstly, process all advance leave credit request for expiration
+             */
+            CheckAdvanceLeaveCreditExpiration();
+
+
             // This is applicable only to employees with forwarded balance on leave credits.
 
             // This action will post entries to leave ledger based on DTR Submitted, such as
@@ -553,8 +760,6 @@ namespace LeaveModule.Controllers
             // select all DTRs that is not yet processed
             var DTRsForPosting = DTRs.Where(r => !DTRsAtLeaveLedger.Contains(r.DtrID)).OrderBy(r=>r.EIC).ThenBy(r => r.Year).ThenBy(r => r.Month).ThenBy(r => r.Period);
 
-            
-            
             try
             {
                 // get a list of EICs

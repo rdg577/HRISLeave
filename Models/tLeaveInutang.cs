@@ -12,15 +12,16 @@ namespace LeaveModule.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tLeaveAppLedgerMaster
+    public partial class tLeaveInutang
     {
         public int Id { get; set; }
         public string EIC { get; set; }
-        public string DTRId { get; set; }
-        public double VLCreditBalance { get; set; }
-        public double SLCreditBalance { get; set; }
-        public System.DateTime Timestamp { get; set; }
-        public string Reference { get; set; }
-        public string Remark { get; set; }
+        public System.DateTime DateFrom { get; set; }
+        public System.DateTime DateTo { get; set; }
+        public int NumDays { get; set; }
+        public double EquivalentDays { get; set; }
+        public string PostedByEIC { get; set; }
+        public System.DateTime DatePosted { get; set; }
+        public bool IsActive { get; set; }
     }
 }

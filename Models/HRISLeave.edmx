@@ -108,6 +108,8 @@
           <Property Name="VLCreditBalance" Type="float" Nullable="false" />
           <Property Name="SLCreditBalance" Type="float" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="Reference" Type="nvarchar" MaxLength="10" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="tLeaveBalanceForwarded">
           <Key>
@@ -121,6 +123,20 @@
           <Property Name="TotalBalanceForwarded" Type="float" Nullable="false" />
           <Property Name="EICForwardedBy" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="DateForwarded" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tLeaveInutang">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EIC" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="DateFrom" Type="date" Nullable="false" />
+          <Property Name="DateTo" Type="date" Nullable="false" />
+          <Property Name="NumDays" Type="int" Nullable="false" />
+          <Property Name="EquivalentDays" Type="float" Nullable="false" />
+          <Property Name="PostedByEIC" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="DatePosted" Type="datetime" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="tLogDashboard">
           <Key>
@@ -428,6 +444,7 @@ warning 6002: The table/view 'HRISLeave.dbo.vrefLeaveTypeAndAllotment' does not 
           <EntitySet Name="tLeaveAppLedger" EntityType="Self.tLeaveAppLedger" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tLeaveAppLedgerMaster" EntityType="Self.tLeaveAppLedgerMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tLeaveBalanceForwarded" EntityType="Self.tLeaveBalanceForwarded" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tLeaveInutang" EntityType="Self.tLeaveInutang" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tLogDashboard" EntityType="Self.tLogDashboard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefHoliday" EntityType="Self.trefHoliday" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefLeaveAdministrators" EntityType="Self.trefLeaveAdministrators" Schema="dbo" store:Type="Tables" />
@@ -714,8 +731,9 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Parameter Name="EIC" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="fnLeaveLedgerGenerator" IsComposable="true" ReturnType="Collection(HRISLeaveModel.fnLeaveLedgerGenerator_Result)">
-            <Parameter Name="EIC" Mode="In" Type="String" />
+          <Parameter Name="EIC" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="tLeaveInutangs" EntityType="HRISLeaveModel.tLeaveInutang" />
         </EntityContainer>
         <EntityType Name="tapp212Image">
           <Key>
@@ -806,6 +824,8 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="VLCreditBalance" Type="Double" Nullable="false" />
           <Property Name="SLCreditBalance" Type="Double" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Reference" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Remark" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="trefLeaveCreditForZeroVLCredit">
           <Key>
@@ -1057,6 +1077,20 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Type="Double" Name="SL_ABS_UND_WP" Nullable="true" />
           <Property Type="Double" Name="SL_ABS_UND_WOP" Nullable="true" />
         </ComplexType>
+        <EntityType Name="tLeaveInutang">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DateFrom" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateTo" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="NumDays" Type="Int32" Nullable="false" />
+          <Property Name="EquivalentDays" Type="Double" Nullable="false" />
+          <Property Name="PostedByEIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DatePosted" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1225,6 +1259,8 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <EntitySetMapping Name="tLeaveAppLedgerMasters">
             <EntityTypeMapping TypeName="HRISLeaveModel.tLeaveAppLedgerMaster">
               <MappingFragment StoreEntitySet="tLeaveAppLedgerMaster">
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="Reference" ColumnName="Reference" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="SLCreditBalance" ColumnName="SLCreditBalance" />
                 <ScalarProperty Name="VLCreditBalance" ColumnName="VLCreditBalance" />
@@ -1506,6 +1542,21 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="tLeaveInutangs">
+            <EntityTypeMapping TypeName="HRISLeaveModel.tLeaveInutang">
+              <MappingFragment StoreEntitySet="tLeaveInutang">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="DatePosted" ColumnName="DatePosted" />
+                <ScalarProperty Name="PostedByEIC" ColumnName="PostedByEIC" />
+                <ScalarProperty Name="EquivalentDays" ColumnName="EquivalentDays" />
+                <ScalarProperty Name="NumDays" ColumnName="NumDays" />
+                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
+                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

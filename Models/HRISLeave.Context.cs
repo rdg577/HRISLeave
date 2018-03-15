@@ -49,6 +49,7 @@ namespace LeaveModule.Models
         public DbSet<tLeaveApp> tLeaveApps { get; set; }
         public DbSet<vLeaveApp> vLeaveApps { get; set; }
         public DbSet<tappOffice> tappOffices { get; set; }
+        public DbSet<tLeaveInutang> tLeaveInutangs { get; set; }
     
         public virtual ObjectResult<spEmployeeLeaveBalance_Result> spEmployeeLeaveBalance(string eIC, Nullable<System.DateTime> dateBegin, Nullable<System.DateTime> dateEnd, string sbl, string stl, string ml, string pl, string spl, string slp, string rl, string vawc, string sel, string mone, string fl, string magnacarta)
         {

@@ -23,7 +23,7 @@ else
     </style>
     <div id="promptArea"></div>
     <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="col-lg-4 col-md-4 col-sm-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <a href="#leave-balances-body" data-toggle="collapse">Forward Leave Balances</a>
@@ -32,37 +32,93 @@ else
                     <div class="panel-body">
 
                         <div id="employeeGroup" class="form-group">
-                            <label for="employee">Employee Name</label><br />
-                            <input class="form-control" id="employee" aria-describedby="employeeHelp" style="width: 100%;" placeholder="" required><br />
+                            <label for="employee">Employee Name</label><br/>
+                            <input class="form-control" id="employee" aria-describedby="employeeHelp" style="width: 100%;" placeholder="" required><br/>
                             <small id="employeeHelp" class="form-text text-muted">Start typing the lastname of the employee.</small>
                         </div>
 
                         <div class="form-group">
-                            <label for="asOfDate">As of</label><br />
-                            <input class="form-control" id="asOfDate" aria-describedby="asOfDateHelp" style="width: 100%;" placeholder="" required><br />
+                            <label for="asOfDate">As of</label><br/>
+                            <input class="form-control" id="asOfDate" aria-describedby="asOfDateHelp" style="width: 100%;" placeholder="" required><br/>
                             <small id="asOfDateHelp" class="form-text text-muted">Date when credits are forwarded. Format: MM/DD/YYYY</small>
                         </div>
 
                         <div class="form-group">
-                            <label for="vlBalance">Vacation Leave Balance</label><br />
-                            <input type="number" id="vlBalance" placeholder="" required />
+                            <label for="vlBalance">Vacation Leave Balance</label><br/>
+                            <input type="number" id="vlBalance" placeholder="" required/>
                         </div>
 
                         <div class="form-group">
-                            <label for="slBalance">Sick Leave Balance</label><br />
-                            <input type="number" id="slBalance" placeholder="" required />
+                            <label for="slBalance">Sick Leave Balance</label><br/>
+                            <input type="number" id="slBalance" placeholder="" required/>
                         </div>
-                        <div class="pull-right">
-                            <button type="reset" class="btn btn-default" id="btnReset">Reset</button>
-                            <button type="button" class="btn btn-primary" id="btnForwardLeaveBalances">Submit</button>
-                        </div>
+                    </div>
 
+                    <div class="panel-footer">
+                        <button type="button" class="btn btn-primary" id="btnForwardLeaveBalances">Submit</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a href="#advance-leave-crediting" data-toggle="collapse">Advance Leave Crediting</a>
+                </div>
+                <div id="advance-leave-crediting" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div id="employeeGroup" class="form-group">
+                            <label for="ngalan">Employee Name</label><br />
+                            <input class="form-control" id="ngalan" aria-describedby="employeeHelp" style="width: 100%;" placeholder="" required><br />
+                            <small id="employeeHelp" class="form-text text-muted">Start typing the lastname of the employee.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="petsa-gikan">Date From</label><br />
+                            <input class="form-control" id="petsa-gikan" aria-describedby="adv-date-from-help" style="width: 100%;" placeholder="" required><br />
+                            <small id="adv-date-from-help" class="form-text text-muted">Date started. Format: MM/DD/YYYY</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="petsa-hangtud">Date To</label><br />
+                            <input class="form-control" id="petsa-hangtud" aria-describedby="adv-date-to-help" style="width: 100%;" placeholder="" required><br />
+                            <small id="adv-date-to-help" class="form-text text-muted">Date ended. Format: MM/DD/YYYY</small>
+                        </div>
+
+                        <div class="form-group form-inline">
+                            <label for="petsa-hangtud">Total Number of Days</label><br />
+                            <input class="form-control" id="num-days" aria-describedby="adv-date-to-help" 
+                                   style="width: 20%;" placeholder="" required readonly="true"><br />
+                        </div>
+
+                        <div class="form-group form-inline">
+                            <label for="petsa-hangtud">Equivalent Leave Credit</label><br />
+
+                            <input class="form-control" id="equivalent-days-vl" aria-describedby="vl-help"
+                                   style="width: 100%;" placeholder="" required readonly="true">
+                            <small id="vl-help" class="form-text text-muted">Vacation Leave</small>
+
+                            <input class="form-control" id="equivalent-days-sl" aria-describedby="sl-help"
+                                   style="width: 100%;" placeholder="" required readonly="true">
+                            <small id="sl-help" class="form-text text-muted">Sick Leave</small>
+
+                            <input class="form-control" id="equivalent-days-total" aria-describedby="total-help"
+                                   style="width: 100%;" placeholder="" required readonly="true">
+                            <small id="total-help" class="form-text text-muted">Total</small>
+                        </div>
+
+                    </div>
+
+                    <div class="panel-footer">
+                        <button type="button" class="btn btn-primary" id="btnAdvanceLeaveCrediting">Submit</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-4 col-sm-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <a href="#posting-leave-credits" data-toggle="collapse">Leave Ledger Updating</a>
@@ -76,6 +132,9 @@ else
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="row">
     </div>
 
 }

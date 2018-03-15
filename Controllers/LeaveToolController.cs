@@ -11,6 +11,23 @@ namespace LeaveModule.Controllers
     {
         private HRISEntities db = new HRISEntities();
 
+        public JsonResult GetLeaveCredit(int days)
+        {
+            // 15Mar2018@0524
+            // fetch and return equivalent leave credit
+            var numMonths = days/30;
+            var numDays = days%30;
+
+            // query database
+            var month = db.trefLeaveCreditsEarneds.SingleOrDefault(r => r.Type.Equals("MONTHLY") && r.Num == numMonths);
+            var daily = db.trefLeaveCreditsEarneds.SingleOrDefault(r => r.Type.Equals("DAILY") && r.Num == numDays);
+
+            var m = month != null ? (month.Vacation + month.Sick) : 0;
+            var d = daily != null ? (daily.Vacation + daily.Sick) : 0;
+
+            return Json((m + d), JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult LeaveApprovingOfficer()
         {
             // 31Jan2018@0944

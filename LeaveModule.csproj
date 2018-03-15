@@ -161,6 +161,9 @@
     <Compile Include="Models\tLeaveBalanceForwarded.cs">
       <DependentUpon>HRISLeave.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tLeaveInutang.cs">
+      <DependentUpon>HRISLeave.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tLogDashboard.cs">
       <DependentUpon>HRISLeave.tt</DependentUpon>
     </Compile>
@@ -12378,6 +12381,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Leave\Approve.cshtml" />
     <Content Include="Views\Leave\LeaveCard.cshtml" />
+    <Content Include="Views\Leave\Reports.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

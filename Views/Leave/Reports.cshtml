@@ -1,7 +1,8 @@
 ﻿
 @{
-    ViewBag.Title = "HR Posting of Leave Request";
+    ViewBag.Title = "Report";
 }
+
 <style>
     tbody > tr:hover {
         background-color: #E3F2FD;
@@ -26,7 +27,7 @@ else
     <div class="panel panel-primary">
         <div class="panel-heading">
             <div class="panel-title">
-                <strong>LEAVE REQUEST THAT NEEDS YOUR ACTION</strong>
+                <strong>LEAVE CREDIT CERTIFICATION</strong>
             </div>
         </div>
         <div class="panel-body">
@@ -44,10 +45,10 @@ else
                 </div>
             </div>
 
-            <!-- Unacted leave request -->
-            <div v-for="(key, leave) in getUnactedByHR(leaveRequestsForHR)" style="padding-bottom: 1em;">
+            <!-- Acted leave request -->
+            <div v-for="(key, leave) in getActedByHR(leaveRequestsForHR)" style="padding-bottom: 1em;">
 
-                <div class="panel panel-danger">
+                <div class="panel panel-info">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -139,15 +140,11 @@ else
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-group">
-                                    <label for="actions" style="font-size: 8pt; color: teal;">ACTION</label>
-                                    <p id="actions">
-                                        <button class="btn btn-danger btn-sm" v-on:click="denyHR(leave)" v-if="leave.IsRecommendedAtHR==true || leave.IsRecommendedAtHR==null">
-                                            <span class="glyphicon glyphicon-thumbs-down"></span> DENY
-                                        </button>
-                                        <button class="btn btn-success btn-sm" v-on:click="recommendHR(leave)" v-if="leave.IsRecommendedAtHR==false || leave.IsRecommendedAtHR==null">
-                                            <span class="glyphicon glyphicon-thumbs-up"></span> POST IT
-                                        </button>
-                                    </p>
+                                    <label for="" style="font-size: 8pt; color: teal;">ACTION</label><br />
+                                    <button id="" type="button" class="btn btn-info btn-block" title="Print leave credits..."
+                                            v-on:click="printPreview(leave)">
+                                        <span class="glyphicon glyphicon-print"></span> PRINT LEAVE CREDITS
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -157,38 +154,7 @@ else
             </div>
         </div>
     </div>
-
-    <!-- Modal -->
-    <div id="leaveRecommendationModal" class="modal fade" role="dialog">
-        <div class="modal-dialog" style="width: 760px">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header" style="color: white; background-color: #002984;">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">LEAVE RECOMMENDATION <span v-if="itemActiveForRecommendation">FOR {{ itemActiveForRecommendation.profile.fullnameLast }}</span></h4>
-                </div>
-
-                <div class="modal-body">
-                    <div id="leaveApprovingOfficer" class="form-group">
-                        <label for="approvingEIC" style="color: teal;">Who will approve this leave?</label><br />
-                        <input id="approvingEIC" style="width: 300px" />
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <div class="pull-right">
-                        <button id="btnCancel" class="btn btn-default">CANCEL</button>
-                        <button class="btn btn-success" v-on:click="submitRecommendation">SUBMIT THIS RECOMMENDATION</button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
 }
-
-
 
 @{
     var controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
