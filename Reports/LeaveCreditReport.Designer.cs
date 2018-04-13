@@ -27,11 +27,11 @@ namespace LeaveModule.Reports
             this.textBox11 = new Telerik.Reporting.TextBox();
             this.textBox12 = new Telerik.Reporting.TextBox();
             this.textBox10 = new Telerik.Reporting.TextBox();
-            this.sqlDSLeaveCredits = new Telerik.Reporting.SqlDataSource();
             this.textBox13 = new Telerik.Reporting.TextBox();
             this.textBox14 = new Telerik.Reporting.TextBox();
             this.textBox15 = new Telerik.Reporting.TextBox();
             this.textBox16 = new Telerik.Reporting.TextBox();
+            this.sqlDSLeaveCredits = new Telerik.Reporting.SqlDataSource();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // detail
@@ -129,7 +129,7 @@ namespace LeaveModule.Reports
             this.textBox6.Style.Font.Bold = false;
             this.textBox6.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(9D);
             this.textBox6.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Center;
-            this.textBox6.Value = "= Fields.Period.Date.Date";
+            this.textBox6.Value = "= Fields.Period.Date";
             // 
             // textBox7
             // 
@@ -209,17 +209,6 @@ namespace LeaveModule.Reports
             this.textBox10.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Center;
             this.textBox10.Value = "Balance :";
             // 
-            // sqlDSLeaveCredits
-            // 
-            this.sqlDSLeaveCredits.ConnectionString = "Data Source=YOHANNES;Initial Catalog=HRISLeave;User ID=sa;Password=m@st3rk3y;Mult" +
-    "ipleActiveResultSets=True;Application Name=EntityFramework";
-            this.sqlDSLeaveCredits.Name = "sqlDSLeaveCredits";
-            this.sqlDSLeaveCredits.Parameters.AddRange(new Telerik.Reporting.SqlDataSourceParameter[] {
-            new Telerik.Reporting.SqlDataSourceParameter("@EIC", System.Data.DbType.String, "=Parameters.EIC.Value"),
-            new Telerik.Reporting.SqlDataSourceParameter("@recNo", System.Data.DbType.Int32, "=Parameters.recNo.Value")});
-            this.sqlDSLeaveCredits.ProviderName = "System.Data.SqlClient";
-            this.sqlDSLeaveCredits.SelectCommand = "select * from fnLeaveCreditsDataForPrinting(@EIC, @recNo)";
-            // 
             // textBox13
             // 
             this.textBox13.Format = "{0:N4}";
@@ -274,6 +263,17 @@ namespace LeaveModule.Reports
             this.textBox16.Value = "=IIf(Fields.LeaveCode <> \"VL\" and Fields.LeaveCode <> \"SL\", \"OTHER(\" + Fields.Lea" +
     "veCode + \")\", \"OTHER\")";
             // 
+            // sqlDSLeaveCredits
+            // 
+            this.sqlDSLeaveCredits.ConnectionString = "Data Source=YOHANNES;Initial Catalog=HRISLeave;User ID=sa;Password=m@st3rk3y;Mult" +
+    "ipleActiveResultSets=True;Application Name=EntityFramework";
+            this.sqlDSLeaveCredits.Name = "sqlDSLeaveCredits";
+            this.sqlDSLeaveCredits.Parameters.AddRange(new Telerik.Reporting.SqlDataSourceParameter[] {
+            new Telerik.Reporting.SqlDataSourceParameter("@EIC", System.Data.DbType.String, "=Parameters.EIC.Value"),
+            new Telerik.Reporting.SqlDataSourceParameter("@recNo", System.Data.DbType.Int32, "=Parameters.recNo.Value")});
+            this.sqlDSLeaveCredits.ProviderName = "System.Data.SqlClient";
+            this.sqlDSLeaveCredits.SelectCommand = "select * from fnLeaveCreditsDataForPrinting(@EIC, @recNo)";
+            // 
             // LeaveCreditReport
             // 
             this.DataSource = this.sqlDSLeaveCredits;
@@ -285,9 +285,11 @@ namespace LeaveModule.Reports
             this.PageSettings.PaperKind = System.Drawing.Printing.PaperKind.Legal;
             reportParameter1.Name = "EIC";
             reportParameter1.Text = "EIC";
+            reportParameter1.Value = "";
             reportParameter2.Name = "recNo";
             reportParameter2.Text = "recNo";
             reportParameter2.Type = Telerik.Reporting.ReportParameterType.Integer;
+            reportParameter2.Value = "";
             this.ReportParameters.Add(reportParameter1);
             this.ReportParameters.Add(reportParameter2);
             this.Style.BackgroundColor = System.Drawing.Color.White;

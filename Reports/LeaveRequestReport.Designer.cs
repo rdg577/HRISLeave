@@ -95,10 +95,9 @@ namespace LeaveModule.Reports
             this.textBox69 = new Telerik.Reporting.TextBox();
             this.textBox70 = new Telerik.Reporting.TextBox();
             this.textBox71 = new Telerik.Reporting.TextBox();
-            this.textBox72 = new Telerik.Reporting.TextBox();
             this.textBox73 = new Telerik.Reporting.TextBox();
-            this.sqlDSLeaveRequest = new Telerik.Reporting.SqlDataSource();
             this.textBox22 = new Telerik.Reporting.TextBox();
+            this.sqlDSLeaveRequest = new Telerik.Reporting.SqlDataSource();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // detail
@@ -185,7 +184,6 @@ namespace LeaveModule.Reports
             this.textBox69,
             this.textBox70,
             this.textBox71,
-            this.textBox72,
             this.textBox73,
             this.textBox22});
             this.detail.Name = "detail";
@@ -435,7 +433,7 @@ namespace LeaveModule.Reports
             this.textBox26.Name = "textBox26";
             this.textBox26.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.3529167175292969D), Telerik.Reporting.Drawing.Unit.Inch(0.19999998807907105D));
             this.textBox26.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(10D);
-            this.textBox26.Value = "=IIf(Fields.LeaveCode=\"SL\" And Fields.place <> \"PH\", \"[x] Abroad (Specify)\", \"[ ]" +
+            this.textBox26.Value = "=IIf(Fields.LeaveCode=\"VL\" And Fields.place <> \"PH\", \"[x] Abroad (Specify)\", \"[ ]" +
     " Abroad (Specify)\")";
             // 
             // textBox27
@@ -922,16 +920,6 @@ namespace LeaveModule.Reports
             this.textBox71.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(10D);
             this.textBox71.Value = "=IIf(Fields.statusName=\"CO-TERMINOUS\", \"[x] Co-Terminous\", \"[ ] Co-Terminous\")";
             // 
-            // textBox72
-            // 
-            this.textBox72.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(2.21875D), Telerik.Reporting.Drawing.Unit.Inch(9.0416669845581055D));
-            this.textBox72.Name = "textBox72";
-            this.textBox72.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(3.0715274810791016D), Telerik.Reporting.Drawing.Unit.Inch(0.19999998807907105D));
-            this.textBox72.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(10D);
-            this.textBox72.Style.Font.Underline = false;
-            this.textBox72.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Center;
-            this.textBox72.Value = "= Fields.ApprovingOfficer";
-            // 
             // textBox73
             // 
             this.textBox73.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.010416666977107525D), Telerik.Reporting.Drawing.Unit.Inch(9.7395830154418945D));
@@ -939,16 +927,6 @@ namespace LeaveModule.Reports
             this.textBox73.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(7.4831862449646D), Telerik.Reporting.Drawing.Unit.Inch(0.16453425586223602D));
             this.textBox73.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Center;
             this.textBox73.Value = "INSTRUCTIONS";
-            // 
-            // sqlDSLeaveRequest
-            // 
-            this.sqlDSLeaveRequest.ConnectionString = "Data Source=YOHANNES;Initial Catalog=HRISLeave;User ID=sa;Password=m@st3rk3y;Mult" +
-    "ipleActiveResultSets=True;Application Name=EntityFramework";
-            this.sqlDSLeaveRequest.Name = "sqlDSLeaveRequest";
-            this.sqlDSLeaveRequest.Parameters.AddRange(new Telerik.Reporting.SqlDataSourceParameter[] {
-            new Telerik.Reporting.SqlDataSourceParameter("@recNo", System.Data.DbType.String, "=Parameters.recNo.Value")});
-            this.sqlDSLeaveRequest.ProviderName = "System.Data.SqlClient";
-            this.sqlDSLeaveRequest.SelectCommand = resources.GetString("sqlDSLeaveRequest.SelectCommand");
             // 
             // textBox22
             // 
@@ -959,6 +937,16 @@ namespace LeaveModule.Reports
             this.textBox22.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.textBox22.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Center;
             this.textBox22.Value = "By the authority of the Governor";
+            // 
+            // sqlDSLeaveRequest
+            // 
+            this.sqlDSLeaveRequest.ConnectionString = "Data Source=YOHANNES;Initial Catalog=HRISLeave;User ID=sa;Password=m@st3rk3y;Mult" +
+    "ipleActiveResultSets=True;Application Name=EntityFramework";
+            this.sqlDSLeaveRequest.Name = "sqlDSLeaveRequest";
+            this.sqlDSLeaveRequest.Parameters.AddRange(new Telerik.Reporting.SqlDataSourceParameter[] {
+            new Telerik.Reporting.SqlDataSourceParameter("@recNo", System.Data.DbType.String, "=Parameters.recNo.Value")});
+            this.sqlDSLeaveRequest.ProviderName = "System.Data.SqlClient";
+            this.sqlDSLeaveRequest.SelectCommand = resources.GetString("sqlDSLeaveRequest.SelectCommand");
             // 
             // LeaveRequestReport
             // 
@@ -1069,7 +1057,6 @@ namespace LeaveModule.Reports
         private TextBox textBox69;
         private TextBox textBox70;
         private TextBox textBox71;
-        private TextBox textBox72;
         private TextBox textBox73;
         private TextBox textBox22;
     }
