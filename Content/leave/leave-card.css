@@ -24,7 +24,7 @@ div.panel {
         color: #0000cd;
     }
 
-    #leave-card-table {
+    #leave-card, #leave-card-table {
         overflow: auto;
         overflow-y: hidden;
     }

@@ -182,6 +182,36 @@ const v = new Vue({
                 data: { recNo : leave.recNo }
             });
             window.open("../ReportWebForms/LeaveRequestReport.aspx");
+        },
+        viewLeaveStatus: function(item) {
+            var info = "<table><tr><th>TYPE:</th><td>" + item.LeaveDescription + "</td></tr><tr><th>FROM:</th><td>" + moment(item.periodFrom).format("DD-MMM-YYYY") + "</td></tr><tr><th>TO:</th><td>" + moment(item.periodFrom).format("DD-MMM-YYYY") + "</td></tr><tr><th>FILED ON:</th><td>" + moment(item.dateFiled).format("DD-MMM-YYYY HH:mm:ss") + "</td></tr></table>";
+
+            // Office Level
+            var msg = "<strong>Office Level</strong>";
+            if (item.IsRecommendedAtOffice == null) {
+                var elapsedDays = moment(new Date()).diff(moment(item.dateFiled), "days");
+                msg += "<br/>Not yet acted by <strong>" + item.OfficeRecommender + "</strong>, <strong>" + elapsedDays + " day(s)</strong> has elapsed!";
+            } else if (item.IsRecommendedAtOffice == true) {
+                msg += "<br/>Has been recommended by <strong>" + item.OfficeRecommender + "</strong> on " + moment(item.DateAtOfficeRecommended).format("MM-DD-YYYY @ HH:mm:ss") + "</strong>";
+            } else if (item.IsRecommendedAtOffice == false) {
+                msg += "<br/>Has been denied by <strong>" + item.OfficeRecommender + "</strong> on <strong>" + moment(item.DateAtOfficeRecommended).format("MM-DD-YYYY @ HH:mm:ss") + "</strong>";
+            }
+            // HR Level
+            if (item.IsRecommendedAtOffice != null) msg += "<br/><strong>HR Level</strong>";
+            if (item.IsRecommendedAtOffice != null && item.IsRecommendedAtHR == null) {
+                var elapsedDays = moment(new Date()).diff(moment(item.DateAtOfficeRecommended), "days") + 1;
+                msg += "<br/>Not yet acted at <strong>HR</strong>, <strong>" + elapsedDays + " day(s)</strong> has elapsed!";
+            } else if (item.IsRecommendedAtOffice == true) {
+                msg += "<br/>Has been recommended/posted by <strong>" + item.HRRecommender + "</strong> on " + moment(item.HRDateRecommended).format("MM-DD-YYYY @ HH:mm:ss") + "</strong>";
+            } else if (item.IsRecommendedAtOffice == false) {
+                msg += "<br/>Has been denied/posted by <strong>" + item.HRRecommender + "</strong> on <strong>" + moment(item.HRDateRecommended).format("MM-DD-YYYY @ HH:mm:ss") + "</strong>";
+            }
+            // 19Apr2018@0843
+            bootbox.alert({
+                title: "<h4>LEAVE STATUS</h4>",
+                message: "<div>" + info + "</div><hr/>" + msg,
+                backdrop: true
+            });
         }
     }
 });

@@ -171,6 +171,15 @@
           <Property Name="Role" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="trefLeaveAllotment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LeaveCode" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="IsCalendarDays" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="trefLeaveCreditForZeroVLCredit">
           <Key>
             <PropertyRef Name="Id" />
@@ -448,6 +457,7 @@ warning 6002: The table/view 'HRISLeave.dbo.vrefLeaveTypeAndAllotment' does not 
           <EntitySet Name="tLogDashboard" EntityType="Self.tLogDashboard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefHoliday" EntityType="Self.trefHoliday" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefLeaveAdministrators" EntityType="Self.trefLeaveAdministrators" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="trefLeaveAllotment" EntityType="Self.trefLeaveAllotment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefLeaveCreditForZeroVLCredit" EntityType="Self.trefLeaveCreditForZeroVLCredit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefLeaveCreditsEarned" EntityType="Self.trefLeaveCreditsEarned" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefLeaveLedgerCode" EntityType="Self.trefLeaveLedgerCode" Schema="dbo" store:Type="Tables" />
@@ -734,6 +744,7 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Parameter Name="EIC" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="tLeaveInutangs" EntityType="HRISLeaveModel.tLeaveInutang" />
+          <EntitySet Name="trefLeaveAllotments" EntityType="HRISLeaveModel.trefLeaveAllotment" />
         </EntityContainer>
         <EntityType Name="tapp212Image">
           <Key>
@@ -1090,6 +1101,15 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="PostedByEIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="DatePosted" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="trefLeaveAllotment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LeaveCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="IsCalendarDays" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1553,6 +1573,16 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
                 <ScalarProperty Name="DateTo" ColumnName="DateTo" />
                 <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
                 <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trefLeaveAllotments">
+            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveAllotment">
+              <MappingFragment StoreEntitySet="trefLeaveAllotment">
+                <ScalarProperty Name="IsCalendarDays" ColumnName="IsCalendarDays" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="LeaveCode" ColumnName="LeaveCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

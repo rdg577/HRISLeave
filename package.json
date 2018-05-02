@@ -21,15 +21,20 @@
         "axios": "^0.17.1",
         "bootbox": "^4.4.0",
         "bootstrap": "^3.3.7",
+        "envify": "^4.1.0",
         "jquery": "^1.8.2",
         "kendo-ui-core": "^2017.3.1206",
         "moment": "^2.20.1",
         "moment-business-days": "^1.0.6",
         "numeral": "^2.0.6",
         "sweetalert": "^2.1.0",
+        "toastr": "^2.1.4",
         "vue": "^1.0.28",
+        "vue-dos-punto-singko": "npm:vue@2.5.16",
+        "vue-uno-punto-zero-benteotso": "npm:vue@1.0.28",
         "vuejs-dialog": "^0.4.7",
-        "vuejs-sui-confirmation": "0.0.2"
+        "vuejs-sui-confirmation": "0.0.2",
+        "vuetify": "^1.0.16"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"

@@ -15,6 +15,121 @@ namespace LeaveModule.Controllers
     {
         private HRISEntities db = new HRISEntities();
 
+		private int ClearLeaveLedgerEntries(string EIC)
+		{
+			try
+			{
+				var entries = db.tLeaveAppLedgers.Where(r => r.EIC == EIC && (r.LedgerCode != "101" && r.LedgerCode != "102" && r.LedgerCode != "100")).ToList();
+				var masterEntries = db.tLeaveAppLedgerMasters.Where(r => r.EIC == EIC && r.DTRId!=null).ToList();
+
+				foreach (var entry in entries)
+				{
+					db.tLeaveAppLedgers.Remove(entry);
+				}
+				foreach (var masterEntry in masterEntries)
+				{
+					db.tLeaveAppLedgerMasters.Remove(masterEntry);
+				}
+				db.SaveChanges();
+				return 0;
+			}
+			catch(Exception ex)
+			{
+				return 1;
+			}
+		}
+
+		public ActionResult UpdateLeave(tLeaveApp item)
+	    {
+		    try
+		    {
+			    // 28Apr2018 10h00
+			    db.Entry(item).State = EntityState.Modified;
+			    // update only the fields that are modified
+			    foreach (var prop in item.GetType().GetProperties())
+			    {
+				    if (prop.GetValue(item, null) == null)
+				    {
+					    db.Entry(item).Property(prop.Name).IsModified = false;
+				    }
+			    }
+			    db.SaveChanges();
+
+			    var retVal = -1;
+
+			    if (ClearLeaveLedgerEntries(item.EIC) == 0)
+			    {
+				    retVal = LedgerPostingByEic(item.EIC);
+			    }
+
+			    return Content(Convert.ToString(retVal));
+		    }
+		    catch (Exception ex)
+		    {
+			    return Content("ERROR! " + ex.Message);
+		    }
+	    }
+
+	    public JsonResult ApprovedLeaves(string EIC)
+	    {
+			// 22pr2018 2300hrs
+		    var data = db.vLeaveApps.Where(r => r.EIC == EIC && r.IsApproved==true).OrderByDescending(r => r.periodFrom)
+			.Select(r=> new
+		    {
+			    r.LeaveDescription, 
+				r.dateFiled,
+				r.periodFrom,
+				r.periodTo,
+				r.applyDay,
+				r.place,
+				r.location,
+				leave = db.tLeaveApps.FirstOrDefault(t => t.recNo == r.recNo)
+		    })
+			.ToList();
+		    return Json(data, JsonRequestBehavior.AllowGet);
+	    } 
+
+        public ActionResult Edit(string EIC)
+        {
+            // if out of session, re-login
+            if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
+
+            var _EIC = Session["EIC"].ToString();
+
+            // check if one of the HR BWD Officer
+            var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin")).SingleOrDefault(r => r.EIC == _EIC);
+
+            if (HROfficer == null)
+            {
+                ViewBag.ModuleAdmin = false;
+            }
+            else
+            {
+                ViewBag.ModuleAdmin = true;
+            }
+            return View();
+        }
+
+        public ActionResult Utility()
+        {   // if out of session, re-login
+            if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
+
+            var EIC = Session["EIC"].ToString();
+
+            // check if one of the HR BWD Officer
+            var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin")).SingleOrDefault(r => r.EIC == EIC);
+
+            if (HROfficer == null)
+            {
+                ViewBag.ModuleAdmin = false;
+            }
+            else
+            {
+                ViewBag.ModuleAdmin = true;
+            }
+            return View();
+        }
+
         public void CheckAdvanceLeaveCreditExpiration()
         {
             // 15Mar2018@1411
@@ -37,14 +152,6 @@ namespace LeaveModule.Controllers
                 item.IsActive = false;
 
                 db.Entry(item).State=EntityState.Modified;
-                // update only the fields that are modified
-                foreach (var prop in item.GetType().GetProperties())
-                {
-                    if (prop.GetValue(item, null) == null)
-                    {
-                        db.Entry(item).Property(prop.Name).IsModified = false;
-                    }
-                }
                 
 
                 // fetch the ledger detail entry
@@ -71,6 +178,77 @@ namespace LeaveModule.Controllers
                     db.tLeaveAppLedgers.Add(negateLedgerDetail);
                     
                     var utang = Value/2.0;
+
+                    // update the master ledger
+                    var balance = db.tLeaveAppLedgerMasters.OrderByDescending(r => r.Id).First(r => r.EIC.Equals(EIC));
+                    var vlBalance = Math.Round(balance.VLCreditBalance + utang, 4);
+                    var slBalance = Math.Round(balance.SLCreditBalance + utang, 4);
+
+                    var update = new tLeaveAppLedgerMaster
+                    {
+                        EIC = EIC,
+                        VLCreditBalance = vlBalance,
+                        SLCreditBalance = slBalance,
+                        Reference = idInutang,
+                        Remark = "DEBIT-ADVANCE LEAVE",
+                        Timestamp = petsaKaron
+                    };
+                    db.tLeaveAppLedgerMasters.Add(update);
+
+                }
+
+                // save all changes
+                db.SaveChanges();
+            } // end -> foreach(var item in expired)
+        }
+
+        public void CheckAdvanceLeaveCreditExpiration(string EIC)
+        {
+            // 15Mar2018@1411
+            /*
+             * this will set the advance leave credit record inactive
+             * negate all leave ledger entries
+             * update leave master ledger
+             */
+
+            var petsaKaron = DateTime.Now;
+
+            // fetch all expired records
+            var expired = db.tLeaveInutangs.Where(r => r.DateTo < petsaKaron && r.IsActive && r.EIC.Equals(EIC)).ToList();
+            foreach (var item in expired)
+            {
+                // inutang Id
+                string idInutang = Convert.ToString(item.Id);
+
+                // make it inactive
+                item.IsActive = false;
+
+                db.Entry(item).State = EntityState.Modified;
+
+                // fetch the ledger detail entry
+                var ledgerDetail =
+                    db.tLeaveAppLedgers.SingleOrDefault(
+                        r => r.LedgerCode.Equals("100") && r.Referrence.Equals(idInutang));
+
+                if (ledgerDetail != null)
+                {
+                    var eic = ledgerDetail.EIC;
+                    var LedgerCode = ledgerDetail.LedgerCode;
+                    var Value = Math.Round(ledgerDetail.Value, 4) * (-1);
+                    var Referrence = ledgerDetail.Referrence;
+
+                    // negate the ledger detail entry
+                    var negateLedgerDetail = new tLeaveAppLedger
+                    {
+                        EIC = eic,
+                        LedgerCode = LedgerCode,
+                        Value = Value,
+                        Referrence = Referrence,
+                        Timestamp = petsaKaron
+                    };
+                    db.tLeaveAppLedgers.Add(negateLedgerDetail);
+
+                    var utang = Value / 2.0;
 
                     // update the master ledger
                     var balance = db.tLeaveAppLedgerMasters.OrderByDescending(r => r.Id).First(r => r.EIC.Equals(EIC));
@@ -128,37 +306,37 @@ namespace LeaveModule.Controllers
                     IsActive = true
                 };
                 db.tLeaveInutangs.Add(inutang);
-                db.SaveChanges();
+				db.SaveChanges();
 
-                // get Id of the new added record
-                var newIdInutang = inutang.Id;
+				// get Id of the new added record
+				var newIdInutang = inutang.Id;
 
-                // log entry to ledger details
-                var ledgerDetail = new tLeaveAppLedger
-                {
-                    EIC = EIC,
-                    LedgerCode = "100",
-                    Value = Math.Round(EquivalentDays, 4),
-                    Referrence = newIdInutang.ToString(),
-                    Timestamp = petsaKaron
-                };
-                db.tLeaveAppLedgers.Add(ledgerDetail);
-                db.SaveChanges();
+				// log entry to ledger details
+				var ledgerDetail = new tLeaveAppLedger
+				{
+					EIC = EIC,
+					LedgerCode = "100",
+					Value = Math.Round(EquivalentDays, 4),
+					Referrence = newIdInutang.ToString(),
+					Timestamp = petsaKaron
+				};
+				db.tLeaveAppLedgers.Add(ledgerDetail);
+				db.SaveChanges();
 
-                var newIdLedgerDetail = ledgerDetail.Id;
-                var credit = EquivalentDays / 2;
+				var newIdLedgerDetail = ledgerDetail.Id;
+				var credit = EquivalentDays / 2;
 
-                // log entry to ledger master
-                db.tLeaveAppLedgerMasters.Add(new tLeaveAppLedgerMaster
-                {
-                    EIC = EIC,
-                    VLCreditBalance = Math.Round( vlBalance + credit, 4),
-                    SLCreditBalance = Math.Round(slBalance + credit, 4),
-                    Reference = newIdLedgerDetail.ToString(),
-                    Remark = "ADVANCE LEAVE CREDIT",
-                    Timestamp = petsaKaron
-                });
-                db.SaveChanges();
+				// log entry to ledger master
+				db.tLeaveAppLedgerMasters.Add(new tLeaveAppLedgerMaster
+				{
+					EIC = EIC,
+					VLCreditBalance = Math.Round(vlBalance + credit, 4),
+					SLCreditBalance = Math.Round(slBalance + credit, 4),
+					Reference = newIdLedgerDetail.ToString(),
+					Remark = "ADVANCE LEAVE CREDIT",
+					Timestamp = petsaKaron
+				});
+				db.SaveChanges();
             }
             catch (Exception exception)
             {
@@ -217,13 +395,17 @@ namespace LeaveModule.Controllers
              */
             if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
 
+            var EIC = Session["EIC"].ToString();
+
             /*
              * Execute LedgerPosting()
              * to have an updated data
              */
-            //LedgerPosting();
-
-            return View("LeaveCard");
+            var status = LedgerPostingByEic(EIC);
+            if(status == 0)
+                return View("LeaveCard");
+            
+            return RedirectToAction("MyLeave");
         }
 
         public JsonResult GetLeaveCardData()
@@ -308,6 +490,7 @@ namespace LeaveModule.Controllers
                 return Content(errMsg);
             }
         }
+        
         public ActionResult LeaveRequestForApproval()
         {
             // 30Jan2018@1700
@@ -345,6 +528,7 @@ namespace LeaveModule.Controllers
 
             return Json(data.ToList(), JsonRequestBehavior.AllowGet);
         }
+        
         public ActionResult Approve()
         {
             // 01Feb2018@0335
@@ -574,6 +758,8 @@ namespace LeaveModule.Controllers
         [HttpPost]
         public ActionResult ProcessLeaveRequest(IEnumerable<LeaveRequestModel> leaveRequests )
         {
+			// Saves all leave requests
+
             // if out of session, re-login
             if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
 
@@ -786,6 +972,354 @@ namespace LeaveModule.Controllers
                 var EICs = EICsWithForwardedLeaveCredits.Distinct().ToList();
                 foreach (var EIC in EICs)
                 {
+					LedgerPostingByEic(EIC);
+
+					//var PetsaKaron = DateTime.Now;
+
+					//// set balances to 0 in every employee
+					//double VLBalance = 0.0, SLBalance = 0.0;
+
+					//// get the standing credit balance
+					//tLeaveAppLedgerMaster LastBalanceRecord = null;
+
+					//LastBalanceRecord = db.tLeaveAppLedgerMasters.OrderByDescending(r => r.Id).First(r => r.EIC == EIC);
+
+					//// null, kung wala pa jud ma.proseso ang iyang dtr para sa leave ledger
+					//if (LastBalanceRecord == null) continue;
+
+					//// get the date the balance has been forwarded which
+					//// will be used as the base date for query on
+					//// DTRs for Posting
+					//var balanceForwardedRec = db.tLeaveBalanceForwardeds.Where(r => r.EIC == EIC).Select(r => r.AsOf).Take(1).ToList();
+					//var baseDate = balanceForwardedRec[0].Date;
+
+					//// test if baseDate is the last day of the year
+					//var baseDateIsLastDayOfTheYear = baseDate.Month == 12 && baseDate.Day == 31;
+
+					//// create a list of DTR for Posting
+					//List<tAttDTR> DTRListForPost = null;
+
+					//// create query as per baseDate: add 1 month if baseDateIsLastDayOfTheYear is true else as is
+					//if (baseDateIsLastDayOfTheYear)
+					//{
+					//	// baseDate: add 1 month if baseDateIsLastDayOfTheYear is true
+					//	baseDate = baseDate.AddMonths(1);
+					//	DTRListForPost = (DTRsForPosting
+					//		.Where(r => (r.EIC == EIC) && (r.dtStamp > baseDate))).ToList();
+					//}
+					//else
+					//{
+					//	// baseDate: as is, if baseDateIsLastDayOfTheYear is false
+					//	DTRListForPost = (DTRsForPosting
+					//		.Where(r => (r.EIC == EIC) && (r.dtStamp > baseDate))).ToList();
+					//}
+                        
+					//VLBalance += LastBalanceRecord.VLCreditBalance;
+					//SLBalance += LastBalanceRecord.SLCreditBalance;
+
+                        
+					//foreach (var DTR in DTRListForPost)
+					//{
+					//	var LeaveCreditEarned = 0.0;
+					//	var VLCreditEarned = 0.0;
+					//	var SLCreditEarned = 0.0;
+
+					//	int year = 0, month = 0;
+
+					//	year = DTR.Year ?? PetsaKaron.Year;
+					//	month = DTR.Month ?? PetsaKaron.Month;
+
+					//	// original base date
+					//	baseDate = balanceForwardedRec[0].Date;
+
+					//	/***** LEAVE CREDITS! LEAVE CREDITS! LEAVE CREDITS! LEAVE CREDITS! *****/
+					//	/*
+					//		 * check if DTR is the first DTR or MONTH of the service
+					//		 */
+					//	if (DTR.Year == baseDate.Year && DTR.Month == baseDate.Month)
+					//	{
+					//		var dateStarted = balanceForwardedRec[0].Date;
+
+					//		// get the number of days he/she works
+					//		var totalDays = 0;
+
+					//		if (DTR.Period == 0)
+					//		{   // Zero - is FULL MONTH
+					//			var lastDayOfMonth = dateStarted.AddMonths(1).AddDays(-1).Day;
+					//			var dateEnd = new DateTime(year, month, lastDayOfMonth);
+
+					//			totalDays = (int)(dateEnd - dateStarted).TotalDays;
+					//		}
+					//		else if (DTR.Period == 1)
+					//		{   // 1ST HALF MONTH
+					//			var dateEnd = new DateTime(year, month, 15);
+
+					//			totalDays = (int)(dateEnd - dateStarted).TotalDays;
+					//		}
+					//		else if (DTR.Period == 2)
+					//		{   // 2ND HALF MONTH
+					//			var dateEnd = new DateTime(year, month, 30);
+
+					//			totalDays = (int)(dateEnd - dateStarted).TotalDays;
+					//		}
+
+					//		// get equivalent days from matrix
+					//		var matrixRecord =
+					//			db.trefLeaveCreditsEarneds.Where(r => r.Type.Equals("DAILY"))
+					//				.SingleOrDefault(r => r.Num == totalDays);
+
+					//		VLCreditEarned = matrixRecord != null ? matrixRecord.Vacation : 0;
+					//		SLCreditEarned = matrixRecord != null ? matrixRecord.Sick : 0;
+
+					//	}
+					//	else // it is the first MONTH of the service
+					//	{
+					//		// compute leave credits
+					//		LeaveCreditEarned = DTR.Period == 0 ? 2.5 : 1.25;
+					//		VLCreditEarned = LeaveCreditEarned / 2.0;
+					//		SLCreditEarned = LeaveCreditEarned / 2.0;
+					//	}
+
+					//	// post VL to ledger
+					//	db.tLeaveAppLedgers.Add(new tLeaveAppLedger
+					//	{
+					//		EIC = DTR.EIC,
+					//		DTRId = DTR.DtrID,
+					//		LedgerCode = "103",
+					//		Value = Convert.ToDouble(VLCreditEarned),
+					//		Timestamp = PetsaKaron
+					//	});
+                            
+					//	// post SL to ledger
+					//	db.tLeaveAppLedgers.Add(new tLeaveAppLedger
+					//	{
+					//		EIC = DTR.EIC,
+					//		DTRId = DTR.DtrID,
+					//		LedgerCode = "104",
+					//		Value = Convert.ToDouble(SLCreditEarned),
+					//		Timestamp = PetsaKaron
+					//	});
+
+					//	// update VL/SL Balance
+					//	VLBalance += VLCreditEarned;
+					//	SLBalance += SLCreditEarned;
+
+
+					//	/***** TARDINESS! UNDERTIME! TARDINESS! UNDERTIME! TARDINESS! UNDERTIME! *****/
+					//	/*
+					//		 * Need to convert the minutes into its equivalent
+					//		 * based on the matrix given.
+					//		 */
+					//	var totalMinutesTU = DTR.Tardy + DTR.Undertime;
+
+					//	if (totalMinutesTU > 0)
+					//	{
+					//		var equivalentDaysTU = getCSCEquivalentDays(totalMinutesTU);
+
+					//		// determine if there is available VL credit for 
+					//		// **** TU WITH or WITHOUT PAY
+					//		if ((VLBalance + VLCreditEarned - equivalentDaysTU) < 0)
+					//		{
+					//			// surely TU WITHOUT PAY...hurot na lagi
+					//			db.tLeaveAppLedgers.Add(new tLeaveAppLedger
+					//			{
+					//				EIC = DTR.EIC,
+					//				DTRId = DTR.DtrID,
+					//				LedgerCode = "106B1",
+					//				Value = Convert.ToDouble(equivalentDaysTU),
+					//				Timestamp = PetsaKaron
+					//			});
+					//		}
+					//		else
+					//		{
+					//			// surely TU WITH PAY...daghan pa lagi
+					//			db.tLeaveAppLedgers.Add(new tLeaveAppLedger
+					//			{
+					//				EIC = DTR.EIC,
+					//				DTRId = DTR.DtrID,
+					//				LedgerCode = "106A1",
+					//				Value = Convert.ToDouble(equivalentDaysTU),
+					//				Timestamp = PetsaKaron
+					//			});
+					//		}
+
+					//		// update balances by deducting the tardy and undertime equivalent days
+					//		//VLBalance += (double)(VLCreditEarned - equivalentDaysTU);
+					//		//SLBalance += SLCreditEarned;   
+					//		VLBalance -= equivalentDaysTU;
+					//	}
+
+
+					//	/***** LEAVES! LEAVES! LEAVES! LEAVES! LEAVES! LEAVES! *****/
+					//	// 1. Determine DTR Period
+					//	DateTime? dtrDateBegin = null, dtrDateEnd = null;
+
+					//	switch (DTR.Period)
+					//	{
+					//		case 0:
+					//			// FULL MONTH
+					//			dtrDateBegin = new DateTime(year, month, 1);
+					//			dtrDateEnd = new DateTime(year, month, dtrDateBegin.Value.AddMonths(1).AddDays(-1).Day);
+					//			break;
+					//		case 1:
+					//			// 1ST MONTH
+					//			dtrDateBegin = new DateTime(year, month, 1);
+					//			dtrDateEnd = new DateTime(year, month, 15);
+					//			break;
+					//		case 2:
+					//			// 2nd MONTH
+					//			dtrDateBegin = new DateTime(year, month, 1);
+
+					//			var tempDate = new DateTime(year, month, 1);
+					//			dtrDateEnd = new DateTime(year, month, tempDate.AddMonths(1).AddDays(-1).Day);
+					//			break;
+					//	}
+
+					//	// 2. Fetch all posted and approved leave based on the DTR Period
+					//	var ApprovedLeaves =
+					//		db.vLeaveApps.Where(r=>r.IsApproved==true).Where(
+					//			r => r.EIC == EIC && (r.periodFrom >= dtrDateBegin && r.periodTo <= dtrDateEnd))
+					//			.OrderBy(r => r.periodFrom).ToList();
+
+					//	foreach (var leave in ApprovedLeaves)
+					//	{
+					//		var daysAbsent = leave.applyDay ?? 0;
+					//		if (leave.leaveID.Equals("40301"))   // VL
+					//		{
+					//			// Update VL balance
+					//			VLBalance -= daysAbsent;
+
+					//			if (VLBalance < 0)
+					//			{
+					//				// surely VACATION LEAVE WITHOUT PAY...hurot na lagi
+					//				db.tLeaveAppLedgers.Add(new tLeaveAppLedger
+					//				{
+					//					EIC = DTR.EIC,
+					//					DTRId = DTR.DtrID,
+					//					LedgerCode = "105B1",
+					//					Value = Convert.ToDouble(daysAbsent),
+					//					Referrence = Convert.ToString(leave.recNo),
+					//					Timestamp = PetsaKaron
+					//				});
+					//			}
+					//			else
+					//			{
+					//				// surely VACATION LEAVE WITH PAY...daghan pa lagi
+					//				db.tLeaveAppLedgers.Add(new tLeaveAppLedger
+					//				{
+					//					EIC = DTR.EIC,
+					//					DTRId = DTR.DtrID,
+					//					LedgerCode = "105A1",
+					//					Value = Convert.ToDouble(daysAbsent),
+					//					Referrence = Convert.ToString(leave.recNo),
+					//					Timestamp = PetsaKaron
+					//				});
+					//			}
+					//		}
+					//		else if (leave.leaveID.Equals("40302")) // SL
+					//		{
+					//			// Update SL balance
+					//			SLBalance -= daysAbsent;
+
+					//			if (SLBalance < 0)
+					//			{
+					//				// surely SICK LEAVE WITHOUT PAY...hurot na lagi
+					//				db.tLeaveAppLedgers.Add(new tLeaveAppLedger
+					//				{
+					//					EIC = DTR.EIC,
+					//					DTRId = DTR.DtrID,
+					//					LedgerCode = "105B2",
+					//					Value = Convert.ToDouble(daysAbsent),
+					//					Referrence = Convert.ToString(leave.recNo),
+					//					Timestamp = PetsaKaron
+					//				});
+					//			}
+					//			else
+					//			{
+					//				// surely SICK LEAVE WITH PAY...daghan pa lagi
+					//				db.tLeaveAppLedgers.Add(new tLeaveAppLedger
+					//				{
+					//					EIC = DTR.EIC,
+					//					DTRId = DTR.DtrID,
+					//					LedgerCode = "105A2",
+					//					Value = Convert.ToDouble(daysAbsent),
+					//					Referrence = Convert.ToString(leave.recNo),
+					//					Timestamp = PetsaKaron
+					//				});
+					//			}
+					//		}
+					//		else    // Other Type of Leave
+					//		{
+					//			db.tLeaveAppLedgers.Add(new tLeaveAppLedger
+					//			{
+					//				EIC = DTR.EIC,
+					//				DTRId = DTR.DtrID,
+					//				LedgerCode = "105C",
+					//				Value = Convert.ToDouble(daysAbsent),
+					//				Referrence = Convert.ToString(leave.recNo),
+					//				Timestamp = PetsaKaron
+					//			});
+					//		}
+
+                                
+					//	}
+                            
+					//	// update Master Ledger and post it to the master ledger
+					//	db.tLeaveAppLedgerMasters.Add(new tLeaveAppLedgerMaster
+					//	{
+					//		EIC = DTR.EIC,
+					//		DTRId = DTR.DtrID,
+					//		SLCreditBalance = SLBalance,
+					//		VLCreditBalance = VLBalance,
+					//		Timestamp = PetsaKaron
+					//	});
+					//	db.SaveChanges();
+					//} // end - foreach (var DTR in DTRListForPost)
+                }
+            }
+            catch (Exception e)
+            {
+                var errMsg = "<p>Ooops, something went wrong kaibigan.</p>" +
+                                "<p>Source: " + e.Source + "<br/>" +
+                                "Message: " + e.Message + "<br/>" +
+                                "Inner Exception: " + e.InnerException.Message + "</p>";
+
+                return Content(errMsg);
+            }
+
+
+
+            return Content("0");
+        }
+        
+        public int LedgerPostingByEic(string _EIC)
+        {
+            /*
+             * Firstly, process all advance leave credit request for expiration
+             */
+            CheckAdvanceLeaveCreditExpiration(_EIC);
+
+
+            // This is applicable only to employees with forwarded balance on leave credits.
+
+            // This action will post entries to leave ledger based on DTR Submitted, such as
+            // 1. Leave Credits earned - VL and SL
+            // 2. Tardy and Undertime
+            // 3. Leave
+
+            var DTRsAtLeaveLedger = db.tLeaveAppLedgers.Where(r => r.EIC.Equals(_EIC)).Select(r => r.DTRId).Distinct();
+            var EICsWithForwardedLeaveCredits = db.tLeaveBalanceForwardeds.Where(r => r.EIC.Equals(_EIC)).Select(r => r.EIC);
+            var DTRs = db.tAttDTRs.Where(r => EICsWithForwardedLeaveCredits.Contains(r.EIC) && r.EIC.Equals(_EIC));
+
+            // select all DTRs that is not yet processed
+            var DTRsForPosting = DTRs.Where(r => !DTRsAtLeaveLedger.Contains(r.DtrID)).OrderBy(r => r.Year).ThenBy(r => r.Month).ThenBy(r => r.Period);
+
+            try
+            {
+                // get a list of EICs
+                var EICs = EICsWithForwardedLeaveCredits.Distinct().ToList();
+                foreach (var EIC in EICs)
+                {
                     var PetsaKaron = DateTime.Now;
 
                     // set balances to 0 in every employee
@@ -794,7 +1328,7 @@ namespace LeaveModule.Controllers
                     // get the standing credit balance
                     tLeaveAppLedgerMaster LastBalanceRecord = null;
 
-                    LastBalanceRecord = db.tLeaveAppLedgerMasters.OrderByDescending(r => r.Id).First(r => r.EIC == EIC);
+                    LastBalanceRecord = db.tLeaveAppLedgerMasters.OrderByDescending(r => r.Id).FirstOrDefault(r => r.EIC == EIC);
 
                     // null, kung wala pa jud ma.proseso ang iyang dtr para sa leave ledger
                     if (LastBalanceRecord == null) continue;
@@ -825,11 +1359,11 @@ namespace LeaveModule.Controllers
                         DTRListForPost = (DTRsForPosting
                             .Where(r => (r.EIC == EIC) && (r.dtStamp > baseDate))).ToList();
                     }
-                        
+
                     VLBalance += LastBalanceRecord.VLCreditBalance;
                     SLBalance += LastBalanceRecord.SLCreditBalance;
 
-                        
+
                     foreach (var DTR in DTRListForPost)
                     {
                         var LeaveCreditEarned = 0.0;
@@ -901,7 +1435,7 @@ namespace LeaveModule.Controllers
                             Value = Convert.ToDouble(VLCreditEarned),
                             Timestamp = PetsaKaron
                         });
-                            
+
                         // post SL to ledger
                         db.tLeaveAppLedgers.Add(new tLeaveAppLedger
                         {
@@ -980,7 +1514,7 @@ namespace LeaveModule.Controllers
                                 break;
                             case 2:
                                 // 2nd MONTH
-                                dtrDateBegin = new DateTime(year, month, 1);
+                                dtrDateBegin = new DateTime(year, month, 16);
 
                                 var tempDate = new DateTime(year, month, 1);
                                 dtrDateEnd = new DateTime(year, month, tempDate.AddMonths(1).AddDays(-1).Day);
@@ -989,7 +1523,7 @@ namespace LeaveModule.Controllers
 
                         // 2. Fetch all posted and approved leave based on the DTR Period
                         var ApprovedLeaves =
-                            db.vLeaveApps.Where(r=>r.IsApproved==true).Where(
+                            db.vLeaveApps.Where(r => r.IsApproved == true).Where(
                                 r => r.EIC == EIC && (r.periodFrom >= dtrDateBegin && r.periodTo <= dtrDateEnd))
                                 .OrderBy(r => r.periodFrom).ToList();
 
@@ -1073,9 +1607,43 @@ namespace LeaveModule.Controllers
                                 });
                             }
 
-                                
+
                         }
-                            
+
+						/***** INUTANG NA CREDITS! INUTANG NA CREDITS! *****/
+						var MgaInutang = db.tLeaveInutangs.Where(r => r.EIC == _EIC && (r.DatePosted >= dtrDateBegin && r.DatePosted <= dtrDateEnd)).OrderBy(r => r.DatePosted).ToList();
+
+						foreach (var utang in MgaInutang)
+						{
+							var utangId = utang.Id;
+							var utangDays = utang.EquivalentDays;
+
+							// log entry to ledger details
+							var ledgerDetail = new tLeaveAppLedger
+							{
+								EIC = _EIC,
+								LedgerCode = "100",
+								Value = Math.Round(utangDays, 4),
+								Referrence = utangId.ToString(),
+								Timestamp = PetsaKaron
+							};
+							db.tLeaveAppLedgers.Add(ledgerDetail);
+
+							var newIdLedgerDetail = ledgerDetail.Id;
+							var credit = utangDays / 2.0;
+
+							// log entry to ledger master
+							db.tLeaveAppLedgerMasters.Add(new tLeaveAppLedgerMaster
+							{
+								EIC = EIC,
+								VLCreditBalance = Math.Round(VLBalance + credit, 4),
+								SLCreditBalance = Math.Round(SLBalance + credit, 4),
+								Reference = newIdLedgerDetail.ToString(),
+								Remark = "ADVANCE LEAVE CREDIT",
+								Timestamp = PetsaKaron
+							});
+						} // end -> foreach (var utang in MgaInutang)
+
                         // update Master Ledger and post it to the master ledger
                         db.tLeaveAppLedgerMasters.Add(new tLeaveAppLedgerMaster
                         {
@@ -1085,9 +1653,12 @@ namespace LeaveModule.Controllers
                             VLCreditBalance = VLBalance,
                             Timestamp = PetsaKaron
                         });
+
                         db.SaveChanges();
                     } // end - foreach (var DTR in DTRListForPost)
                 }
+
+	            return 0; // encountered no error
             }
             catch (Exception e)
             {
@@ -1096,14 +1667,11 @@ namespace LeaveModule.Controllers
                                 "Message: " + e.Message + "<br/>" +
                                 "Inner Exception: " + e.InnerException.Message + "</p>";
 
-                return Content(errMsg);
+                return 1; // encountered error
             }
-
-
-
-            return Content("0");
+            
         }
-
+        
         public JsonResult LedgerData()
         {
             var EIC = Session["EIC"].ToString();
@@ -1115,12 +1683,12 @@ namespace LeaveModule.Controllers
 
         public JsonResult History()
         {
-            // 14jan2017 2300hrs
+            // 14jan2018 2300hrs
             // if out of session, re-login
             if (Session["EIC"] == null) return Json(null, JsonRequestBehavior.AllowGet);
 
             var EIC = Session["EIC"].ToString();
-            var data = db.vLeaveApps.Where(r => r.EIC == EIC).OrderByDescending(r => r.periodFrom);
+            var data = db.vLeaveApps.Where(r => r.EIC == EIC).OrderByDescending(r => r.periodFrom).Take(100);
             return Json(data.ToList(), JsonRequestBehavior.AllowGet);
         }
 

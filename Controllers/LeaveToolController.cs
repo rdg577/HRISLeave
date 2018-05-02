@@ -115,7 +115,7 @@ namespace LeaveModule.Controllers
             dynamic data =
                 db.trefLeaveTypes.OrderBy(o => o.NumCode)
                     .Where(w => w.IsActive)
-                    .Select(s => new { s.Id, s.Description, s.NumCode })
+                    .Select(s => new { s.Id, s.Description, s.NumCode, allotment = db.trefLeaveAllotments.FirstOrDefault(r=>r.LeaveCode==s.NumCode) })
                     .ToList();
             return Json(data, JsonRequestBehavior.AllowGet);
         }

@@ -108,7 +108,7 @@ $(document).ready(function () {
     }
     );
 
-    //create AutoComplete UI component
+    //create ComboBox UI component
     $("#recommendingOfficer").kendoComboBox({
         dataSource: recommendingOfficersList,
         dataTextField: "fullnameLast",

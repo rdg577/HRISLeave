@@ -205,13 +205,23 @@
                 {{ item.periodFrom | redenDateFormat }} to {{ item.periodTo | redenDateFormat }}
             </div>
             <div class="Rtable-cell">
-                {{ item.IsApproved==false ? ("Not Approved - " + item.DisapprovalRemark):"Not yet approved" }}
+                <span v-if="item.IsRecommendedAtOffice==null" style="color: yellow; background-color: red; padding: 3px;">Not yet acted for recommendation!</span>
+                <span v-if="item.IsRecommendedAtOffice==false">Sorry, it is not recommended at Office level!</span>
+                <span v-if="item.IsRecommendedAtOffice==true && item.IsRecommendedAtHR==null">At HR, but not yet recommended and/or acted.</span>
+                <span v-if="item.IsRecommendedAtHR==true && item.IsApproved==null">Not yet acted for approval!</span>
+                <span v-if="item.IsRecommendedAtHR==true && item.IsApproved!=null">
+                    {{ item.IsApproved==false ? ("Not Approved - " + item.DisapprovalRemark):"Not yet approved" }}
+                </span>
             </div>
             <div class="Rtable-cell">
-                <button type="button" class="btn btn-danger btn-sm" title="Cancel this leave request." v-if="item.IsApproved==null" v-on:click="cancelLeaveRequest(item, this)">
+                <button type="button" class="btn btn-danger btn-xs" title="Cancel this leave request." v-if="item.IsApproved==null" v-on:click="cancelLeaveRequest(item, this)">
                     <span class="glyphicon glyphicon-remove"></span> Cancel
                 </button>
-                <button type="button" class="btn btn-info btn-sm" title="Print this leave request."
+                <button type="button" class="btn btn-warning btn-xs" title="View Detailed Status."
+                        v-if="item.IsApproved==null" v-on:click="viewLeaveStatus(item)">
+                    <span class="glyphicon glyphicon-list"></span> Status
+                </button>
+                <button type="button" class="btn btn-info btn-xs" title="Print this leave request."
                         v-if="item.IsRecommendedAtOffice==true" v-on:click="printPreview(item)">
                     <span class="glyphicon glyphicon-print"></span> Print
                 </button>

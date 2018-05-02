@@ -1,5 +1,4 @@
-﻿
-const gulp = require('gulp');
+﻿const gulp = require('gulp');
 const gutil = require('gulp-util');
 var babel = require('gulp-babel');
 var minify = require('gulp-uglify');
@@ -125,45 +124,61 @@ gulp.task('build', function () {
     gutil.log(folders);
     folders.map(function (folder) {
 
-        // for my-leave and settings
-        if (fs.existsSync(scriptsPath + "//" + folder + "//main.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//main.js", "Scripts//app//" + folder, "main.js");
-        }
-        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-main.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//vue-main.js", "Scripts//app//" + folder, "vue-main.js");
-        }
+        //// for my-leave and settings
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//main.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//main.js", "Scripts//app//" + folder, "main.js");
+        //}
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-main.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-main.js", "Scripts//app//" + folder, "vue-main.js");
+        //}
 
-        /*// for create leave
-        if (fs.existsSync(scriptsPath + "//" + folder + "//create.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//create.js", "Scripts//app//" + folder, "create.js");
-        }
-        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-create.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//vue-create.js", "Scripts//app//" + folder, "vue-create.js");
-        }*/
+        //// for create leave
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//create.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//create.js", "Scripts//app//" + folder, "create.js");
+        //}
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-create.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-create.js", "Scripts//app//" + folder, "vue-create.js");
+        //}
 
-        /*// for leave recommendation
-        if (fs.existsSync(scriptsPath + "//" + folder + "//recommend.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//recommend.js", "Scripts//app//" + folder, "recommend.js");
-        }
-        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-recommend.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//vue-recommend.js", "Scripts//app//" + folder, "vue-recommend.js");
-        }*/
+        //// for leave recommendation
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//recommend.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//recommend.js", "Scripts//app//" + folder, "recommend.js");
+        //}
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-recommend.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-recommend.js", "Scripts//app//" + folder, "vue-recommend.js");
+        //}
 
-        /*// for leave approval
-        if (fs.existsSync(scriptsPath + "//" + folder + "//approve.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//approve.js", "Scripts//app//" + folder, "approve.js");
-        }
-        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-approve.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//vue-approve.js", "Scripts//app//" + folder, "vue-approve.js");
-        }*/
+        //// for leave approval
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//approve.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//approve.js", "Scripts//app//" + folder, "approve.js");
+        //}
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-approve.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-approve.js", "Scripts//app//" + folder, "vue-approve.js");
+        //}
 
-        /*// for leave-card
-        if (fs.existsSync(scriptsPath + "//" + folder + "//leave-card.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//leave-card.js", "Scripts//app//" + folder, "leave-card.js");
+        //// for leave-card
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//leave-card.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//leave-card.js", "Scripts//app//" + folder, "leave-card.js");
+        //}
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-leave-card.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-leave-card.js", "Scripts//app//" + folder, "vue-leave-card.js");
+        //}
+
+        //// for utility
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//utility.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//utility.js", "Scripts//app//" + folder, "utility.js");
+        //}
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-utility.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-utility.js", "Scripts//app//" + folder, "vue-utility.js");
+        //}
+
+        // for edit
+        if (fs.existsSync(scriptsPath + "//" + folder + "//edit.js")) {
+            compileJSVue2(scriptsPath + "//" + folder + "//edit.js", "Scripts//app//" + folder, "edit.js");
         }
-        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-leave-card.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//vue-leave-card.js", "Scripts//app//" + folder, "vue-leave-card.js");
-        }*/
+        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-edit.js")) {
+            compileJSVue2(scriptsPath + "//" + folder + "//vue-edit.js", "Scripts//app//" + folder, "vue-edit.js");
+        }
     });
 });
 
@@ -173,5 +188,4 @@ gulp.task('default', function () {
     folders.map(function (folder) {
         watchFolder(scriptsPath + "//" + folder + "//main.js", "Scripts//app//" + folder);
     });
-
 });
