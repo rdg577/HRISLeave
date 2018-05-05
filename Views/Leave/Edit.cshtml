@@ -2,7 +2,7 @@
     ViewBag.Title = "Edit";
 }
 
-<link href="~/Content/leave/rtable.css" rel="stylesheet" />
+@*<link href="~/Content/leave/rtable.css" rel="stylesheet" />*@
 
 @if (!ViewBag.ModuleAdmin)
 {
@@ -16,7 +16,7 @@ else
 		<div class="panel-heading">
 			<div class="panel-title">
 				<div>
-					<empleyado v-model="employee" v-once v-on:change="getApprovedLeave(employee.EIC)" style="width: 85%"></empleyado>
+					<empleyado v-model="employee" v-once v-on:change="employee && getApprovedLeave(employee.EIC)" style="width: 85%"></empleyado>
 					<button class="btn btn-default" v-on:click="getApprovedLeave(employee.EIC)">
 						<span class="glyphicon glyphicon-search"></span> Search
 					</button>

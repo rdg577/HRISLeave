@@ -15,6 +15,27 @@ namespace LeaveModule.Controllers
     {
         private HRISEntities db = new HRISEntities();
 
+	    public ActionResult MonetaryValue(double leaveCredit)
+	    {
+		    if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
+
+		    var eic = Session["EIC"].ToString();
+		    var emp = db.vEmployeeCompleteFields.SingleOrDefault(r => r.EIC == eic);
+		    if (emp == null) return Content("Employee not found...");
+
+			var monthlySalary = Convert.ToDouble(emp.rateMonth ?? 0);
+		    const double workingDays = 22.0;
+		    var moneyValue = (monthlySalary / workingDays) * leaveCredit;
+		    moneyValue = Math.Round(moneyValue, 2);
+
+		    return Json(new { moneyValue = moneyValue}, JsonRequestBehavior.AllowGet);
+	    }
+		
+	    public ActionResult UnauthorizedAccess()
+	    {
+		    return View();
+	    }
+
 		private int ClearLeaveLedgerEntries(string EIC)
 		{
 			try
@@ -117,17 +138,12 @@ namespace LeaveModule.Controllers
             var EIC = Session["EIC"].ToString();
 
             // check if one of the HR BWD Officer
-            var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin")).SingleOrDefault(r => r.EIC == EIC);
+			var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin") && r.IsActive).SingleOrDefault(r => r.EIC == EIC);
 
-            if (HROfficer == null)
-            {
-                ViewBag.ModuleAdmin = false;
-            }
-            else
-            {
-                ViewBag.ModuleAdmin = true;
-            }
-            return View();
+	        if (HROfficer != null) return View();
+
+	        Session["DeniedAccessMsg"] = "Oops! You have limited access on this page, please contact HR.";
+	        return RedirectToAction("UnauthorizedAccess", "Leave");
         }
 
         public void CheckAdvanceLeaveCreditExpiration()
@@ -354,18 +370,12 @@ namespace LeaveModule.Controllers
             var EIC = Session["EIC"].ToString();
 
             // check if one of the HR BWD Officer
-            var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin")).SingleOrDefault(r => r.EIC == EIC);
+            var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin") && r.IsActive).SingleOrDefault(r => r.EIC == EIC);
 
-            if (HROfficer == null)
-            {
-                ViewBag.ModuleAdmin = false;
-            }
-            else
-            {
-                ViewBag.ModuleAdmin = true;
-            }
+			if (HROfficer != null) return View();
 
-            return View();
+	        Session["DeniedAccessMsg"] = "Oops! You have limited access on this page, please contact HR.";
+	        return RedirectToAction("UnauthorizedAccess", "Leave");
         }
 
         [HttpPost]
@@ -537,18 +547,12 @@ namespace LeaveModule.Controllers
             var EIC = Session["EIC"].ToString();
 
             // check if one of the HR BWD Officer
-            var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ApprovingOfficer")).SingleOrDefault(r => r.EIC == EIC);
+            var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ApprovingOfficer") && r.IsActive).SingleOrDefault(r => r.EIC == EIC);
 
-            if (HROfficer == null)
-            {
-                ViewBag.ModuleAdmin = false;
-            }
-            else
-            {
-                ViewBag.ModuleAdmin = true;
-            }
+            if (HROfficer != null) return View();
 
-            return View();
+	        Session["DeniedAccessMsg"] = "Oops! You have limited access on this page, please contact HR.";
+	        return RedirectToAction("UnauthorizedAccess", "Leave");
 
         }
 
@@ -717,17 +721,12 @@ namespace LeaveModule.Controllers
             var EIC = Session["EIC"].ToString();
 
             // check if one of the HR BWD Officer
-            var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin")).SingleOrDefault(r => r.EIC == EIC);
+            var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin") && r.IsActive).SingleOrDefault(r => r.EIC == EIC);
+			
+			if (HROfficer != null) return View("HRRecommend");
 
-            if (HROfficer == null)
-            {
-                ViewBag.ModuleAdmin = false;
-            }
-            else
-            {
-                ViewBag.ModuleAdmin = true;
-            }
-            return View("HRRecommend");
+	        Session["DeniedAccessMsg"] = "Oops! You have limited access on this page, please contact HR.";
+	        return RedirectToAction("UnauthorizedAccess", "Leave");
         }
 
         public ActionResult Recommend()
@@ -832,6 +831,14 @@ namespace LeaveModule.Controllers
             // if out of session, re-login
             if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
 
+	        var EIC = Session["EIC"].ToString();
+			var hadForwardedHisBalance = db.tLeaveBalanceForwardeds.SingleOrDefault(r => r.EIC == EIC);
+	        if (hadForwardedHisBalance == null)
+	        {
+		        Session["DeniedAccessMsg"] = "Oops! Your leave credit balance has not yet been forwarded, please contact HR.";
+		        return RedirectToAction("UnauthorizedAccess", "Leave");
+	        }
+
             return View();
         }
 
@@ -851,17 +858,13 @@ namespace LeaveModule.Controllers
             var EIC = Session["EIC"].ToString();
 
             // check if one of the HR BWD Officer
-            var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin")).SingleOrDefault(r => r.EIC == EIC);
+			var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin") && r.IsActive).SingleOrDefault(r => r.EIC == EIC);
 
-            if (HROfficer == null)
-            {
-                ViewBag.ModuleAdmin = false;
-            }
-            else
-            {
-                ViewBag.ModuleAdmin = true;
-            }
-            return View();
+	        if (HROfficer != null) return View();
+
+	        Session["DeniedAccessMsg"] = "Oops! You have limited access on this page, please contact HR.";
+
+	        return RedirectToAction("UnauthorizedAccess", "Leave");
         }
 
         public ActionResult ForwardCreditBalance(string EIC, string AsOf, string VLBalanceForwarded, string SLBalanceForwarded)
@@ -1508,12 +1511,12 @@ namespace LeaveModule.Controllers
                                 dtrDateEnd = new DateTime(year, month, dtrDateBegin.Value.AddMonths(1).AddDays(-1).Day);
                                 break;
                             case 1:
-                                // 1ST MONTH
+                                // 1ST HALF
                                 dtrDateBegin = new DateTime(year, month, 1);
                                 dtrDateEnd = new DateTime(year, month, 15);
                                 break;
                             case 2:
-                                // 2nd MONTH
+                                // 2nd HALF
                                 dtrDateBegin = new DateTime(year, month, 16);
 
                                 var tempDate = new DateTime(year, month, 1);

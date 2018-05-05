@@ -128,9 +128,9 @@ gulp.task('build', function () {
         //if (fs.existsSync(scriptsPath + "//" + folder + "//main.js")) {
         //    compileJSVue2(scriptsPath + "//" + folder + "//main.js", "Scripts//app//" + folder, "main.js");
         //}
-        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-main.js")) {
-        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-main.js", "Scripts//app//" + folder, "vue-main.js");
-        //}
+        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-main.js")) {
+            compileJSVue2(scriptsPath + "//" + folder + "//vue-main.js", "Scripts//app//" + folder, "vue-main.js");
+        }
 
         //// for create leave
         //if (fs.existsSync(scriptsPath + "//" + folder + "//create.js")) {

@@ -1,0 +1,181 @@
+﻿@{
+    ViewBag.Title = "Conversion Matrix - Leave Works Hour";
+}
+
+<script src="~/Scripts/app/Leave/utilities/app/app.js"></script>
+<script src="~/Scripts/app/Leave/utilities/controller/conversionMatrixWHCtrl.js"></script>
+
+<div class="box" ng-app="HRISLeaveForm" ng-controller="conversionMatrixWHCtrl">
+    <div class="box-header">
+        <div class="row">
+            <div class="col-sm-12 pull-right">
+                <div class="text-right">
+                    <a ng-click="showAddModal()" class="btn btn-primary" data-toggle="modal" data-target=".bs-modal-md">
+                        <i class="fa fa-plus"></i>
+                        Add Conversion Matrix
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <div class="col-md-5 col-sm-6 col-xs-12">
+            <div class="form-group pull-left">
+                <p class="col-xs-3 col-md-2 text-right p-inline">Show</p>
+                <div class="col-xs-6 col-md-7">
+                    <select class="pull-left form-control select-inline" ng-init="itemsPerPage = '10'" ng-model="itemsPerPage" ng-change="perPage()">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <p class="col-xs-3 col-md-2 p-inline">Entries</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-xs-3 pull-right">
+            <input type="text" value="" ng-model="query" ng-change="perPage()" class=" form-control" placeholder="Search ...." />
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Number</th>
+                    <th>Days Equivalent</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="cm in pagedItems[currentPage] |
+                               filter: searchBox">
+                    <td>{{ cm.Type }}</td>
+                    <td>{{ cm.Num }}</td>
+                    <td>{{ cm.DayEquivalent }}</td>
+                    <td>
+                        <a ng-click="editConversionMatrixWH(cm)" data-toggle="modal" data-target=".bs-modal-md" class="btn btn-primary btn-xs  btn-flat btn-table">
+                            <i class="fa fa-edit"></i>
+                            Edit
+                        </a>
+                        @*<a ng-click="deleteConversionMatrixWH(cm)" class="btn btn-danger btn-xs btn-flat btn-table">
+                            <i class="fa fa-remove"></i>
+                            Delete
+                        </a>*@
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <div class="pagination pagination-centered" ng-show="datalists.length">
+                            <ul class="pagination-controle pagination">
+                                <li>
+                                    <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
+                                            ng-click="curPage=curPage-1">
+                                        &lt; PREV
+                                    </button>
+                                </li>
+                                <li>
+                                    <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>
+                                </li>
+                                <li>
+                                    <button type="button" class="btn btn-primary"
+                                            ng-disabled="curPage >= datalists.length/pageSize - 1"
+                                            ng-click="curPage = curPage+1">
+                                        NEXT &gt;
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Type</th>
+                    <th>Number</th>
+                    <th>Days Equivalent</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <div class="pull-right">
+                            <ul class="pagination" ng-if="validPage">
+                                <li ng-class="{disabled: currentPage == 0}">
+                                    <a href ng-click="prevPage()">« Prev</a>
+                                </li>
+
+                                <li ng-repeat="n in range(pagedItems.length, currentPage, currentPage + gap) "
+                                    ng-class="{active: n == currentPage}"
+                                    ng-click="setPage()">
+                                    <a href ng-bind="n + 1">1</a>
+                                </li>
+
+                                <li ng-class="{disabled: (currentPage) == pagedItems.length - 1}">
+                                    <a href ng-click="nextPage()">Next »</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div><!-- /.box-body -->
+
+
+
+
+    <div class="modal fade bs-modal-md in" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal(cm)"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel2">Add Conversion Matrix</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="box-body">
+                            <div class="form-group" ng-if="DataExist" ng-init="DataExist = false">
+                                <div class="alert alert-danger">
+                                    <h4><i class="icon fa fa-ban"></i> Data already exist!</h4>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Type</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control input-lg" ng-model="cm.Type" ng-change="DataExist = false">
+                                        <option value="MINUTES">MINUTES</option>
+                                        <option value="HOURS">HOURS</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Number</label>
+                                <div class="col-sm-10">
+                                    <input ng-model="cm.Num" ng-keydown="DataExist = false" class="form-control input-lg" type="number" placeholder="Number">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Days Equivalent</label>
+                                <div class="col-sm-10">
+                                    <input ng-model="cm.DayEquivalent" ng-keydown="DataExist = false" class="form-control input-lg" type="number" placeholder="Days Equivalent">
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.box-body -->
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" ng-click="closeModal(cm)">Close</button>
+                    <button ng-click="addConversionMatrixWH()" type="button" class="btn btn-primary" ng-if="ShowAdd" ng-init="ShowAdd = true">Add New</button>
+                    <button ng-click="updateConversionMatrixWH()" type="button" class="btn btn-primary" ng-if="ShowUpdate" ng-init="ShowUpdate = true">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*-----MODAL BODY----------*@
+
+
+
+</div>

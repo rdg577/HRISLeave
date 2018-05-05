@@ -69,7 +69,14 @@
         <!-- VL and SL Only -->
         <div class="Rtable Rtable--2cols Rtable--collapse">
             <div style="order: 0;" class="Rtable-cell Rtable-cell--head">
-                Vacation Leave
+	            Vacation Leave
+				<div v-if="leaveBalances.VacationLeave > 0 || leaveBalances.SickLeave > 0"
+					 v-on:click="leaveBalances && showMonetaryValue(leaveBalances.VacationLeave)"
+					 class="mone-value" style="display:inline-block">
+					<button class="btn btn-flat btn-xs btn-info" title="Monetary Value">
+						<i class="fa fa-money"></i>
+					</button>
+				</div>
             </div>
             <div style="order: 1;" class="Rtable-cell" v-if="leaveBalances.VacationLeave">
                 {{ leaveBalances.VacationLeave | redenNumberFormat }}
@@ -79,7 +86,14 @@
             </div>
 
             <div style="order: 0;" class="Rtable-cell Rtable-cell--head">
-                Sick Leave
+	            Sick Leave
+	            <div v-if="leaveBalances.SickLeave > 0" 
+	                 v-on:click="leaveBalances && showMonetaryValue(leaveBalances.SickLeave)" 
+					 class="mone-value" style="display:inline-block">
+					<button class="btn btn-flat btn-xs btn-info" title="Monetary Value">
+						<i class="fa fa-money"></i>
+					</button>
+				</div>
             </div>
             <div style="order: 1;" class="Rtable-cell" v-if="leaveBalances.SickLeave">
                 {{ leaveBalances.SickLeave | redenNumberFormat }}
@@ -309,8 +323,8 @@
     var controllerUrl = Url.Content("~") + controllerName;
 }
 <script>
-window.ServerUrl = '@serverUrl';
-window.VueRouterUrl = '@controllerUrl';
+	window.ServerUrl = '@serverUrl';
+	window.VueRouterUrl = '@controllerUrl';
 </script>
 @Scripts.Render("~/Scripts/app/" + controllerName + "/main.js")
 

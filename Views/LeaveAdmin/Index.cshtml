@@ -1,0 +1,193 @@
+﻿@{
+    ViewBag.Title = "Settings - Administrative Privileges";
+}
+
+<script src="~/Scripts/app/Leave/utilities/app/app.js"></script>
+<script src="~/Scripts/app/Leave/utilities/controller/adminCtrl.js"></script>
+
+
+
+<div ng-app ="HRISLeaveForm" ng-controller="adminCtrl">
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div style="text-align:right;padding-top:5px;padding-bottom:15px;">
+                <a href="#" ng-click="clearModalInput()" class="btn btn-primary" style="width:180px;" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-plus " style="padding-right:5px"></i>Add Administrative User</a>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-3 col-sm-4" ng-repeat="ad in loadAdmins" >
+            <div class="ibox">
+                <div class="ibox-content product-box" style="height:356px;">
+
+                    <div class=" product-imitation">
+                        <span class="product-price label-{{ad.IsActive ? 'success' : 'danger'}}" style="padding: 2px 3px">
+                            {{ad.IsActive ? "ACTIVE" : "INACTIVE"}}
+                        </span>
+						<img  ng-src="~/LeaveAdmin/RetrieveImage/{{ ad.EIC }}" alt="" class="img-circle img-responsive" />
+                    </div>
+                    <div class="product-desc text-center" style="color:#676a6c;">
+                        <a href="#" ng-click="editAdmin(ad)" ng-init="DataExist=false;" style="color:#808080;" data-toggle="modal" data-target=".bs-example-modal-md">
+                            <span class="pull-right" style="margin-top:-20px;margin-right:-15px;">
+                                <i class="fa fa-pencil"></i>
+                            </span>
+                        </a>
+                       
+                        <h5 style="margin:0px auto;color:#676a6c;font-size:16px">{{ad.firstName}} {{(ad.middleName).charAt(0)}}.</h5>
+                        <h3 class="product-name" style="font-size:24px"><strong>{{ad.lastName}}</strong></h3>
+                        <h5>{{ad.fullDescription}}</h5>
+                        <h4><strong>{{split(ad.Role)}}</strong></h4>
+                       
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    @*-----MODAL BODY----------*@
+    <div class="modal fade bs-example-modal-md in" data-backdrop="static" data-keyboard="false" tabindex ="-1" role="dialog" aria-hidden="true" style="display:none; padding-right: 16px;">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#357ca5;color:white">
+
+                    <button type="button" ng-click="clearModalInput()" class="close" data-dismiss="modal" aria-label="Close" style="color:white"><span aria-hidden="true">×</span></button>
+                    <h3 class="modal-title" id="myModalLabel2">{{titleHead}} Administrative User</h3>
+                </div>
+                <div class="modal-body" id="inSearch">
+
+                    <tt style="font-family:inherit;font-size:16px;padding-right:10px;">Employee's Full Name</tt>
+                    @(Html.Kendo().AutoComplete()
+                             .Name("allEmp")
+                            .HtmlAttributes(new { maxlength = "20", style = "width:70%;", placeholder = "Search Name to Add... " })
+                            .Filter("contains")
+                            .DataTextField("Text")
+                            .DataTextField("Value")
+                            .Suggest(true)
+                            .MinLength(3)
+                            .Template("<img class=\"img-circle\" style=\"width: 50px; height: 50px; \" src=\"" + Url.Content("~/LeaveAdmin/RetrieveImage/#: data.Text #") + "\">" +
+                                                    "<span class=\"\" style=\"font-size:12px;\">  #: data.Value # </span>")
+                    .DataSource(dt => dt.Read("loadAllEmp", "LeaveAdmin"))
+                            .Events(e => { e.Change("getInfo"); })
+                            
+                    )
+                </div>
+                <div style="margin-top:5%;display:none;" id="hideNsHow">
+                    <div class="row" style="margin-left:2px;">
+                        <div class="col-xs-12" style="padding-right:30px;">
+                            <div class=" box box-widget widget-user-2">
+
+                                <div class="widget-user-header bg-light-blue-active">
+                                    <div class="widget-user-image" id="nomineeImg" style="margin-left:1px;padding-left:1px;">
+                                    </div>
+                                    <h3 class="widget-user-username" style="font-size:30px;font-weight:600;margin-bottom: 0px;margin-top: 0px;" id="fullName" ng-bind="r.fullnameLast"></h3>
+                                    <h4 class="widget-user-desc" style="font-size:24px;font-weight:600;color:#ccc;margin-bottom: 0px;" id="position" ng-bind="r.fullDescription" ></h4>
+                                    <h5 class="widget-user-desc" style="font-size:16px;margin-bottom: 0px;" id="officeName" ng-bind="r.officeName"></h5>
+
+                                </div>
+                               
+                                
+                                <div class="box-footer no-padding">
+                                    <ul class="nav nav-stacked">
+                                        <li style="font-size:18px;padding:10px 10px 10px 20px;">Role
+                                            <div class="col-sm-5 pull-right inputSelect" style="padding-right:0px;position:relative">
+                                                <select  class=" form-control input-sm" style="font-size:18px;border: none;position:absolute;top:0;left:0;text-align:right;" placeholder="Choose Role here" ng-model="r.Role">
+                                                    <option ng-repeat="rol in loadRoles" value="{{split(rol)}}">{{split(rol)}}</option>
+                                                </select>
+                                                <input type="text" style="font-size:18px;border: none;position:absolute;top:0;left:0;text-align:right;" ng-model="r.Role" placeholder="Choose Role here" />
+                                            </div>          
+                                            
+                                        </li>
+                                        <li style="font-size:18px"><a href="#">Status 
+                                            
+                                                <div class="switch pull-right" style="display:inline-block">
+                                                    <div class="onoffswitch">
+                                                        <input type="checkbox" checked class="onoffswitch-checkbox" id="example1" ng-model="r.IsActive">
+                                                        <label class="onoffswitch-label" for="example1">
+                                                            <span class="onoffswitch-inner"></span>
+                                                            <span class="onoffswitch-switch"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            
+                                           </a></li>
+                                     
+                                    </ul>
+                                </div>
+                                
+                            </div>
+                            @*<h5 id="eic"></h5>*@
+                            <input type="hidden" id="eic" ng-model="r.EIC" />
+                            @*<input type="text" ng-model="r.EIC" />*@
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" ng-click="clearModalInput()" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <button ng-click="newAdminUser()" ng-if="showNew" ng-int="showNew=true" type="button" class="btn btn-primary">Save changes</button>
+                        <button ng-click="updateAdminUser()" ng-if="showUpdate" ng-init="showUpdate=true" type="button" class="btn btn-primary">Update changes</button>
+                    </div>
+                </div>
+              
+        </div>
+    </div>
+    @*-----MODAL BODY----------*@
+
+</div>
+</div>
+<script>
+    function getInfo() {
+        //alert("get Info")
+        if ($(".k-item").length > 0) {
+           
+            var n = $('#allEmp').val();
+            //$('#fname').val(n);
+
+            //console.log($('#fname').val());
+            $('#hideNsHow').show();
+            //var eic = n.split('-');
+
+            
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Content("~/leaveAdmin/getData?full=")"+n,
+
+                success: function (data) { 
+                    console.log(data);
+                $('#nomineeImg').empty();
+                $('#nomineeImg').append("<img class=\"img-circle\" style=\"width: 80px;border: 3px solid #ccc;margin-right: 15px;\" src=\"@Url.Content("~/leaveAdmin/RetrieveImage/")" + data.eic + "  \" alt=\"User profile picture\">")
+                $('#fullName').text(data.fullName)
+                $('#position').text(data.position)
+                $('#officeName').text(data.officeName)
+                $('#eic').text(data.eic)
+                $('#eic').val(data.eic)
+            },
+            dataType: "json",
+            traditional: true
+            });
+            
+    } else {
+            $('#hideNsHow').hide();
+    }
+    }
+
+
+
+    $("#example1").click(function () {
+        if ($("#example1").is(":checked")) {
+            //console.log('true')
+        } else {
+            //console.log('false');
+        }
+    });
+
+
+</script>

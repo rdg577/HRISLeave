@@ -7,6 +7,7 @@ const moment = require('moment');
 const axios = require('axios');
 var numeral = require("numeral");
 var businessMoment = require("moment-business-days");
+var swal = require('sweetalert');
 
 var mgaHolidays = function() {
     var tmp = null;
@@ -212,6 +213,18 @@ const v = new Vue({
                 message: "<div>" + info + "</div><hr/>" + msg,
                 backdrop: true
             });
+        },
+        showMonetaryValue: function(leaveCredit) {
+            axios.post("../Leave/MonetaryValue", 
+                { "leaveCredit": leaveCredit }).then(
+                (response) => {
+                    swal({
+                        title: 'Leave Monetary Value Php' + response.data.moneyValue,
+                        message: '(Note: For budget allotment!)',
+                        icon: 'info'
+                    });
+                }
+            ).catch((error) => console.log(error));
         }
     }
 });

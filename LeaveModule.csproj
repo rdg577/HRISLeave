@@ -95,9 +95,17 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AuthenticationService.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LeaveAdminController.cs" />
+    <Compile Include="Controllers\LeaveAllotmentController.cs" />
     <Compile Include="Controllers\LeaveController.cs" />
+    <Compile Include="Controllers\LeaveConversionMatrixDPController.cs" />
+    <Compile Include="Controllers\LeaveConversionMatrixWHController.cs" />
+    <Compile Include="Controllers\LeaveCreditsEarnedController.cs" />
+    <Compile Include="Controllers\LeaveLedgerDescriptionController.cs" />
     <Compile Include="Controllers\LeaveToolController.cs" />
+    <Compile Include="Controllers\LeaveTypeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -241,10 +249,44 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\AdminLTE\dist\css\AdminLTE.css" />
+    <Content Include="Content\AdminLTE\dist\css\AdminLTE.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-black-light.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-black-light.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-black.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-black.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-blue-light.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-blue-light.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-blue.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-blue.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-green-light.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-green-light.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-green.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-green.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-purple-light.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-purple-light.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-purple.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-purple.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-red-light.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-red-light.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-red.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-red.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-yellow-light.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-yellow-light.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-yellow.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-yellow.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\_all-skins.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\_all-skins.min.css" />
+    <Content Include="Content\AdminLTE\dist\js\app.js" />
+    <Content Include="Content\AdminLTE\dist\js\app.min.js" />
+    <Content Include="Content\AdminLTE\dist\js\demo.js" />
+    <Content Include="Content\AdminLTE\dist\js\pages\dashboard.js" />
+    <Content Include="Content\AdminLTE\dist\js\pages\dashboard2.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\img\e_leave.jpg" />
     <Content Include="Content\kendo\Black\editor.png" />
     <Content Include="Content\kendo\Black\imagebrowser.png" />
@@ -580,14 +622,19 @@
     <Content Include="Content\kendo\Uniform\sprite_2x.png" />
     <Content Include="Content\kendo\Uniform\sprite_kpi.png" />
     <Content Include="Content\kendo\Uniform\sprite_kpi_2x.png" />
+    <Content Include="Content\leave\img\default-user.png" />
+    <Content Include="Content\leave\img\logohris2.png" />
     <Content Include="Content\leave\leave-card.css" />
     <Content Include="Content\leave\rtable-create.css" />
     <Content Include="Content\leave\rtable.css" />
+    <Content Include="Content\leave\utility2.css" />
+    <Content Include="Content\leave\utility2.min.css" />
     <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\leave\leave.css" />
     <Content Include="gulpfile.js" />
     <Content Include="Models\GENERAL.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -11752,8 +11799,32 @@
     <Content Include="node_modules\vuetify\test\unit\components\VToolbar\__snapshots__\VToolbarSideIcon.spec.js.snap" />
     <Content Include="node_modules\vuetify\test\unit\components\VTooltip\__snapshots__\VTooltip.spec.js.snap" />
     <Content Include="node_modules\vuetify\test\unit\mixins\__snapshots__\rippleable.spec.js.snap" />
+    <Content Include="Content\leave\utility2.css.map" />
+    <Content Include="Content\leave\utility2.scss" />
+    <Content Include="Content\toastr.scss" />
+    <Content Include="Content\toastr.less" />
     <None Include="Properties\PublishProfiles\HRISLeaveProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\app\Leave\approve.js" />
+    <Content Include="Scripts\app\Leave\create.js" />
+    <Content Include="Scripts\app\Leave\leave-card.js" />
+    <Content Include="Scripts\app\Leave\main.js" />
+    <Content Include="Scripts\app\Leave\recommend.js" />
+    <Content Include="Scripts\app\Leave\utilities\app\app.js" />
+    <Content Include="Scripts\app\Leave\utilities\controller\adminCtrl.js" />
+    <Content Include="Scripts\app\Leave\utilities\controller\allotmentCtrl.js" />
+    <Content Include="Scripts\app\Leave\utilities\controller\conversionMatrixDPCtrl.js" />
+    <Content Include="Scripts\app\Leave\utilities\controller\conversionMatrixWHCtrl.js" />
+    <Content Include="Scripts\app\Leave\utilities\controller\creditsEarnedCtrl.js" />
+    <Content Include="Scripts\app\Leave\utilities\controller\leaveTypeCtrl.js" />
+    <Content Include="Scripts\app\Leave\utilities\controller\ledgerDescriptionCtrl.js" />
+    <Content Include="Scripts\app\Leave\utility.js" />
+    <Content Include="Scripts\app\Leave\vue-approve.js" />
+    <Content Include="Scripts\app\Leave\vue-create.js" />
+    <Content Include="Scripts\app\Leave\vue-edit.js" />
+    <Content Include="Scripts\app\Leave\vue-leave-card.js" />
+    <Content Include="Scripts\app\Leave\vue-main.js" />
+    <Content Include="Scripts\app\Leave\vue-recommend.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -12372,6 +12443,9 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\sweetalert.min.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="ViewModels\Leave\approve.js" />
     <Content Include="ViewModels\Leave\create.js" />
@@ -13019,12 +13093,19 @@
     <Content Include="Views\Leave\Reports.cshtml" />
     <Content Include="Views\Leave\Utility.cshtml" />
     <Content Include="Views\Leave\Edit.cshtml" />
+    <Content Include="Views\LeaveAdmin\Index.cshtml" />
+    <Content Include="Views\LeaveAllotment\Index.cshtml" />
+    <Content Include="Views\LeaveConversionMatrixDP\Index.cshtml" />
+    <Content Include="Views\LeaveConversionMatrixWH\Index.cshtml" />
+    <Content Include="Views\LeaveCreditsEarned\Index.cshtml" />
+    <Content Include="Views\LeaveLedgerDescription\Index.cshtml" />
+    <Content Include="Views\LeaveType\Index.cshtml" />
+    <Content Include="Views\Leave\UnauthorizedAccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\bootstrap\" />
     <Folder Include="Content\fonts\" />
-    <Folder Include="Scripts\app\Leave\" />
     <Folder Include="Scripts\esm\" />
     <Folder Include="Scripts\umd\" />
     <Folder Include="Views\LeaveTool\" />

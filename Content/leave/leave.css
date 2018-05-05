@@ -17,15 +17,14 @@
     white-space: normal;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    /*max-width: 280px;*/
-}
-
 /* Leave Admin CSS */ 
 .avatar {
     -ms-border-radius: 50%;
     border-radius: 50%;
+}
+
+@media (max-width: 767px) {
+	div.mone-value {
+	    float: right !important;
+	}
 }

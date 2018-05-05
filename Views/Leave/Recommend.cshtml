@@ -29,15 +29,20 @@
                 <th>Action</th>
             </tr>
             </thead>
-            <tbody v-for="item in leaveRequests">
-            <tr>
-                <td>{{ item.dateFiled|redenDateFormat }}</td>
-                <td>{{ item.Fullname }}</td>
-                <td>
-                    <button v-on:click="viewLeaveRequest(item)" class="btn btn-default btn-sm" title="View Leave Request"><span class="glyphicon glyphicon-eye-open"></span></button>
-                </td>
-            </tr>
-            </tbody>
+	        <tbody v-for="item in leaveRequests">
+	        <tr>
+		        <td>{{ item.dateFiled|redenDateFormat }}</td>
+		        <td>{{ item.Fullname }}</td>
+		        <td>
+			        <button v-on:click="viewLeaveRequest(item)" class="btn btn-default btn-sm" title="View Leave Request"><span class="glyphicon glyphicon-eye-open"></span></button>
+		        </td>
+	        </tr>
+	        </tbody>
+	        <tfoot v-if="leaveRequests.length<1">
+	        <tr>
+		        <td colspan="3">Nothing to recommend...</td>
+	        </tr>
+	        </tfoot>
         </table>
     </div>
 </div>

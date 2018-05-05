@@ -110,7 +110,8 @@ namespace LeaveModule.Controllers
         {
             return Content(DateTime.Now.ToString());
         }
-        public JsonResult LeaveTypes()
+        
+		public JsonResult LeaveTypes()
         {
             dynamic data =
                 db.trefLeaveTypes.OrderBy(o => o.NumCode)
@@ -127,6 +128,14 @@ namespace LeaveModule.Controllers
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+
+	    public JsonResult EmployeeCompleteData(string EIC)
+	    {
+		    var data =
+			    db.vEmployeeCompleteFields.SingleOrDefault(r=>r.EIC==EIC);
+
+		    return Json(data, JsonRequestBehavior.AllowGet);
+	    }
 
         public JsonResult DepartmentOfficersEIC()
         {
@@ -163,9 +172,6 @@ namespace LeaveModule.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        /*
-         * User Profile Image
-         */
         public ActionResult UserImage(string id)
         {
             var cover = GetImageFromDataBase(id);
