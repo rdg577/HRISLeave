@@ -25,7 +25,7 @@ namespace LeaveModule.Controllers
             }
             catch (Exception e)
             {
-                return Content("1");
+                return Content(e.Message);
             }
         }
 

@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "Edit";
+}
+<style>
+	.avatar {
+		-ms-border-radius: 50%;
+		border-radius: 50%;
+	}
+</style>
+
+<link href="~/Content/leave/rtable.css" rel="stylesheet" />
+
+<div id="app">
+
+	@if (!ViewBag.ModuleAdmin)
+	{
+		<div class="well well-sm">Ooops! Sorry you have insufficient access right.</div>
+	}
+	else
+	{
+		<h4>Restore Approved Leave</h4>
+
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div class="panel-title">
+					<div>
+						<empleyado v-model="employee" v-once v-on:change="employee && getApprovedLeave(employee.EIC)" style="width: 100%"></empleyado>
+						@*<button class="btn btn-default" v-on:click="getApprovedLeave(employee.EIC)">
+							<span class="glyphicon glyphicon-search"></span> Search
+						</button>*@
+					</div>
+				</div>
+			</div>
+			<div id="my-leave-history" class="panel-collapse" v-if="leaveApproved && leaveApproved.length>0">
+
+				<div class="Rtable Rtable--8cols Rtable--collapse" v-for="item in leaveApproved">
+
+					<div class="Rtable-cell Rtable-cell--head">
+						<b>{{ item.LeaveDescription }}</b><br />
+						<small>Filed on: {{ item.dateFiled | redenDateFormat }}</small>
+					</div>
+					<div class="Rtable-cell">
+						From: <br /><b>{{ item.periodFrom | redenDateFormat }}</b>
+					</div>
+					<div class="Rtable-cell">
+						To: <br /><b>{{ item.periodTo | redenDateFormat }}</b>
+					</div>
+					<div class="Rtable-cell">
+						Days: <br /><b>{{ item.applyDay }}</b>
+					</div>
+					<div class="Rtable-cell" v-if="item.place=='PH'">
+						Location: <br /><b>{{ item.place }}</b>
+					</div>
+					<div class="Rtable-cell" v-else>
+						Location: <br /><b>{{ item.place }} - {{ item.location }}</b>
+					</div>
+					<div class="Rtable-cell">
+						<button class="btn btn-primary btn-sm" v-on:click="editLeave(item.leave)" data-toggle="modal" data-target="#myModal">
+							<i class="glyphicon glyphicon-pencil"></i> Restore
+						</button>
+					</div>
+				</div>
+
+			</div>
+			<div class="panel-collapse" v-if="leaveApproved && leaveApproved.length==0" style="padding: 10px 15px;">
+				<h5>Found nothing...</h5>
+			</div>
+		</div>
+
+		<!-- Modal -->
+		<div id="myModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" v-on:click="leaveToRestore = null">&times;</button>
+						<h4 class="modal-title">Restore Approved Leave</h4>
+					</div>
+
+					<div class="modal-body" v-if="leaveToRestore">
+
+						<div class="form-group">
+							<label for="control-no">Control No:</label>
+							<div id="control-no">{{ leaveToRestore.controlNo }}</div>
+						</div>
+
+						<div class="form-group">
+							<label for="date-filed">Date Filed:</label>
+							<petsa id="date-filed" v-model="dateFiled" style="width: 100%"></petsa>
+						</div>
+
+						<div class="form-group">
+							<label for="leave-period-from">Date From:</label>
+							<petsa ref="leave-period-from" id="leave-period-from" v-model="leaveToRestore.periodFrom" style="width: 100%" v-on:change="computeNumDays"></petsa>
+						</div>
+
+						<div class="form-group">
+							<label for="leave-period-to">Date To:</label>
+							<petsa ref="leave-period-to" id="leave-period-to" v-model="leaveToRestore.periodTo" style="width: 100%" v-on:change="computeNumDays"></petsa>
+						</div>
+
+						<div class="form-group">
+							<label for="days">Day(s):</label>
+							<input type="number" readonly id="days" v-model="leaveToRestore.applyDay" class="form-control" />
+						</div>
+
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" v-on:click="submit(leaveToRestore)" data-dismiss="modal">Submit</button>
+						<button type="button" class="btn btn-default" v-on:click="leaveToRestore = null" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	}
+
+</div>
+
+@{
+	var controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+	var serverUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+	var controllerUrl = Url.Content("~") + controllerName;
+}
+
+@Scripts.Render("~/Scripts/app/" + controllerName + "/vue-restoration.js")

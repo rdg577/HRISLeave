@@ -1,3 +1,5 @@
 ﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	Layout = Session["EIC"] == null ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_LayoutAdminLTE.cshtml";
+
+	//Layout = "~/Views/Shared/_Layout.cshtml";
 }

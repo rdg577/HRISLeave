@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Settings";
+}
+
+<style>
+	tbody > tr:hover {
+		background-color: #E3F2FD;
+		color: #000000;
+	}
+
+	div.panel {
+		box-shadow: 4px 4px 5px 0px #90CAF9;
+	}
+
+	a.menu {
+		color: #428bca;
+		text-align: left;
+		padding: 10px 15px;
+		background-color: #f5f5f5;
+		box-shadow: 4px 4px 5px 0px #90CAF9;
+	}
+
+	a.menu:hover {
+		text-decoration: underline;
+		background-color: #f5f5f5;
+		border-color: #ddd;
+		color: #2a6496;
+	}
+
+	button, a.btn {
+		box-shadow: 4px 4px 5px 0px #90CAF9;
+	}
+</style>
+
+<div id="app">
+
+	<div class="row">
+		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="padding-bottom: 5px;">
+			<a class="menu btn btn-default btn-block" href="@Url.Action("SettingsLeaveAllotments")">Allotment</a>
+		</div>
+		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="padding-bottom: 5px;">
+			<a class="menu btn btn-default btn-block" href="@Url.Action("SettingsLeaveConversionMatrixDP")">Conversion Matrix - Days Present</a>
+		</div>
+		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="padding-bottom: 5px;">
+			<a class="menu btn btn-default btn-block" href="@Url.Action("SettingsLeaveConversionMatrixWH")">Conversion Matrix - Work Hours</a>
+		</div>
+		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="padding-bottom: 5px;">
+			<a class="menu btn btn-default btn-block" href="@Url.Action("SettingsLeaveCreditsEarned")">Credits Earned Table</a>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="padding-bottom: 5px;">
+			<a class="menu btn btn-default btn-block" href="@Url.Action("SettingsLeaveTypes")">Leave Types</a>
+		</div>
+		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="padding-bottom: 5px;">
+			<a class="menu btn btn-default btn-block" href="@Url.Action("SettingsLeaveAdministrators")">Administrators</a>
+		</div>
+		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="padding-bottom: 5px;">
+			<a class="menu btn btn-default btn-block" href="@Url.Action("SettingsLeaveLedgerCodes")">Ledger Codes</a>
+		</div>
+	</div>
+
+</div>
+@{
+    var controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+    var serverUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+    var controllerUrl = Url.Content("~") + controllerName;
+}
+@Scripts.Render("~/Scripts/app/" + controllerName + "/main.js")

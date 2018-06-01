@@ -12,7 +12,7 @@ namespace LeaveModule.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tLeaveApp
+    public partial class tleaveApp
     {
         public int recNo { get; set; }
         public string controlNo { get; set; }

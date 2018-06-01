@@ -1,0 +1,337 @@
+﻿@{
+    ViewBag.Title = "My Leave";
+}
+<style>
+     tbody > tr:hover {
+         background-color: #E3F2FD;
+         color: #000000;
+     }
+     div.panel {
+         box-shadow: 4px 4px 5px 0px #90CAF9;
+     }
+
+    button {
+        box-shadow: 3px 3px 2px 0px #dcdcdc;
+    }
+    .modal-header {
+        background-color: #90CAF9;
+    }
+</style>
+<link href="~/Content/leave/rtable.css" rel="stylesheet"/>
+
+<h6>@Session["EIC"].ToString()</h6>
+
+<div id="app">
+
+<div id="promptArea"></div>
+<div class="row">
+	<div class="col-lg-3 col-md-6 col-sm-6">
+		<button class="btn btn-info btn-block" id="btnCreateLeave" aria-label="Left Align">
+			<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp;Create Leave Request
+		</button>
+	</div>
+	<div class="col-lg-3 col-md-6 col-sm-6">
+		<button class="btn btn-info btn-block" id="btnViewLeaveLedger" aria-label="Left Align">
+			<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>&nbsp;View Leave Ledger
+		</button>
+	</div>
+</div>
+
+<br />
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div class="panel-title">
+			<a href="#my-leave-ledger" data-toggle="collapse"><strong>Leave Balances</strong></a>
+		</div>
+	</div>
+	<div id="my-leave-ledger" class="panel-collapse" v-if="leaveBalances">
+		<!-- Period -->
+		<div class="Rtable Rtable--2cols Rtable--collapse">
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				From
+			</div>
+			<div style="order: 1;" class="Rtable-cell" v-if="leaveBalances.dateFrom">
+				{{ leaveBalances.dateFrom | redenDateFormat2 }}
+			</div>
+			<div style="order: 1;" class="Rtable-cell" v-else>
+				&nbsp;
+			</div>
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				To
+			</div>
+			<div style="order: 1;" class="Rtable-cell" v-if="leaveBalances.dateTo">
+				{{ leaveBalances.dateTo | redenDateFormat2 }}
+			</div>
+			<div style="order: 1;" class="Rtable-cell" v-else>
+				&nbsp;
+			</div>
+		</div>
+
+		<!-- VL and SL Only -->
+		<div class="Rtable Rtable--2cols Rtable--collapse">
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				Vacation Leave
+				<div v-if="leaveBalances.VacationLeave > 0 || leaveBalances.SickLeave > 0"
+				     v-on:click="leaveBalances && showMonetaryValue(leaveBalances.VacationLeave)"
+				     class="mone-value" style="display:inline-block">
+					<button class="btn btn-flat btn-xs btn-info" title="Monetary Value">
+						<i class="fa fa-money"></i>
+					</button>
+				</div>
+			</div>
+			<div style="order: 1;" class="Rtable-cell" v-if="leaveBalances.VacationLeave">
+				{{ leaveBalances.VacationLeave | redenNumberFormat }}
+			</div>
+			<div style="order: 1;" class="Rtable-cell" v-else>
+				&nbsp;
+			</div>
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				Sick Leave
+				<div v-if="leaveBalances.SickLeave > 0"
+				     v-on:click="leaveBalances && showMonetaryValue(leaveBalances.SickLeave)"
+				     class="mone-value" style="display:inline-block">
+					<button class="btn btn-flat btn-xs btn-info" title="Monetary Value">
+						<i class="fa fa-money"></i>
+					</button>
+				</div>
+			</div>
+			<div style="order: 1;" class="Rtable-cell" v-if="leaveBalances.SickLeave">
+				{{ leaveBalances.SickLeave | redenNumberFormat }}
+			</div>
+			<div style="order: 1;" class="Rtable-cell" v-else>
+				&nbsp;
+			</div>
+		</div>
+
+		<!-- SBL and SEL Only -->
+		<div class="Rtable Rtable--2cols Rtable--collapse">
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				Special Benefit Leave
+			</div>
+			<div style="order: 1;" class="Rtable-cell">
+				{{ leaveBalances.SpecialBenefitLeave }}
+			</div>
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				Special Emergency Leave
+			</div>
+			<div style="order: 1;" class="Rtable-cell">
+				{{ leaveBalances.SpecialEmergencyLeave }}
+			</div>
+
+		</div>
+
+		<!-- Other Leaves -->
+		<div class="Rtable Rtable--10cols Rtable--collapse">
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				STL
+			</div>
+			<div style="order: 1;" class="Rtable-cell">
+				{{ leaveBalances.StudyLeave }}
+			</div>
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				ML
+			</div>
+			<div style="order: 1;" class="Rtable-cell">
+				{{ leaveBalances.MaternityLeave }}
+			</div>
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				PL
+			</div>
+			<div style="order: 1;" class="Rtable-cell">
+				{{ leaveBalances.PaternityLeave }}
+			</div>
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				SPL
+			</div>
+			<div style="order: 1;" class="Rtable-cell">
+				{{ leaveBalances.SoloParentLeave }}
+			</div>
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				SLP
+			</div>
+			<div style="order: 1;" class="Rtable-cell">
+				{{ leaveBalances.SpecialLeavePrivilege }}
+			</div>
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				RL
+			</div>
+			<div style="order: 1;" class="Rtable-cell">
+				{{ leaveBalances.RehabilitationLeave }}
+			</div>
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				VAWC
+			</div>
+			<div style="order: 1;" class="Rtable-cell">
+				{{ leaveBalances.VAWCLeave }}
+			</div>
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				Mone
+			</div>
+			<div style="order: 1;" class="Rtable-cell">
+				{{ leaveBalances.MonetizedLeave }}
+			</div>
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				FL
+			</div>
+			<div style="order: 1;" class="Rtable-cell">
+				{{ leaveBalances.ForcedLeave }}
+			</div>
+
+			<div style="order: 0;" class="Rtable-cell Rtable-cell--head">
+				Magna
+			</div>
+			<div style="order: 1;" class="Rtable-cell">
+				{{ leaveBalances.MagnaCartaForWomenLeave }}
+			</div>
+
+		</div>
+
+
+	</div>
+	<div class="panel-footer" style="font-size: 8pt;">These are the available leave credits that you can take in your next leave request. [<a href="" data-toggle="modal" data-target="#leaveLegendsModal">Show Legends</a>]</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div class="panel-title">
+			<a href="#my-leave-unposted" data-toggle="collapse"><strong>Unapproved/Unposted Leave History</strong></a>
+		</div>
+	</div>
+	<div id="my-leave-unposted" class="panel-collapse" v-if="leaveHistory">
+
+		<div class="Rtable Rtable--4cols Rtable--collapse" v-for="(key,item) in getUnPostedLeave(leaveHistory)">
+			<div class="Rtable-cell Rtable-cell--head">
+				<b>{{ item.LeaveDescription }}</b>
+				<span v-if="item.IsVLUsedAsSL==true"><br />(Used as SICK LEAVE)</span>
+			</div>
+			<div class="Rtable-cell">
+				{{ item.periodFrom | redenDateFormat2 }} to {{ item.periodTo | redenDateFormat2 }}
+			</div>
+			<div class="Rtable-cell">
+				<span v-if="item.IsRecommendedAtOffice==null" style="color: yellow; background-color: red; padding: 3px;">Not yet acted for recommendation!</span>
+				<span v-if="item.IsRecommendedAtOffice==false">Sorry, it is not recommended at Office level!</span>
+				<span v-if="item.IsRecommendedAtOffice==true && item.IsRecommendedAtHR==null">At HR, but not yet recommended and/or acted.</span>
+				<span v-if="item.IsRecommendedAtHR==true && item.IsApproved==null">Not yet acted for approval!</span>
+				<span v-if="item.IsRecommendedAtHR==true && item.IsApproved!=null">
+					{{ item.IsApproved==false ? ("Not Approved - " + item.DisapprovalRemark):"Not yet approved" }}
+				</span>
+			</div>
+			<div class="Rtable-cell">
+				<button type="button" class="btn btn-danger btn-xs" title="Cancel this leave request." v-if="item.IsApproved==null" v-on:click="cancelLeaveRequest(item, this)">
+					<span class="glyphicon glyphicon-remove"></span> Cancel
+				</button>
+				<button type="button" class="btn btn-warning btn-xs" title="View Detailed Status."
+				        v-if="item.IsApproved==null" v-on:click="viewLeaveStatus(item)">
+					<span class="glyphicon glyphicon-list"></span> Status
+				</button>
+				<button type="button" class="btn btn-info btn-xs" title="Print this leave request."
+				        v-if="item.IsRecommendedAtOffice==true" v-on:click="printPreview(item)">
+					<span class="glyphicon glyphicon-print"></span> Print
+				</button>
+			</div>
+		</div>
+
+	</div>
+	<div class="panel-footer" style="font-size: 8pt;">
+		This panel listed all your leave request/s which is/are not yet approved. You can also cancel your leave request
+		by clicking the "X" button. [<a href="" data-toggle="modal" data-target="#leaveLegendsModal">Show Legends</a>]
+	</div>
+</div>
+
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div class="panel-title">
+			<a href="#my-leave-history" data-toggle="collapse"><strong>Leave History</strong></a>
+		</div>
+	</div>
+	<div id="my-leave-history" class="panel-collapse" v-if="leaveHistory">
+
+		<div class="Rtable Rtable--5cols Rtable--collapse" v-for="(key,item) in getApprovedLeave(leaveHistory)">
+			<div class="Rtable-cell Rtable-cell--head">
+				<b>{{ item.LeaveDescription }}</b>
+			</div>
+			<div class="Rtable-cell">
+				{{ item.periodFrom | redenDateFormat2 }} to {{ item.periodTo | redenDateFormat2 }}
+			</div>
+			<div class="Rtable-cell">
+				{{ item.applyDay }} day(s)
+			</div>
+			<div class="Rtable-cell" style="color: green;">
+				<b>Approved</b>
+			</div>
+			<div class="Rtable-cell" v-if="item.place=='PH'">
+				{{ item.place }}
+			</div>
+			<div class="Rtable-cell" v-else>
+				{{ item.place }} - {{ item.location }}
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<!-- Modal -->
+<div id="leaveLegendsModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">LEAVE LEGENDS</h4>
+			</div>
+
+			<div class="modal-body">
+				<table class="table" v-if="leaveTypesAndAllotment">
+					<thead>
+					<tr>
+						<th>Leave Type</th>
+						<th>Code</th>
+						<th>Total Days Allotment Per Year</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr v-for="item in leaveTypesAndAllotment">
+						<td>{{ item.Description }}</td>
+						<td>{{ item.Code }}</td>
+						<td><span v-if="item.Allotment">{{ item.Allotment }} {{ item.IsCalendarDays ? "Calendar Days":"Working Days" }}</span></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+</div>
+
+@{
+    var controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+	var actionName = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
+    var serverUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+    var controllerUrl = Url.Content("~") + controllerName;
+}
+<script>
+	console.log ( '@actionName' );
+	window.ServerUrl = '@serverUrl';
+	window.VueRouterUrl = '@controllerUrl';
+</script>
+@Scripts.Render("~/Scripts/app/" + controllerName + "/main.js")
+
+@Scripts.Render("~/Scripts/app/" + controllerName + "/vue-main.js")

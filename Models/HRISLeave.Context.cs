@@ -28,29 +28,33 @@ namespace LeaveModule.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<vEmployeeCompleteField> vEmployeeCompleteFields { get; set; }
         public DbSet<tapp212Image> tapp212Image { get; set; }
-        public DbSet<tLeaveBalanceForwarded> tLeaveBalanceForwardeds { get; set; }
-        public DbSet<trefLeaveType> trefLeaveTypes { get; set; }
-        public DbSet<trefLeaveLedgerCode> trefLeaveLedgerCodes { get; set; }
-        public DbSet<tAttDTR> tAttDTRs { get; set; }
+        public DbSet<tleaveApp> tleaveApps { get; set; }
         public DbSet<tLeaveAppLedger> tLeaveAppLedgers { get; set; }
         public DbSet<tLeaveAppLedgerMaster> tLeaveAppLedgerMasters { get; set; }
+        public DbSet<tLeaveBalanceForwarded> tLeaveBalanceForwardeds { get; set; }
+        public DbSet<tLeaveInutang> tLeaveInutangs { get; set; }
+        public DbSet<tLogDashboard> tLogDashboards { get; set; }
+        public DbSet<tmodUserModuleActivity> tmodUserModuleActivities { get; set; }
+        public DbSet<trefLeaveAdministrator> trefLeaveAdministrators { get; set; }
+        public DbSet<trefLeaveAllotment> trefLeaveAllotments { get; set; }
         public DbSet<trefLeaveCreditForZeroVLCredit> trefLeaveCreditForZeroVLCredits { get; set; }
         public DbSet<trefLeaveCreditsEarned> trefLeaveCreditsEarneds { get; set; }
+        public DbSet<trefLeaveEarn> trefLeaveEarns { get; set; }
+        public DbSet<trefLeaveLedgerCode> trefLeaveLedgerCodes { get; set; }
+        public DbSet<trefLeaveMinute> trefLeaveMinutes { get; set; }
+        public DbSet<trefLeaveType> trefLeaveTypes { get; set; }
         public DbSet<trefLeaveWorkHoursConversionMatrix> trefLeaveWorkHoursConversionMatrices { get; set; }
-        public DbSet<vLeaveMasterLedger> vLeaveMasterLedgers { get; set; }
-        public DbSet<trefHoliday> trefHolidays { get; set; }
-        public DbSet<vrefLeaveTypeAndAllotment> vrefLeaveTypeAndAllotments { get; set; }
-        public DbSet<tLogDashboard> tLogDashboards { get; set; }
-        public DbSet<vDeptOfficer> vDeptOfficers { get; set; }
-        public DbSet<vApprvOfficer> vApprvOfficers { get; set; }
-        public DbSet<trefLeaveAdministrator> trefLeaveAdministrators { get; set; }
-        public DbSet<tLeaveApp> tLeaveApps { get; set; }
-        public DbSet<vLeaveApp> vLeaveApps { get; set; }
+        public DbSet<vEmployeeCompleteField> vEmployeeCompleteFields { get; set; }
+        public DbSet<vLeaveApp2> vLeaveApp2 { get; set; }
         public DbSet<tappOffice> tappOffices { get; set; }
-        public DbSet<tLeaveInutang> tLeaveInutangs { get; set; }
-        public DbSet<trefLeaveAllotment> trefLeaveAllotments { get; set; }
+        public DbSet<tAttDTR> tAttDTRs { get; set; }
+        public DbSet<trefHoliday> trefHolidays { get; set; }
+        public DbSet<vApprvOfficer> vApprvOfficers { get; set; }
+        public DbSet<vDeptOfficer> vDeptOfficers { get; set; }
+        public DbSet<vLeaveMasterLedger> vLeaveMasterLedgers { get; set; }
+        public DbSet<vrefLeaveTypeAndAllotment> vrefLeaveTypeAndAllotments { get; set; }
+        public DbSet<tleaveRestore> tleaveRestores { get; set; }
     
         public virtual ObjectResult<spEmployeeLeaveBalance_Result> spEmployeeLeaveBalance(string eIC, Nullable<System.DateTime> dateBegin, Nullable<System.DateTime> dateEnd, string sbl, string stl, string ml, string pl, string spl, string slp, string rl, string vawc, string sel, string mone, string fl, string magnacarta)
         {
@@ -124,16 +128,6 @@ namespace LeaveModule.Models
                 new ObjectParameter("EIC", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spLeaveCardGenerate_Result>("spLeaveCardGenerate", eICParameter);
-        }
-    
-        [EdmFunction("HRISEntities", "fnLeaveLedgerGenerator")]
-        public virtual IQueryable<fnLeaveLedgerGenerator_Result> fnLeaveLedgerGenerator(string eIC)
-        {
-            var eICParameter = eIC != null ?
-                new ObjectParameter("EIC", eIC) :
-                new ObjectParameter("EIC", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<fnLeaveLedgerGenerator_Result>("[HRISEntities].[fnLeaveLedgerGenerator](@EIC)", eICParameter);
         }
     }
 }

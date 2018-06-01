@@ -2,10 +2,18 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	@if (Session["EIC"] == null)
+	{
+		var controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+		if (controllerName != "Home")
+		{
+			<meta http-equiv="refresh" content="7; URL='@Url.Action("Index", "Home")'" />	
+		}
+	}
     <title>@ViewBag.Title - HRISv2 Leave Administration</title>
-		@Styles.Render("~/bundles/vendorCSS")
-    @Styles.Render("~/Content/css")
+	@Styles.Render("~/bundles/vendorCSS")
+    @*@Styles.Render("~/Content/css")*@
 
     @Scripts.Render("~/bundles/vendorJS")
 </head>
@@ -25,19 +33,19 @@
                     @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
-                    <li>@Html.ActionLink("myLeave", "MyLeave", "Leave")</li>
+                    <li>@Html.ActionLink("myLeave", "MyLeave", "LeaveVersion2")</li>
                     @*<li>@Html.ActionLink("Create", "CreateRequest", "Leave")</li>*@
-                    <li>@Html.ActionLink("Recommend", "Recommend", "Leave")</li>
-                    <li>@Html.ActionLink("Posting", "Posting", "Leave")</li>
-                    <li>@Html.ActionLink("Approve", "Approve", "Leave")</li>
-                    <li>@Html.ActionLink("Reports", "Reports", "Leave")</li>
-                    <li>@Html.ActionLink("Utility", "Utility", "Leave")</li>
-                    <li>@Html.ActionLink("Settings", "Settings", "Leave")</li>
+                    <li>@Html.ActionLink("Recommend", "Recommend", "LeaveVersion2")</li>
+                    <li>@Html.ActionLink("Posting", "Posting", "LeaveVersion2")</li>
+                    <li>@Html.ActionLink("Approve", "Approve", "LeaveVersion2")</li>
+                    <li>@Html.ActionLink("Reports", "Reports", "LeaveVersion2")</li>
+                    <li>@Html.ActionLink("Utility", "Utility", "LeaveVersion2")</li>
+                    <li>@Html.ActionLink("Settings", "Settings", "LeaveVersion2")</li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container body-content" id="app">
+    <div class="container body-content" style="padding-top: 55px;">
         @RenderBody()
         <hr />
         <footer>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using LeaveModule.Models;
 
@@ -50,18 +49,27 @@ namespace LeaveModule.Controllers
 
         public ActionResult CheckLeaveScheduleConflict(string strBegin, string strEnd)
         {
-            // 17Jan2018@1600
-            var EIC = Session["EIC"].ToString();
+            try
+            {
+                // 17Jan2018@1600
+                var EIC = Session["EIC"].ToString();
 
-            var dateBegin = Convert.ToDateTime(strBegin);
-            var dateEnd = Convert.ToDateTime(strEnd);
+                var dateBegin = Convert.ToDateTime(strBegin);
+                var dateEnd = Convert.ToDateTime(strEnd);
 
-            // check existing leave request based on leave period
-            var existingUnapprovedLeaves =
-                db.tLeaveApps.Where(
-                    r => r.EIC == EIC && ((dateBegin >= r.periodFrom && dateBegin <= r.periodTo) || (dateEnd >= r.periodFrom && dateEnd <= r.periodTo))).ToList();
-            if (existingUnapprovedLeaves.Count > 0) return Content("1");
-            return Content("0");
+                // check existing leave request based on leave period
+                var existingUnapprovedLeaves =
+                    db.tleaveApps.Where(
+                        r => r.EIC == EIC && ((dateBegin >= r.periodFrom && dateBegin <= r.periodTo) || (dateEnd >= r.periodFrom && dateEnd <= r.periodTo))).ToList();
+                
+                if (existingUnapprovedLeaves.Count > 0) return Content("1");
+
+                return Content("0");
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }
         }
 
         public JsonResult LeaveCodesAndAllotment()

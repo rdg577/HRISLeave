@@ -32,7 +32,9 @@
                 EIC: selectedEmpEIC
             },
             success: function (result) {
-                window.location.href = "Leave/MyLeave";
+                console.log ( result );
+                if(result==0)
+                    window.location.href = "LeaveVersion2/MyLeave";
             },
             error: function (error) {
                 console.log(error);
@@ -53,7 +55,7 @@
             success: function (result) {
                 console.log(result);
                 if (result == 0) {
-                    window.location.href = "Leave/MyLeave";
+                    window.location.href = "LeaveVersion2/MyLeave";
                 }
             },
             error: function (error) {

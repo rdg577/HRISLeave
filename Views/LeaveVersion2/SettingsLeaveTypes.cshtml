@@ -1,0 +1,163 @@
+﻿
+@{
+    ViewBag.Title = "Settings Leave Types";
+}
+<link href="~/Content/leave/utility2.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/app/LeaveVersion2/utilities/app/app.js"></script>
+<script src="~/Scripts/app/LeaveVersion2/utilities/controller/leaveTypeCtrl.js"></script>
+
+<h2>Settings Leave Types</h2>
+
+
+<div ng-app="HRISLeaveForm" ng-controller="leaveTypeCtrl">
+	<div class="box">
+		<div class="box-header">
+			<div class="row">
+				<div class="col-sm-4">
+				</div>
+				<div class="col-sm-8">
+					<div style="text-align:right;padding-top:5px;">
+						<a href="#" ng-click="clearModalInput()"class="btn btn-primary" style="width:150px;" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-plus " style="padding-right:5px"></i>Add Leave type</a>
+					</div>
+				</div>
+			</div>
+
+
+		</div><!-- /.box-header -->
+		<div class="box-body">
+			<div class="col-md-3 col-xs-3">
+				<select class="pull-left form-control" ng-init="itemsPerPage = '10'" ng-model="itemsPerPage" ng-change="perPage()">
+					<option value="10">10</option>
+					<option value="20">20</option>
+					<option value="100">100</option>
+				</select>
+			</div>
+			<div class="col-md-3 col-xs-3 pull-right">
+				<input type="text" value="" ng-model="query" class=" form-control" placeholder="Search ...." ng-change="perPage()" />
+			</div>
+			<table id="example1" class="table table-bordered table-striped">
+				<thead>
+				<tr>
+					<th style="width:50px;text-align:center;">Status</th>
+					<th style="width:100px;text-align:center;">Code</th>
+					<th style="width:100px;text-align:center;">Abbreviation</th>
+					<th style="width:auto;">Description</th>
+					<th style="width:200px;text-align:center;">Action</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="lt in pagedItems[currentPage]">
+					<td style="text-align:center;"><span class="label label-{{  lt.IsActive ? 'success' : 'danger' }}">{{ lt.IsActive ? "ACTIVE" : "INACTIVE" }}</span></td>
+					<td style="text-align:center;">{{ lt.NumCode}}</td>
+					<td style="text-align:center;">{{ lt.Code }}</td>
+					<td>{{ lt.Description }}</td>                      
+					<td>
+						<a href="#" ng-click="editLeaveType(lt)"  class="btn btn-primary btn-xs btn-table" ng-init="DataExist=false;" data-toggle="modal" data-target=".bs-example-modal-md"><i class=" fa fa-edit" style="padding-right:5px;"></i>Edit</a>
+						@*<a ng-click="removLT(lt)" class="btn btn-danger btn-xs "><i class="fa fa-trash" style="padding-right:5px;"></i>Remove</a>*@
+					</td>
+				</tr>
+				</tbody>
+				<tfoot>
+				<tr>
+					<th style="width:50px;text-align:center;">Status</th>
+					<th style="width:100px;text-align:center;">Code</th>
+					<th style="width:100px;text-align:center;">Abbreviation</th>
+					<th style="width:auto;">Description</th>
+					<th style="width:200px;text-align:center;">Action</th>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<div class="pull-right">
+							<ul class="pagination" ng-if="validPage">
+								<li ng-class="{disabled: currentPage == 0}">
+									<a href ng-click="prevPage()">« Prev</a>
+								</li>
+
+								<li ng-repeat="n in range(pagedItems.length, currentPage, currentPage + gap) "
+								    ng-class="{active: n == currentPage}"
+								    ng-click="setPage()">
+									<a href ng-bind="n + 1">1</a>
+								</li>
+
+								<li ng-class="{disabled: (currentPage) == pagedItems.length - 1}">
+									<a href ng-click="nextPage()">Next »</a>
+								</li>
+							</ul>
+						</div>
+					</td>
+				</tr>
+				</tfoot>
+			</table>
+		</div><!-- /.box-body -->
+		<!-- /.box -->
+
+	</div>
+
+	<div class="modal fade bs-example-modal-md in" tabindex="-1" role="dialog" aria-hidden="true" style="display:none; padding-right: 16px;" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header" style="background-color:#357ca5;color:white">
+
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:white" ng-click="closeModal()"><span aria-hidden="true">×</span></button>
+					<h3 class="modal-title" id="myModalLabel2">{{titleHead}} Leave Type</h3>
+				</div>
+				<div class="modal-body">
+
+					<div class="form-group" ng-if="DataExist" ng-init="DataExist=false">
+						<div class="alert alert-danger">
+							<h4><i class="icon fa fa-ban"></i> Data already exist!</h4>
+						</div>
+					</div>
+					<form class="form-horizontal">
+						<div class="box-body">
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-2 control-label" style="padding-left:0px">Number</label>
+								<div class="col-sm-7" style="padding-left:0px">
+									<input ng-model="trefLeaveType.NumCode" ng-change="DataExist=false;" class="form-control input-lg" type="text" placeholder="Code Number">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="inputPassword3" class="col-sm-2 control-label" style="padding-left:0px">Description</label>
+								<div class="col-sm-10" style="padding-left:0px">
+									<input ng-model="trefLeaveType.Description" ng-change="trefLeaveType.Description=(trefLeaveType.Description).toUpperCase();DataExist=false" class="form-control input-lg" type="text" placeholder="Description">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-2 control-label" style="padding-left:0px">Abbr.</label>
+								<div class="col-sm-7" style="padding-left:0px">
+									<input ng-model="trefLeaveType.Code" ng-change="trefLeaveType.Code=(trefLeaveType.Code).toUpperCase();DataExist=false" class="form-control input-lg" type="text" placeholder="Abbreviation Code">
+								</div>
+							</div>
+
+							<!-- /.Switch   Active/Inactive -->
+
+							<div class="form-group">
+								<label for="inputPassword3" class="col-sm-2 control-label"></label>
+								<div class="col-sm-8" style="padding-left:0px">
+									<div class="col-xs-1" style="padding-left:0px">
+										<input ng-model="trefLeaveType.IsActive" ng-change="DataExist=false;" type="checkbox" ng-false-value="false" ng-true-value="true" class="icheckbox_flat-blue" checked="" style="position: absolute;">
+									</div>
+									<div class="col-xs-8" style="padding-left:0px">
+										<p style="text-align:left; padding-top:3px; font-size:16px;color:#616161;">Active Leave type?</p>
+									</div>
+
+
+								</div>
+							</div>
+						</div>
+						<!-- /.box-body -->
+					</form>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default pull-left" data-dismiss="modal" ng-click="closeModal()">Close</button>
+					<button ng-click="newLeaveType()" ng-if="showNew" ng-int="showNew=true" type="button" class="btn btn-primary">Save changes</button>
+					<button ng-click="updateLeaveType()" ng-if="showUpdate" type="button" ng-init="showUpdate=true" class="btn btn-primary">Update changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	@*-----MODAL BODY----------*@
+</div>

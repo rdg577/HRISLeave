@@ -1,4 +1,5 @@
-﻿const gulp = require('gulp');
+/// <vs />
+const gulp = require('gulp');
 const gutil = require('gulp-util');
 var babel = require('gulp-babel');
 var minify = require('gulp-uglify');
@@ -38,10 +39,10 @@ function watchFolder(input, output) {
 
     function bundle() {
         b.bundle()
-            .pipe(source('bundle.js'))
+            .pipe(source('*.js'))
             .pipe(buffer())
             .pipe(sourcemaps.init({ loadMaps: true }))
-            //.pipe(babel({ compact: false, presets: ['es2015'] }))
+            .pipe(babel({ compact: false, presets: ['es2015'] }))
             // Add transformation tasks to the pipeline here.
             //.pipe(minify())
             //  .on('error', gutil.log)
@@ -88,10 +89,12 @@ function compileJSVue(input, output) {
     .pipe(source('vue-bundle.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(babel({ compact: false, presets: ['es2015'] }))
-        // Add transformation tasks to the pipeline here.
-        .pipe(minify())
-        .on('error', gutil.log)
+    .pipe(babel({ compact: false, presets: ['es2015'] }))
+
+    // Add transformation tasks to the pipeline here.
+    .pipe(minify())
+    .on('error', gutil.log)
+
     //.pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(output));
 }
@@ -109,11 +112,14 @@ function compileJSVue2(input, output, fn) {
     .pipe(source(fn))
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(babel({ compact: true, presets: ['es2015'] }))
-        // Add transformation tasks to the pipeline here.
-        .pipe(minify())
-        .on('error', gutil.log)
+    .pipe(babel({ compact: true, presets: ['es2015'] }))
+
+    ////Add transformation tasks to the pipeline here.
+    //.pipe(minify())
+    //.on('error', gutil.log)
+
     //.pipe(sourcemaps.write('./'))
+
     .pipe(gulp.dest(output));
 }
 
@@ -128,30 +134,37 @@ gulp.task('build', function () {
         //if (fs.existsSync(scriptsPath + "//" + folder + "//main.js")) {
         //    compileJSVue2(scriptsPath + "//" + folder + "//main.js", "Scripts//app//" + folder, "main.js");
         //}
-        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-main.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//vue-main.js", "Scripts//app//" + folder, "vue-main.js");
-        }
-
-        //// for create leave
-        //if (fs.existsSync(scriptsPath + "//" + folder + "//create.js")) {
-        //    compileJSVue2(scriptsPath + "//" + folder + "//create.js", "Scripts//app//" + folder, "create.js");
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-main.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-main.js", "Scripts//app//" + folder, "vue-main.js");
         //}
+
+        ////// for create leave
+        ////if (fs.existsSync(scriptsPath + "//" + folder + "//create.js")) {
+        ////    compileJSVue2(scriptsPath + "//" + folder + "//create.js", "Scripts//app//" + folder, "create.js");
+        ////}
         //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-create.js")) {
         //    compileJSVue2(scriptsPath + "//" + folder + "//vue-create.js", "Scripts//app//" + folder, "vue-create.js");
         //}
 
-        //// for leave recommendation
-        //if (fs.existsSync(scriptsPath + "//" + folder + "//recommend.js")) {
-        //    compileJSVue2(scriptsPath + "//" + folder + "//recommend.js", "Scripts//app//" + folder, "recommend.js");
-        //}
+        ////// for leave recommendation @ Office Levvel
+        ////if (fs.existsSync(scriptsPath + "//" + folder + "//recommend.js")) {
+        ////    compileJSVue2(scriptsPath + "//" + folder + "//recommend.js", "Scripts//app//" + folder, "recommend.js");
+        ////}
         //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-recommend.js")) {
         //    compileJSVue2(scriptsPath + "//" + folder + "//vue-recommend.js", "Scripts//app//" + folder, "vue-recommend.js");
         //}
 
-        //// for leave approval
-        //if (fs.existsSync(scriptsPath + "//" + folder + "//approve.js")) {
-        //    compileJSVue2(scriptsPath + "//" + folder + "//approve.js", "Scripts//app//" + folder, "approve.js");
+        //// for leave recommendation @ HR Level
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-recommend-hr.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-recommend-hr.js", "Scripts//app//" + folder, "vue-recommend-hr.js");
         //}
+
+        //// for leave recommendation @ HR Level
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-reports.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-reports.js", "Scripts//app//" + folder, "vue-reports.js");
+        //}
+
+        // for leave approval
         //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-approve.js")) {
         //    compileJSVue2(scriptsPath + "//" + folder + "//vue-approve.js", "Scripts//app//" + folder, "vue-approve.js");
         //}
@@ -172,12 +185,14 @@ gulp.task('build', function () {
         //    compileJSVue2(scriptsPath + "//" + folder + "//vue-utility.js", "Scripts//app//" + folder, "vue-utility.js");
         //}
 
-        // for edit
-        if (fs.existsSync(scriptsPath + "//" + folder + "//edit.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//edit.js", "Scripts//app//" + folder, "edit.js");
-        }
-        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-edit.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//vue-edit.js", "Scripts//app//" + folder, "vue-edit.js");
+        ////  for edit
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-edit.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-edit.js", "Scripts//app//" + folder, "vue-edit.js");
+        //}
+
+        // for restoration
+        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-restoration.js")) {
+            compileJSVue2(scriptsPath + "//" + folder + "//vue-restoration.js", "Scripts//app//" + folder, "vue-restoration.js");
         }
     });
 });
@@ -186,6 +201,6 @@ gulp.task('default', function () {
     var folders = getFolders(scriptsPath);
     gutil.log(folders);
     folders.map(function (folder) {
-        watchFolder(scriptsPath + "//" + folder + "//main.js", "Scripts//app//" + folder);
+        watchFolder(scriptsPath + "//" + folder + "//*.js", "Scripts//app//" + folder);
     });
 });

@@ -326,6 +326,6 @@ ASALocalRun/
 ###############
 Scripts/
 fonts/
-Content/bootstrap/
-Content/fonts/
-Content/kendo/
+Content/
+kendo/
+admin-lte/

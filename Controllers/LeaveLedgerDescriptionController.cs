@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using LeaveModule.Models;
 
@@ -13,24 +8,7 @@ namespace LeaveModule.Controllers
     {
 
         HRISEntities db =new HRISEntities();
-
-        // GET: LedgerDescription
-        public ActionResult Index()
-		{
-			// if out of session, re-login
-			if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
-
-			var EIC = Session["EIC"].ToString();
-
-			// check if one of the HR BWD Officer
-			var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin") && r.IsActive).SingleOrDefault(r => r.EIC == EIC);
-
-			if (HROfficer != null) return View();
-
-			Session["DeniedAccessMsg"] = "Oops! You have limited access on this page, please contact HR.";
-			return RedirectToAction("UnauthorizedAccess", "Leave");
-        }
-
+        
         [HttpPost]
         public ActionResult loadLedger()
         {
@@ -68,7 +46,7 @@ namespace LeaveModule.Controllers
         [HttpPost]
         public ActionResult updateLedger(trefLeaveLedgerCode lc)
         {
-	        db.Entry(lc).State = EntityState.Modified;
+            db.Entry(lc).State = System.Data.EntityState.Modified;
             db.SaveChanges();
 
             return Json(lc, JsonRequestBehavior.AllowGet);
@@ -78,7 +56,7 @@ namespace LeaveModule.Controllers
         public ActionResult removeLedger(trefLeaveLedgerCode lc)
         {
 
-	        db.Entry(lc).State = EntityState.Deleted;
+            db.Entry(lc).State = System.Data.EntityState.Deleted;
             db.SaveChanges();
 
 

@@ -1,0 +1,217 @@
+﻿@{
+    ViewBag.Title = "Create Leave Request";
+}
+<style>
+    tbody > tr:hover {
+        background-color: #E3F2FD;
+        color: #000000;
+    }
+    .table tbody > tr > td {
+        vertical-align: middle;
+    }
+
+    .form-row {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    div.panel {
+        box-shadow: 4px 4px 5px 0px #90CAF9;
+    }
+
+    button {
+        box-shadow: 3px 3px 2px 0px #dcdcdc;
+    }
+
+    .modal-header {
+        background-color: #0D47A1;
+        color: white;
+    }
+
+	.avatar {
+		-ms-border-radius: 50%;
+		border-radius: 50%;
+	}
+</style>
+<link href="~/Content/leave/rtable-create.css" rel="stylesheet" />
+<div id="app">
+	<div id="promptArea"></div>
+	<div id="create-request-leave">
+		<div class="panel panel-primary">
+			<div class=" panel-heading" @* style="background-color: green; color: white;"*@>
+				<div class="panel-title">
+					<b>LEAVE OF ABSENCE REQUEST LIST</b>
+				</div>
+			</div>
+			<div class="Rtable Rtable--8cols Rtable--collapse" v-for="item in leaveRequests">
+				<div class="Rtable-cell Rtable-cell--head" v-if="item.isVLUsedAsSL==true">
+					<b>SICK LEAVE</b>
+					<span><br />(Using VACATION LEAVE CREDIT)</span>
+				</div>
+				<div class="Rtable-cell Rtable-cell--head" v-else>
+					<b>{{ item.leaveDescription }}</b>
+				</div>
+				<div class="Rtable-cell">{{ item.dateBegin | redenDateFormat }} to<br />{{ item.dateEnd | redenDateFormat }}</div>
+				<div class="Rtable-cell">{{ item.daysAbsent }} day/s</div>
+				<div class="Rtable-cell" v-if="item.isWithPay==true">With Pay</div>
+				<div class="Rtable-cell" v-if="item.isWithPay==false" style="color: red;">Without Pay</div>
+				<div class="Rtable-cell">{{ item.place }} {{ item.location }}</div>
+				<div class="Rtable-cell" v-if="item.commutation==true">For commutation</div>
+				<div class="Rtable-cell" v-if="item.commutation==false">Not for commutation</div>
+				<div class="Rtable-cell" v-if="item.remark!=''">{{ item.remark }}</div>
+				<div class="Rtable-cell">
+					<button type="button" class="btn btn-info btn-sm" v-on:click="editLeaveRequest(item)">
+						<span class="glyphicon glyphicon-edit" title="Edit"></span> Edit
+					</button>
+					<button type="button" class="btn btn-danger btn-sm" v-on:click="removeLeaveRequest(item)">
+						<span class="glyphicon glyphicon-remove" title="Remove"></span> Delete
+					</button>
+				</div>
+			</div>
+			<div class="Rtable Rtable--2cols Rtable--collapse" v-show="leaveRequests.length > 0">
+				<div class="Rtable-cell Rtable-cell--alert">
+					Name of Recommending Officer :
+				</div>
+				<div class="Rtable-cell Rtable-cell--alert">
+					<input class="form-control" id="recommendingOfficer" style="width: 100%;" />
+				</div>
+			</div>
+			<div class="panel-footer">
+				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" title="Add new leave request">
+					<span class="glyphicon glyphicon-plus"></span>&nbsp;NEW REQUEST
+				</button>
+				<div class="pull-right">
+					<button type="button" class="btn btn-default" v-on:click="cancelLeaveRequest" title="Cancel Leave Request">
+						<span class="glyphicon glyphicon-backward"></span>&nbsp;CANCEL
+					</button>
+					<button type="button" class="btn btn-success" v-on:click="submitLeaveRequest(this)" v-show="leaveRequests.length > 0" title="Send all your leave request to server">
+						<span class="glyphicon glyphicon-send"></span>&nbsp;SUBMIT
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- LIST OF HOLIDAYS -->
+		<div class="panel panel-info" style="overflow-x:auto;">
+			<div class=" panel-heading">
+				<a href="#holidays" data-toggle="collapse">See List of Holidays Here...</a>
+			</div>
+			<div id="holidays" class="panel-collapse collapse">
+				<table class="table table-responsive" style="color: teal; font-size: 8pt;">
+					<thead>
+						<tr>
+							<th>DATE</th>
+							<th>TITLE</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="holiday in holidays">
+							<td>{{ holiday.petsa }}</td>
+							<td>{{ holiday.description }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+
+		<!-- Modal -->
+		<div id="myModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">NEW REQUEST</h4>
+					</div>
+
+					<div id="mgaMensahe"></div>
+
+					<div class="modal-body">
+
+						<div class="row form-row">
+							<div class="col col-md-5 col-sm-5 col-xs-5" style="text-align: right">
+								<label for="leaveType">Leave Type</label><br />
+								<small class="form-text text-muted">Select the type of leave</small>
+							</div>
+							<div class="col col-md-7 col-sm-7 col-xs-7">
+								<input id="leaveType" style="width: 100%" /><br />
+								<small id="useVLasSLHelper"><input id="useVLasSL" type="checkbox" /> VL but used as sick leave?</small>
+							</div>
+						</div>
+
+						<div class="row form-row">
+							<div class="col col-md-5 col-sm-5 col-xs-5" style="text-align: right">
+								<label for="placePH">Location where leave will be spent?</label><br />
+								<small class="form-text text-muted">Pls. specify the location (or hospital name, in case of sick leave.)</small>
+							</div>
+							<div class="col col-md-7 col-sm-7 col-xs-7">
+								<input type="radio" id="placePH" name="place" value="PH" checked />&nbsp;Within Philippines<br />
+								<input type="radio" id="placeAbroad" name="place" value="Abroad" />&nbsp;Abroad
+								<br />
+								<small>Specify:</small><input id="placeLocation" type="text" class="form-control" />
+							</div>
+						</div>
+
+						<div class="row form-row">
+							<div class="col col-md-5 col-sm-5 col-xs-5" style="text-align: right">
+								<label for="dateBegin">Start of leave period</label>
+							</div>
+							<div class="col col-md-7 col-sm-7 col-xs-7">
+								<input id="dateBegin" />
+							</div>
+						</div>
+
+						<div class="row form-row">
+							<div class="col col-md-5 col-sm-5 col-xs-5" style="text-align: right">
+								<label for="dateEnd">End of leave period</label><br />
+								<small class="form-text text-muted">If One (1) day leave, set date the same as start of leave period.</small>
+							</div>
+							<div class="col col-md-7 col-sm-7 col-xs-7">
+								<input id="dateEnd" />
+							</div>
+						</div>
+
+						<div class="row form-row">
+							<div class="col col-md-5 col-sm-5 col-xs-5" style="text-align: right">
+								<label for="placePH">Do you want commutation for this leave?</label>
+							</div>
+							<div class="col col-md-7 col-sm-7 col-xs-7">
+								<input type="radio" id="commutationYes" name="commutation" value="Yes" />&nbsp;YES, I want commutation. <br />
+								<input type="radio" id="commutationNo" name="commutation" value="No" checked />&nbsp;NO, not this time.
+							</div>
+						</div>
+
+						<div id="remarkSection" class="row form-row" style="background-color: lightpink;">
+							<div class="col col-md-5 col-sm-5 col-xs-5" style="text-align: right">
+								<label for="placePH">Remark</label><br />
+								<small class="form-text text-muted">Please enter your remark here.</small>
+							</div>
+							<div class="col col-md-7 col-sm-7 col-xs-7">
+								<input type="text" id="remark" v-model="remark" class="form-control" />
+							</div>
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button id="btnAddToLeaveRequest" type="button" class="btn btn-primary" v-if="!editMode" v-on:click="addToLeaveRequest" title="Add this item to list">ADD TO LIST</button>
+						<button id="btnEdit" type="button" class="btn btn-primary" v-if="editMode" v-on:click="updateLeaveRequest" title="Update this selected item">UPDATE</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="closeForm" title="Close this form">CLOSE</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+
+@{
+    var controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+    var serverUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+    var controllerUrl = Url.Content("~") + controllerName;
+}
+@Scripts.Render("~/Scripts/app/" + controllerName + "/create.js")
+
+@Scripts.Render("~/Scripts/app/" + controllerName + "/vue-create.js")

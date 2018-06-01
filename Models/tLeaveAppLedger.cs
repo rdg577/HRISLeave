@@ -19,7 +19,7 @@ namespace LeaveModule.Models
         public string DTRId { get; set; }
         public string LedgerCode { get; set; }
         public double Value { get; set; }
-        public System.DateTime Timestamp { get; set; }
         public string Referrence { get; set; }
+        public System.DateTime Timestamp { get; set; }
     }
 }

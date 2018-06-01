@@ -53,7 +53,7 @@
           <Property Name="statusName" Type="nvarchar" MaxLength="20" />
           <Property Name="returnTag" Type="int" />
         </EntityType>
-        <EntityType Name="tLeaveApp">
+        <EntityType Name="tleaveApp">
           <Key>
             <PropertyRef Name="recNo" />
           </Key>
@@ -80,7 +80,7 @@
           <Property Name="HRRecommendedByEIC" Type="nvarchar" MaxLength="20" />
           <Property Name="HRDateRecommended" Type="datetime" />
           <Property Name="IsRecommendedAtHR" Type="bit" />
-          <Property Name="ApprovalEIC" Type="nvarchar" MaxLength="150" />
+          <Property Name="ApprovalEIC" Type="nvarchar" MaxLength="20" />
           <Property Name="DateApprovedDisapproved" Type="datetime" />
           <Property Name="IsApproved" Type="bit" />
           <Property Name="DisapprovalRemark" Type="nvarchar" MaxLength="250" />
@@ -95,7 +95,7 @@
           <Property Name="DTRId" Type="nvarchar" MaxLength="18" />
           <Property Name="LedgerCode" Type="nvarchar" MaxLength="5" Nullable="false" />
           <Property Name="Value" Type="float" Nullable="false" />
-          <Property Name="Referrence" Type="nvarchar" MaxLength="10" />
+          <Property Name="Referrence" Type="nvarchar" MaxLength="20" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="tLeaveAppLedgerMaster">
@@ -138,6 +138,21 @@
           <Property Name="DatePosted" Type="datetime" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="tleaveRestore">
+          <Key>
+            <PropertyRef Name="recNo" />
+          </Key>
+          <Property Name="recNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="controlNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="datePosted" Type="datetime" />
+          <Property Name="dateFiled" Type="datetime" />
+          <Property Name="EIC" Type="nvarchar" MaxLength="20" />
+          <Property Name="leaveID" Type="nvarchar" MaxLength="5" />
+          <Property Name="periodFrom" Type="date" />
+          <Property Name="periodTo" Type="date" />
+          <Property Name="isPosted" Type="int" />
+          <Property Name="restoredByEIC" Type="nvarchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="tLogDashboard">
           <Key>
             <PropertyRef Name="RecNo" />
@@ -150,6 +165,18 @@
           <Property Name="ActionEIC" Type="nvarchar" MaxLength="20" />
           <Property Name="DT" Type="datetime" />
           <Property Name="ReadMark" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tmodUserModuleActivity">
+          <Key>
+            <PropertyRef Name="recNo" />
+          </Key>
+          <Property Name="recNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EIC" Type="nvarchar" MaxLength="20" />
+          <Property Name="activityID" Type="int" />
+          <Property Name="modulelD" Type="int" />
+          <Property Name="activityName" Type="nvarchar" MaxLength="50" />
+          <Property Name="actionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="orderID" Type="int" />
         </EntityType>
         <EntityType Name="trefHoliday">
           <Key>
@@ -199,6 +226,13 @@
           <Property Name="Sick" Type="float" Nullable="false" />
           <Property Name="Num" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="trefLeaveEarn">
+          <Key>
+            <PropertyRef Name="day" />
+          </Key>
+          <Property Name="day" Type="decimal" Precision="3" Scale="1" Nullable="false" />
+          <Property Name="earn" Type="decimal" Precision="5" Scale="3" />
+        </EntityType>
         <EntityType Name="trefLeaveLedgerCode">
           <Key>
             <PropertyRef Name="Id" />
@@ -207,6 +241,13 @@
           <Property Name="Code" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="trefLeaveMinute">
+          <Key>
+            <PropertyRef Name="minute" />
+          </Key>
+          <Property Name="minute" Type="int" Nullable="false" />
+          <Property Name="day" Type="decimal" Precision="5" Scale="3" />
         </EntityType>
         <EntityType Name="trefLeaveType">
           <Key>
@@ -228,7 +269,7 @@
           <Property Name="DayEquivalent" Type="float" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'HRISLeave.dbo.vApprvOfficer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'HRIS.dbo.vApprvOfficer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vApprvOfficer">
           <Key>
             <PropertyRef Name="recNo" />
@@ -241,7 +282,7 @@ warning 6002: The table/view 'HRISLeave.dbo.vApprvOfficer' does not have a prima
           <Property Name="fullnameLast" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'HRISLeave.dbo.vDeptOfficer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'HRIS.dbo.vDeptOfficer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vDeptOfficer">
           <Key>
             <PropertyRef Name="recNo" />
@@ -254,7 +295,7 @@ warning 6002: The table/view 'HRISLeave.dbo.vDeptOfficer' does not have a primar
           <Property Name="groupName" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'HRISLeave.dbo.vEmployeeCompleteField' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'HRIS.dbo.vEmployeeCompleteField' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vEmployeeCompleteField">
           <Key>
             <PropertyRef Name="recNo" />
@@ -333,8 +374,8 @@ warning 6002: The table/view 'HRISLeave.dbo.vEmployeeCompleteField' does not hav
           <Property Name="chargeName" Type="varchar" MaxLength="150" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'HRISLeave.dbo.vLeaveApp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="vLeaveApp">
+warning 6002: The table/view 'HRIS.dbo.vLeaveApp2' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vLeaveApp2">
           <Key>
             <PropertyRef Name="recNo" />
           </Key>
@@ -366,7 +407,7 @@ warning 6002: The table/view 'HRISLeave.dbo.vLeaveApp' does not have a primary k
           <Property Name="HRRecommender" Type="nvarchar" MaxLength="60" />
           <Property Name="HRDateRecommended" Type="datetime" />
           <Property Name="IsRecommendedAtHR" Type="bit" />
-          <Property Name="ApprovalEIC" Type="nvarchar" MaxLength="150" />
+          <Property Name="ApprovalEIC" Type="nvarchar" MaxLength="20" />
           <Property Name="ApprovingOfficer" Type="nvarchar" MaxLength="60" />
           <Property Name="DateApprovedDisapproved" Type="datetime" />
           <Property Name="IsApproved" Type="bit" />
@@ -374,7 +415,7 @@ warning 6002: The table/view 'HRISLeave.dbo.vLeaveApp' does not have a primary k
           <Property Name="IsVLUsedAsSL" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'HRISLeave.dbo.vLeaveMasterLedger' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'HRIS.dbo.vLeaveMasterLedger' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vLeaveMasterLedger">
           <Key>
             <PropertyRef Name="DtrID" />
@@ -389,7 +430,7 @@ warning 6002: The table/view 'HRISLeave.dbo.vLeaveMasterLedger' does not have a 
           <Property Name="SLBalance" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'HRISLeave.dbo.vrefLeaveTypeAndAllotment' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'HRIS.dbo.vrefLeaveTypeAndAllotment' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vrefLeaveTypeAndAllotment">
           <Key>
             <PropertyRef Name="Id" />
@@ -405,26 +446,6 @@ warning 6002: The table/view 'HRISLeave.dbo.vrefLeaveTypeAndAllotment' does not 
           <Property Name="Allotment" Type="int" />
           <Property Name="IsCalendarDays" Type="bit" />
         </EntityType>
-        <Function Name="fnLeaveLedgerGenerator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="EIC" Type="nvarchar" Mode="In" />
-          <ReturnType>
-            <CollectionType>
-              <RowType>
-                <Property Name="Id" Type="int" Nullable="false" />
-                <Property Name="Period" Type="datetime" />
-                <Property Name="DTRId" Type="nvarchar" MaxLength="20" />
-                <Property Name="Particular" Type="nvarchar" MaxLength="50" />
-                <Property Name="SubParticular" Type="nvarchar" MaxLength="50" />
-                <Property Name="VLEarned" Type="float" />
-                <Property Name="VL_ABS_UND_WP" Type="float" />
-                <Property Name="VL_ABS_UND_WOP" Type="float" />
-                <Property Name="SLEarned" Type="float" />
-                <Property Name="SL_ABS_UND_WP" Type="float" />
-                <Property Name="SL_ABS_UND_WOP" Type="float" />
-              </RowType>
-            </CollectionType>
-          </ReturnType>
-        </Function>
         <Function Name="spEmployeeLeaveBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EIC" Type="varchar" Mode="In" />
           <Parameter Name="dateBegin" Type="date" Mode="In" />
@@ -449,18 +470,22 @@ warning 6002: The table/view 'HRISLeave.dbo.vrefLeaveTypeAndAllotment' does not 
           <EntitySet Name="tapp212Image" EntityType="Self.tapp212Image" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tappOffice" EntityType="Self.tappOffice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tAttDTR" EntityType="Self.tAttDTR" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tLeaveApp" EntityType="Self.tLeaveApp" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tleaveApp" EntityType="Self.tleaveApp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tLeaveAppLedger" EntityType="Self.tLeaveAppLedger" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tLeaveAppLedgerMaster" EntityType="Self.tLeaveAppLedgerMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tLeaveBalanceForwarded" EntityType="Self.tLeaveBalanceForwarded" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tLeaveInutang" EntityType="Self.tLeaveInutang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tleaveRestore" EntityType="Self.tleaveRestore" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tLogDashboard" EntityType="Self.tLogDashboard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tmodUserModuleActivity" EntityType="Self.tmodUserModuleActivity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefHoliday" EntityType="Self.trefHoliday" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefLeaveAdministrators" EntityType="Self.trefLeaveAdministrators" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefLeaveAllotment" EntityType="Self.trefLeaveAllotment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefLeaveCreditForZeroVLCredit" EntityType="Self.trefLeaveCreditForZeroVLCredit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefLeaveCreditsEarned" EntityType="Self.trefLeaveCreditsEarned" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="trefLeaveEarn" EntityType="Self.trefLeaveEarn" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefLeaveLedgerCode" EntityType="Self.trefLeaveLedgerCode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="trefLeaveMinute" EntityType="Self.trefLeaveMinute" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefLeaveType" EntityType="Self.trefLeaveType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trefLeaveWorkHoursConversionMatrix" EntityType="Self.trefLeaveWorkHoursConversionMatrix" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="vApprvOfficer" EntityType="Self.vApprvOfficer" store:Type="Views" store:Schema="dbo">
@@ -555,43 +580,43 @@ FROM [dbo].[vDeptOfficer] AS [vDeptOfficer]</DefiningQuery>
 [vEmployeeCompleteField].[chargeName] AS [chargeName]
 FROM [dbo].[vEmployeeCompleteField] AS [vEmployeeCompleteField]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="vLeaveApp" EntityType="Self.vLeaveApp" store:Type="Views" store:Schema="dbo">
+          <EntitySet Name="vLeaveApp2" EntityType="Self.vLeaveApp2" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
-[vLeaveApp].[recNo] AS [recNo], 
-[vLeaveApp].[controlNo] AS [controlNo], 
-[vLeaveApp].[datePosted] AS [datePosted], 
-[vLeaveApp].[dateFiled] AS [dateFiled], 
-[vLeaveApp].[EIC] AS [EIC], 
-[vLeaveApp].[Fullname] AS [Fullname], 
-[vLeaveApp].[leaveID] AS [leaveID], 
-[vLeaveApp].[LeaveCode] AS [LeaveCode], 
-[vLeaveApp].[LeaveDescription] AS [LeaveDescription], 
-[vLeaveApp].[commutation] AS [commutation], 
-[vLeaveApp].[periodFrom] AS [periodFrom], 
-[vLeaveApp].[periodTo] AS [periodTo], 
-[vLeaveApp].[place] AS [place], 
-[vLeaveApp].[location] AS [location], 
-[vLeaveApp].[applyDay] AS [applyDay], 
-[vLeaveApp].[recommendEIC] AS [recommendEIC], 
-[vLeaveApp].[approveEIC] AS [approveEIC], 
-[vLeaveApp].[isPosted] AS [isPosted], 
-[vLeaveApp].[remarks] AS [remarks], 
-[vLeaveApp].[isWithPay] AS [isWithPay], 
-[vLeaveApp].[OfficeRecommendedByEIC] AS [OfficeRecommendedByEIC], 
-[vLeaveApp].[OfficeRecommender] AS [OfficeRecommender], 
-[vLeaveApp].[DateAtOfficeRecommended] AS [DateAtOfficeRecommended], 
-[vLeaveApp].[IsRecommendedAtOffice] AS [IsRecommendedAtOffice], 
-[vLeaveApp].[HRRecommendedByEIC] AS [HRRecommendedByEIC], 
-[vLeaveApp].[HRRecommender] AS [HRRecommender], 
-[vLeaveApp].[HRDateRecommended] AS [HRDateRecommended], 
-[vLeaveApp].[IsRecommendedAtHR] AS [IsRecommendedAtHR], 
-[vLeaveApp].[ApprovalEIC] AS [ApprovalEIC], 
-[vLeaveApp].[ApprovingOfficer] AS [ApprovingOfficer], 
-[vLeaveApp].[DateApprovedDisapproved] AS [DateApprovedDisapproved], 
-[vLeaveApp].[IsApproved] AS [IsApproved], 
-[vLeaveApp].[DisapprovalRemark] AS [DisapprovalRemark], 
-[vLeaveApp].[IsVLUsedAsSL] AS [IsVLUsedAsSL]
-FROM [dbo].[vLeaveApp] AS [vLeaveApp]</DefiningQuery>
+[vLeaveApp2].[recNo] AS [recNo], 
+[vLeaveApp2].[controlNo] AS [controlNo], 
+[vLeaveApp2].[datePosted] AS [datePosted], 
+[vLeaveApp2].[dateFiled] AS [dateFiled], 
+[vLeaveApp2].[EIC] AS [EIC], 
+[vLeaveApp2].[Fullname] AS [Fullname], 
+[vLeaveApp2].[leaveID] AS [leaveID], 
+[vLeaveApp2].[LeaveCode] AS [LeaveCode], 
+[vLeaveApp2].[LeaveDescription] AS [LeaveDescription], 
+[vLeaveApp2].[commutation] AS [commutation], 
+[vLeaveApp2].[periodFrom] AS [periodFrom], 
+[vLeaveApp2].[periodTo] AS [periodTo], 
+[vLeaveApp2].[place] AS [place], 
+[vLeaveApp2].[location] AS [location], 
+[vLeaveApp2].[applyDay] AS [applyDay], 
+[vLeaveApp2].[recommendEIC] AS [recommendEIC], 
+[vLeaveApp2].[approveEIC] AS [approveEIC], 
+[vLeaveApp2].[isPosted] AS [isPosted], 
+[vLeaveApp2].[remarks] AS [remarks], 
+[vLeaveApp2].[isWithPay] AS [isWithPay], 
+[vLeaveApp2].[OfficeRecommendedByEIC] AS [OfficeRecommendedByEIC], 
+[vLeaveApp2].[OfficeRecommender] AS [OfficeRecommender], 
+[vLeaveApp2].[DateAtOfficeRecommended] AS [DateAtOfficeRecommended], 
+[vLeaveApp2].[IsRecommendedAtOffice] AS [IsRecommendedAtOffice], 
+[vLeaveApp2].[HRRecommendedByEIC] AS [HRRecommendedByEIC], 
+[vLeaveApp2].[HRRecommender] AS [HRRecommender], 
+[vLeaveApp2].[HRDateRecommended] AS [HRDateRecommended], 
+[vLeaveApp2].[IsRecommendedAtHR] AS [IsRecommendedAtHR], 
+[vLeaveApp2].[ApprovalEIC] AS [ApprovalEIC], 
+[vLeaveApp2].[ApprovingOfficer] AS [ApprovingOfficer], 
+[vLeaveApp2].[DateApprovedDisapproved] AS [DateApprovedDisapproved], 
+[vLeaveApp2].[IsApproved] AS [IsApproved], 
+[vLeaveApp2].[DisapprovalRemark] AS [DisapprovalRemark], 
+[vLeaveApp2].[IsVLUsedAsSL] AS [IsVLUsedAsSL]
+FROM [dbo].[vLeaveApp2] AS [vLeaveApp2]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vLeaveMasterLedger" EntityType="Self.vLeaveMasterLedger" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -621,6 +646,252 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HRISLeaveModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="HRISEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tapp212Image" EntityType="HRISLeaveModel.tapp212Image" />
+          <EntitySet Name="tleaveApps" EntityType="HRISLeaveModel.tleaveApp" />
+          <EntitySet Name="tLeaveAppLedgers" EntityType="HRISLeaveModel.tLeaveAppLedger" />
+          <EntitySet Name="tLeaveAppLedgerMasters" EntityType="HRISLeaveModel.tLeaveAppLedgerMaster" />
+          <EntitySet Name="tLeaveBalanceForwardeds" EntityType="HRISLeaveModel.tLeaveBalanceForwarded" />
+          <EntitySet Name="tLeaveInutangs" EntityType="HRISLeaveModel.tLeaveInutang" />
+          <EntitySet Name="tLogDashboards" EntityType="HRISLeaveModel.tLogDashboard" />
+          <EntitySet Name="tmodUserModuleActivities" EntityType="HRISLeaveModel.tmodUserModuleActivity" />
+          <EntitySet Name="trefLeaveAdministrators" EntityType="HRISLeaveModel.trefLeaveAdministrator" />
+          <EntitySet Name="trefLeaveAllotments" EntityType="HRISLeaveModel.trefLeaveAllotment" />
+          <EntitySet Name="trefLeaveCreditForZeroVLCredits" EntityType="HRISLeaveModel.trefLeaveCreditForZeroVLCredit" />
+          <EntitySet Name="trefLeaveCreditsEarneds" EntityType="HRISLeaveModel.trefLeaveCreditsEarned" />
+          <EntitySet Name="trefLeaveEarns" EntityType="HRISLeaveModel.trefLeaveEarn" />
+          <EntitySet Name="trefLeaveLedgerCodes" EntityType="HRISLeaveModel.trefLeaveLedgerCode" />
+          <EntitySet Name="trefLeaveMinutes" EntityType="HRISLeaveModel.trefLeaveMinute" />
+          <EntitySet Name="trefLeaveTypes" EntityType="HRISLeaveModel.trefLeaveType" />
+          <EntitySet Name="trefLeaveWorkHoursConversionMatrices" EntityType="HRISLeaveModel.trefLeaveWorkHoursConversionMatrix" />
+          <EntitySet Name="vEmployeeCompleteFields" EntityType="HRISLeaveModel.vEmployeeCompleteField" />
+          <EntitySet Name="vLeaveApp2" EntityType="HRISLeaveModel.vLeaveApp2" />
+          <EntitySet Name="tappOffices" EntityType="HRISLeaveModel.tappOffice" />
+          <EntitySet Name="tAttDTRs" EntityType="HRISLeaveModel.tAttDTR" />
+          <EntitySet Name="trefHolidays" EntityType="HRISLeaveModel.trefHoliday" />
+          <EntitySet Name="vApprvOfficers" EntityType="HRISLeaveModel.vApprvOfficer" />
+          <EntitySet Name="vDeptOfficers" EntityType="HRISLeaveModel.vDeptOfficer" />
+          <EntitySet Name="vLeaveMasterLedgers" EntityType="HRISLeaveModel.vLeaveMasterLedger" />
+          <EntitySet Name="vrefLeaveTypeAndAllotments" EntityType="HRISLeaveModel.vrefLeaveTypeAndAllotment" />
+          <FunctionImport Name="spEmployeeLeaveBalance" ReturnType="Collection(HRISLeaveModel.spEmployeeLeaveBalance_Result)">
+            <Parameter Name="EIC" Mode="In" Type="String" />
+            <Parameter Name="dateBegin" Mode="In" Type="DateTime" />
+            <Parameter Name="dateEnd" Mode="In" Type="DateTime" />
+            <Parameter Name="sbl" Mode="In" Type="String" />
+            <Parameter Name="stl" Mode="In" Type="String" />
+            <Parameter Name="ml" Mode="In" Type="String" />
+            <Parameter Name="pl" Mode="In" Type="String" />
+            <Parameter Name="spl" Mode="In" Type="String" />
+            <Parameter Name="slp" Mode="In" Type="String" />
+            <Parameter Name="rl" Mode="In" Type="String" />
+            <Parameter Name="vawc" Mode="In" Type="String" />
+            <Parameter Name="sel" Mode="In" Type="String" />
+            <Parameter Name="mone" Mode="In" Type="String" />
+            <Parameter Name="fl" Mode="In" Type="String" />
+            <Parameter Name="magnacarta" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spLeaveCardGenerate" ReturnType="Collection(HRISLeaveModel.spLeaveCardGenerate_Result)">
+          <Parameter Name="EIC" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="tleaveRestores" EntityType="HRISLeaveModel.tleaveRestore" />
+        </EntityContainer>
+        <EntityType Name="tapp212Image">
+          <Key>
+            <PropertyRef Name="RecNo" />
+          </Key>
+          <Property Name="RecNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="imageData" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tleaveApp">
+          <Key>
+            <PropertyRef Name="recNo" />
+          </Key>
+          <Property Name="recNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="controlNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="datePosted" Type="DateTime" Precision="3" />
+          <Property Name="dateFiled" Type="DateTime" Precision="3" />
+          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="leaveID" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="commutation" Type="Int32" />
+          <Property Name="periodFrom" Type="DateTime" Precision="0" />
+          <Property Name="periodTo" Type="DateTime" Precision="0" />
+          <Property Name="applyDay" Type="Double" />
+          <Property Name="place" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="location" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="recommendEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="approveEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="isPosted" Type="Int32" />
+          <Property Name="remarks" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="isWithPay" Type="Boolean" />
+          <Property Name="OfficeRecommendedByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DateAtOfficeRecommended" Type="DateTime" Precision="3" />
+          <Property Name="IsRecommendedAtOffice" Type="Boolean" />
+          <Property Name="HRRecommendedByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HRDateRecommended" Type="DateTime" Precision="3" />
+          <Property Name="IsRecommendedAtHR" Type="Boolean" />
+          <Property Name="ApprovalEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DateApprovedDisapproved" Type="DateTime" Precision="3" />
+          <Property Name="IsApproved" Type="Boolean" />
+          <Property Name="DisapprovalRemark" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="IsVLUsedAsSL" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="tLeaveAppLedger">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DTRId" Type="String" MaxLength="18" FixedLength="false" Unicode="true" />
+          <Property Name="LedgerCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="Referrence" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="tLeaveAppLedgerMaster">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DTRId" Type="String" MaxLength="18" FixedLength="false" Unicode="false" />
+          <Property Name="VLCreditBalance" Type="Double" Nullable="false" />
+          <Property Name="SLCreditBalance" Type="Double" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Reference" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Remark" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tLeaveBalanceForwarded">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="AsOf" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="VLBalanceForwarded" Type="Double" Nullable="false" />
+          <Property Name="SLBalanceForwarded" Type="Double" Nullable="false" />
+          <Property Name="TotalBalanceForwarded" Type="Double" Nullable="false" />
+          <Property Name="EICForwardedBy" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DateForwarded" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="tLeaveInutang">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DateFrom" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateTo" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="NumDays" Type="Int32" Nullable="false" />
+          <Property Name="EquivalentDays" Type="Double" Nullable="false" />
+          <Property Name="PostedByEIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DatePosted" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tLogDashboard">
+          <Key>
+            <PropertyRef Name="RecNo" />
+          </Key>
+          <Property Name="RecNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ModuleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CtrlNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ActionEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DT" Type="DateTime" Precision="3" />
+          <Property Name="ReadMark" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tmodUserModuleActivity">
+          <Key>
+            <PropertyRef Name="recNo" />
+          </Key>
+          <Property Name="recNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="activityID" Type="Int32" />
+          <Property Name="modulelD" Type="Int32" />
+          <Property Name="activityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="actionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="orderID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="trefLeaveAdministrator">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Role" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="trefLeaveAllotment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LeaveCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="IsCalendarDays" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="trefLeaveCreditForZeroVLCredit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DaysPresent" Type="Double" Nullable="false" />
+          <Property Name="DaysLWOP" Type="Double" Nullable="false" />
+          <Property Name="LeaveCreditsEarned" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="trefLeaveCreditsEarned">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Vacation" Type="Double" Nullable="false" />
+          <Property Name="Sick" Type="Double" Nullable="false" />
+          <Property Name="Num" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="trefLeaveEarn">
+          <Key>
+            <PropertyRef Name="day" />
+          </Key>
+          <Property Name="day" Type="Decimal" Nullable="false" Precision="3" Scale="1" />
+          <Property Name="earn" Type="Decimal" Precision="5" Scale="3" />
+        </EntityType>
+        <EntityType Name="trefLeaveLedgerCode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="trefLeaveMinute">
+          <Key>
+            <PropertyRef Name="minute" />
+          </Key>
+          <Property Name="minute" Type="Int32" Nullable="false" />
+          <Property Name="day" Type="Decimal" Precision="5" Scale="3" />
+        </EntityType>
+        <EntityType Name="trefLeaveType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NumCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="trefLeaveWorkHoursConversionMatrix">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Name="Num" Type="Int32" Nullable="false" />
+          <Property Name="DayEquivalent" Type="Double" Nullable="false" />
+        </EntityType>
         <EntityType Name="vEmployeeCompleteField">
           <Key>
             <PropertyRef Name="recNo" />
@@ -631,7 +902,7 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           </Key>
           <Property Name="recNo" Type="Int32" Nullable="false" />
           <Property Name="idNo" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="lastName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="middleName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -647,7 +918,7 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="sortTagPlantillia" Type="Int32" />
           <Property Name="isFunded" Type="Int32" />
           <Property Name="isVacant" Type="Int32" />
-          <Property Name="positionCode" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="positionCode" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="fullDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="shortDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="accronym" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -679,11 +950,11 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="dateTo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
           <Property Name="paySchemeCode" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
           <Property Name="sepCause" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="payGroupCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="payGroupCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="groupName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="sortTagDivision" Type="Int32" />
           <Property Name="sortTagSection" Type="Int32" />
-          <Property Name="empGroupCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="empGroupCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="empGroup" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="isPlantilla" Type="Int32" />
           <Property Name="officeCodeWarm" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -698,93 +969,57 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="chargeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="chargeName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityContainer Name="HRISEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="vEmployeeCompleteFields" EntityType="Self.vEmployeeCompleteField" />
-          <EntitySet Name="tapp212Image" EntityType="HRISLeaveModel.tapp212Image" />
-          <EntitySet Name="tLeaveBalanceForwardeds" EntityType="HRISLeaveModel.tLeaveBalanceForwarded" />
-          <EntitySet Name="trefLeaveTypes" EntityType="HRISLeaveModel.trefLeaveType" />
-          <EntitySet Name="trefLeaveLedgerCodes" EntityType="HRISLeaveModel.trefLeaveLedgerCode" />
-          <EntitySet Name="tAttDTRs" EntityType="HRISLeaveModel.tAttDTR" />
-          <EntitySet Name="tLeaveAppLedgers" EntityType="HRISLeaveModel.tLeaveAppLedger" />
-          <EntitySet Name="tLeaveAppLedgerMasters" EntityType="HRISLeaveModel.tLeaveAppLedgerMaster" />
-          <EntitySet Name="trefLeaveCreditForZeroVLCredits" EntityType="HRISLeaveModel.trefLeaveCreditForZeroVLCredit" />
-          <EntitySet Name="trefLeaveCreditsEarneds" EntityType="HRISLeaveModel.trefLeaveCreditsEarned" />
-          <EntitySet Name="trefLeaveWorkHoursConversionMatrices" EntityType="HRISLeaveModel.trefLeaveWorkHoursConversionMatrix" />
-          <EntitySet Name="vLeaveMasterLedgers" EntityType="HRISLeaveModel.vLeaveMasterLedger" />
-          <EntitySet Name="trefHolidays" EntityType="HRISLeaveModel.trefHoliday" />
-          <EntitySet Name="vrefLeaveTypeAndAllotments" EntityType="HRISLeaveModel.vrefLeaveTypeAndAllotment" />
-          <EntitySet Name="tLogDashboards" EntityType="HRISLeaveModel.tLogDashboard" />
-          <EntitySet Name="vDeptOfficers" EntityType="HRISLeaveModel.vDeptOfficer" />
-          <EntitySet Name="vApprvOfficers" EntityType="HRISLeaveModel.vApprvOfficer" />
-          <EntitySet Name="trefLeaveAdministrators" EntityType="HRISLeaveModel.trefLeaveAdministrator" />
-          <EntitySet Name="tLeaveApps" EntityType="HRISLeaveModel.tLeaveApp" />
-          <EntitySet Name="vLeaveApps" EntityType="HRISLeaveModel.vLeaveApp" />
-          <EntitySet Name="tappOffices" EntityType="HRISLeaveModel.tappOffice" />
-          <FunctionImport Name="spEmployeeLeaveBalance" ReturnType="Collection(HRISLeaveModel.spEmployeeLeaveBalance_Result)">
-            <Parameter Name="EIC" Mode="In" Type="String" />
-            <Parameter Name="dateBegin" Mode="In" Type="DateTime" />
-            <Parameter Name="dateEnd" Mode="In" Type="DateTime" />
-            <Parameter Name="sbl" Mode="In" Type="String" />
-            <Parameter Name="stl" Mode="In" Type="String" />
-            <Parameter Name="ml" Mode="In" Type="String" />
-            <Parameter Name="pl" Mode="In" Type="String" />
-            <Parameter Name="spl" Mode="In" Type="String" />
-            <Parameter Name="slp" Mode="In" Type="String" />
-            <Parameter Name="rl" Mode="In" Type="String" />
-            <Parameter Name="vawc" Mode="In" Type="String" />
-            <Parameter Name="sel" Mode="In" Type="String" />
-            <Parameter Name="mone" Mode="In" Type="String" />
-            <Parameter Name="fl" Mode="In" Type="String" />
-            <Parameter Name="magnacarta" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="spLeaveCardGenerate" ReturnType="Collection(HRISLeaveModel.spLeaveCardGenerate_Result)">
-          <Parameter Name="EIC" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="fnLeaveLedgerGenerator" IsComposable="true" ReturnType="Collection(HRISLeaveModel.fnLeaveLedgerGenerator_Result)">
-          <Parameter Name="EIC" Mode="In" Type="String" />
-          </FunctionImport>
-          <EntitySet Name="tLeaveInutangs" EntityType="HRISLeaveModel.tLeaveInutang" />
-          <EntitySet Name="trefLeaveAllotments" EntityType="HRISLeaveModel.trefLeaveAllotment" />
-        </EntityContainer>
-        <EntityType Name="tapp212Image">
+        <EntityType Name="vLeaveApp2">
           <Key>
-            <PropertyRef Name="RecNo" />
+            <PropertyRef Name="recNo" />
           </Key>
-          <Property Name="RecNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="recNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="controlNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="datePosted" Type="DateTime" Precision="3" />
+          <Property Name="dateFiled" Type="DateTime" Precision="3" />
           <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="imageData" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Fullname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="leaveID" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="LeaveCode" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="LeaveDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="commutation" Type="Int32" />
+          <Property Name="periodFrom" Type="DateTime" Precision="0" />
+          <Property Name="periodTo" Type="DateTime" Precision="0" />
+          <Property Name="place" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="location" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="applyDay" Type="Double" />
+          <Property Name="recommendEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="approveEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="isPosted" Type="Int32" />
+          <Property Name="remarks" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="isWithPay" Type="Boolean" />
+          <Property Name="OfficeRecommendedByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="OfficeRecommender" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="DateAtOfficeRecommended" Type="DateTime" Precision="3" />
+          <Property Name="IsRecommendedAtOffice" Type="Boolean" />
+          <Property Name="HRRecommendedByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HRRecommender" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="HRDateRecommended" Type="DateTime" Precision="3" />
+          <Property Name="IsRecommendedAtHR" Type="Boolean" />
+          <Property Name="ApprovalEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovingOfficer" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="DateApprovedDisapproved" Type="DateTime" Precision="3" />
+          <Property Name="IsApproved" Type="Boolean" />
+          <Property Name="DisapprovalRemark" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="IsVLUsedAsSL" Type="Boolean" />
         </EntityType>
-        <EntityType Name="tLeaveBalanceForwarded">
+        <EntityType Name="tappOffice">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="recNo" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="AsOf" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="VLBalanceForwarded" Type="Double" Nullable="false" />
-          <Property Name="SLBalanceForwarded" Type="Double" Nullable="false" />
-          <Property Name="TotalBalanceForwarded" Type="Double" Nullable="false" />
-          <Property Name="EICForwardedBy" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="DateForwarded" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="trefLeaveType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="NumCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="trefLeaveLedgerCode">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="recNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="officeCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="officeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="accronym" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="officeServiceRec" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="branch" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="sortTag" Type="Int32" />
+          <Property Name="tagRemarks" Type="Int32" />
         </EntityType>
         <EntityType Name="tAttDTR">
           <Key>
@@ -813,58 +1048,38 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="statusName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="returnTag" Type="Int32" />
         </EntityType>
-        <EntityType Name="tLeaveAppLedger">
+        <EntityType Name="trefHoliday">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="recNo" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="DTRId" Type="String" MaxLength="18" FixedLength="false" Unicode="true" />
-          <Property Name="LedgerCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
-          <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Referrence" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="recNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="month" Type="Int32" />
+          <Property Name="day" Type="Int32" />
+          <Property Name="remarks" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="statusID" Type="Int32" />
+          <Property Name="dtStamp" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="tLeaveAppLedgerMaster">
+        <EntityType Name="vApprvOfficer">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="recNo" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="DTRId" Type="String" MaxLength="18" FixedLength="false" Unicode="false" />
-          <Property Name="VLCreditBalance" Type="Double" Nullable="false" />
-          <Property Name="SLCreditBalance" Type="Double" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Reference" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Remark" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="recNo" Type="Int32" Nullable="false" />
+          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="fullnameFirst" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="groupName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="empGroupCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="fullnameLast" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="trefLeaveCreditForZeroVLCredit">
+        <EntityType Name="vDeptOfficer">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="recNo" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DaysPresent" Type="Double" Nullable="false" />
-          <Property Name="DaysLWOP" Type="Double" Nullable="false" />
-          <Property Name="LeaveCreditsEarned" Type="Double" Nullable="false" />
-        </EntityType>
-        <EntityType Name="trefLeaveCreditsEarned">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Vacation" Type="Double" Nullable="false" />
-          <Property Name="Sick" Type="Double" Nullable="false" />
-          <Property Name="Num" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="trefLeaveWorkHoursConversionMatrix">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Type" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
-          <Property Name="Num" Type="Int32" Nullable="false" />
-          <Property Name="DayEquivalent" Type="Double" Nullable="false" />
+          <Property Name="recNo" Type="Int32" Nullable="false" />
+          <Property Name="groupID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="fullnameFirst" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="fullnameLast" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="groupName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="vLeaveMasterLedger">
           <Key>
@@ -878,17 +1093,6 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="VLBalance" Type="Double" />
           <Property Name="SLBalance" Type="Double" />
-        </EntityType>
-        <EntityType Name="trefHoliday">
-          <Key>
-            <PropertyRef Name="recNo" />
-          </Key>
-          <Property Name="recNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="month" Type="Int32" />
-          <Property Name="day" Type="Int32" />
-          <Property Name="remarks" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="statusID" Type="Int32" />
-          <Property Name="dtStamp" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="vrefLeaveTypeAndAllotment">
           <Key>
@@ -904,135 +1108,6 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="Allotment" Type="Int32" />
           <Property Name="IsCalendarDays" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="tLogDashboard">
-          <Key>
-            <PropertyRef Name="RecNo" />
-          </Key>
-          <Property Name="RecNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ModuleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CtrlNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ActionEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="DT" Type="DateTime" Precision="3" />
-          <Property Name="ReadMark" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="vDeptOfficer">
-          <Key>
-            <PropertyRef Name="recNo" />
-          </Key>
-          <Property Name="recNo" Type="Int32" Nullable="false" />
-          <Property Name="groupID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="fullnameFirst" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="fullnameLast" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-          <Property Name="groupName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="vApprvOfficer">
-          <Key>
-            <PropertyRef Name="recNo" />
-          </Key>
-          <Property Name="recNo" Type="Int32" Nullable="false" />
-          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="fullnameFirst" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-          <Property Name="groupName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="empGroupCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="fullnameLast" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="trefLeaveAdministrator">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Role" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tLeaveApp">
-          <Key>
-            <PropertyRef Name="recNo" />
-          </Key>
-          <Property Name="recNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="controlNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="datePosted" Type="DateTime" Precision="3" />
-          <Property Name="dateFiled" Type="DateTime" Precision="3" />
-          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="leaveID" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
-          <Property Name="commutation" Type="Int32" />
-          <Property Name="periodFrom" Type="DateTime" Precision="0" />
-          <Property Name="periodTo" Type="DateTime" Precision="0" />
-          <Property Name="applyDay" Type="Double" />
-          <Property Name="place" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="location" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
-          <Property Name="recommendEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="approveEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="isPosted" Type="Int32" />
-          <Property Name="remarks" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="isWithPay" Type="Boolean" />
-          <Property Name="OfficeRecommendedByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="DateAtOfficeRecommended" Type="DateTime" Precision="3" />
-          <Property Name="IsRecommendedAtOffice" Type="Boolean" />
-          <Property Name="HRRecommendedByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="HRDateRecommended" Type="DateTime" Precision="3" />
-          <Property Name="IsRecommendedAtHR" Type="Boolean" />
-          <Property Name="ApprovalEIC" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="DateApprovedDisapproved" Type="DateTime" Precision="3" />
-          <Property Name="IsApproved" Type="Boolean" />
-          <Property Name="DisapprovalRemark" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="IsVLUsedAsSL" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="vLeaveApp">
-          <Key>
-            <PropertyRef Name="recNo" />
-          </Key>
-          <Property Name="recNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="datePosted" Type="DateTime" Precision="3" />
-          <Property Name="dateFiled" Type="DateTime" Precision="3" />
-          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Fullname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-          <Property Name="leaveID" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
-          <Property Name="LeaveCode" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="LeaveDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="commutation" Type="Int32" />
-          <Property Name="periodFrom" Type="DateTime" Precision="0" />
-          <Property Name="periodTo" Type="DateTime" Precision="0" />
-          <Property Name="place" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="location" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
-          <Property Name="applyDay" Type="Double" />
-          <Property Name="recommendEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="approveEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="isPosted" Type="Int32" />
-          <Property Name="remarks" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="isWithPay" Type="Boolean" />
-          <Property Name="OfficeRecommendedByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="OfficeRecommender" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-          <Property Name="DateAtOfficeRecommended" Type="DateTime" Precision="3" />
-          <Property Name="IsRecommendedAtOffice" Type="Boolean" />
-          <Property Name="HRRecommendedByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="HRRecommender" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-          <Property Name="HRDateRecommended" Type="DateTime" Precision="3" />
-          <Property Name="IsRecommendedAtHR" Type="Boolean" />
-          <Property Name="ApprovalEIC" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ApprovingOfficer" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-          <Property Name="DateApprovedDisapproved" Type="DateTime" Precision="3" />
-          <Property Name="IsApproved" Type="Boolean" />
-          <Property Name="DisapprovalRemark" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="controlNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="IsVLUsedAsSL" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="tappOffice">
-          <Key>
-            <PropertyRef Name="recNo" />
-          </Key>
-          <Property Name="recNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="officeCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="officeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="accronym" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="officeServiceRec" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="branch" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="sortTag" Type="Int32" />
-          <Property Name="tagRemarks" Type="Int32" />
         </EntityType>
         <ComplexType Name="spEmployeeLeaveBalance_Result">
           <Property Type="Int64" Name="Id" Nullable="true" />
@@ -1075,122 +1150,27 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Type="Double" Name="runningSLBalance" Nullable="true" />
           <Property Type="Double" Name="SL_ABS_UND_WOP" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="fnLeaveLedgerGenerator_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="DateTime" Name="Period" Nullable="true" Precision="23" />
-          <Property Type="String" Name="DTRId" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="Particular" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="SubParticular" Nullable="true" MaxLength="50" />
-          <Property Type="Double" Name="VLEarned" Nullable="true" />
-          <Property Type="Double" Name="VL_ABS_UND_WP" Nullable="true" />
-          <Property Type="Double" Name="VL_ABS_UND_WOP" Nullable="true" />
-          <Property Type="Double" Name="SLEarned" Nullable="true" />
-          <Property Type="Double" Name="SL_ABS_UND_WP" Nullable="true" />
-          <Property Type="Double" Name="SL_ABS_UND_WOP" Nullable="true" />
-        </ComplexType>
-        <EntityType Name="tLeaveInutang">
+        <EntityType Name="tleaveRestore">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="recNo" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="DateFrom" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="DateTo" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="NumDays" Type="Int32" Nullable="false" />
-          <Property Name="EquivalentDays" Type="Double" Nullable="false" />
-          <Property Name="PostedByEIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="DatePosted" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="recNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="controlNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="datePosted" Type="DateTime" Precision="3" />
+          <Property Name="dateFiled" Type="DateTime" Precision="3" />
+          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="leaveID" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="periodFrom" Type="DateTime" Precision="0" />
+          <Property Name="periodTo" Type="DateTime" Precision="0" />
+          <Property Name="isPosted" Type="Int32" />
+          <Property Name="restoredByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="trefLeaveAllotment">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LeaveCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="Value" Type="Int32" Nullable="false" />
-          <Property Name="IsCalendarDays" Type="Boolean" Nullable="false" />
-        </EntityType>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="HRISLeaveModelStoreContainer" CdmEntityContainer="HRISEntities">
-          <EntitySetMapping Name="vEmployeeCompleteFields">
-            <EntityTypeMapping TypeName="HRISLeaveModel.vEmployeeCompleteField">
-              <MappingFragment StoreEntitySet="vEmployeeCompleteField">
-                <ScalarProperty Name="recNo" ColumnName="recNo" />
-                <ScalarProperty Name="idNo" ColumnName="idNo" />
-                <ScalarProperty Name="EIC" ColumnName="EIC" />
-                <ScalarProperty Name="firstName" ColumnName="firstName" />
-                <ScalarProperty Name="lastName" ColumnName="lastName" />
-                <ScalarProperty Name="middleName" ColumnName="middleName" />
-                <ScalarProperty Name="extName" ColumnName="extName" />
-                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
-                <ScalarProperty Name="birthplace" ColumnName="birthplace" />
-                <ScalarProperty Name="fullnameFirst" ColumnName="fullnameFirst" />
-                <ScalarProperty Name="fullnameLast" ColumnName="fullnameLast" />
-                <ScalarProperty Name="userEIC" ColumnName="userEIC" />
-                <ScalarProperty Name="dateEncoded" ColumnName="dateEncoded" />
-                <ScalarProperty Name="staffingCode" ColumnName="staffingCode" />
-                <ScalarProperty Name="itemNo" ColumnName="itemNo" />
-                <ScalarProperty Name="sortTagPlantillia" ColumnName="sortTagPlantillia" />
-                <ScalarProperty Name="isFunded" ColumnName="isFunded" />
-                <ScalarProperty Name="isVacant" ColumnName="isVacant" />
-                <ScalarProperty Name="positionCode" ColumnName="positionCode" />
-                <ScalarProperty Name="fullDescription" ColumnName="fullDescription" />
-                <ScalarProperty Name="shortDescription" ColumnName="shortDescription" />
-                <ScalarProperty Name="accronym" ColumnName="accronym" />
-                <ScalarProperty Name="sg" ColumnName="sg" />
-                <ScalarProperty Name="positionCodeSub" ColumnName="positionCodeSub" />
-                <ScalarProperty Name="subPositionName" ColumnName="subPositionName" />
-                <ScalarProperty Name="shortPositionName" ColumnName="shortPositionName" />
-                <ScalarProperty Name="accronymSub" ColumnName="accronymSub" />
-                <ScalarProperty Name="statusCode" ColumnName="statusCode" />
-                <ScalarProperty Name="statusName" ColumnName="statusName" />
-                <ScalarProperty Name="groupID" ColumnName="groupID" />
-                <ScalarProperty Name="isGovService" ColumnName="isGovService" />
-                <ScalarProperty Name="officeCode" ColumnName="officeCode" />
-                <ScalarProperty Name="officeName" ColumnName="officeName" />
-                <ScalarProperty Name="accronymOffice" ColumnName="accronymOffice" />
-                <ScalarProperty Name="officeServiceRec" ColumnName="officeServiceRec" />
-                <ScalarProperty Name="sortTagOffice" ColumnName="sortTagOffice" />
-                <ScalarProperty Name="divisionCode" ColumnName="divisionCode" />
-                <ScalarProperty Name="divisionName" ColumnName="divisionName" />
-                <ScalarProperty Name="accronymDivision" ColumnName="accronymDivision" />
-                <ScalarProperty Name="sectionCode" ColumnName="sectionCode" />
-                <ScalarProperty Name="sectionName" ColumnName="sectionName" />
-                <ScalarProperty Name="accronymSection" ColumnName="accronymSection" />
-                <ScalarProperty Name="salaryCode" ColumnName="salaryCode" />
-                <ScalarProperty Name="step" ColumnName="step" />
-                <ScalarProperty Name="rateMonth" ColumnName="rateMonth" />
-                <ScalarProperty Name="rateDay" ColumnName="rateDay" />
-                <ScalarProperty Name="dateFrom" ColumnName="dateFrom" />
-                <ScalarProperty Name="dateTo" ColumnName="dateTo" />
-                <ScalarProperty Name="paySchemeCode" ColumnName="paySchemeCode" />
-                <ScalarProperty Name="sepCause" ColumnName="sepCause" />
-                <ScalarProperty Name="payGroupCode" ColumnName="payGroupCode" />
-                <ScalarProperty Name="groupName" ColumnName="groupName" />
-                <ScalarProperty Name="sortTagDivision" ColumnName="sortTagDivision" />
-                <ScalarProperty Name="sortTagSection" ColumnName="sortTagSection" />
-                <ScalarProperty Name="empGroupCode" ColumnName="empGroupCode" />
-                <ScalarProperty Name="empGroup" ColumnName="empGroup" />
-                <ScalarProperty Name="isPlantilla" ColumnName="isPlantilla" />
-                <ScalarProperty Name="officeCodeWarm" ColumnName="officeCodeWarm" />
-                <ScalarProperty Name="gender" ColumnName="gender" />
-                <ScalarProperty Name="branch" ColumnName="branch" />
-                <ScalarProperty Name="isActive" ColumnName="isActive" />
-                <ScalarProperty Name="DesignationSR" ColumnName="DesignationSR" />
-                <ScalarProperty Name="statusNameSR" ColumnName="statusNameSR" />
-                <ScalarProperty Name="salarySR" ColumnName="salarySR" />
-                <ScalarProperty Name="SchemeCode" ColumnName="SchemeCode" />
-                <ScalarProperty Name="oldItemNo" ColumnName="oldItemNo" />
-                <ScalarProperty Name="chargeCode" ColumnName="chargeCode" />
-                <ScalarProperty Name="chargeName" ColumnName="chargeName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tapp212Image">
             <EntityTypeMapping TypeName="HRISLeaveModel.tapp212Image">
               <MappingFragment StoreEntitySet="tapp212Image">
@@ -1200,217 +1180,9 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tLeaveBalanceForwardeds">
-            <EntityTypeMapping TypeName="HRISLeaveModel.tLeaveBalanceForwarded">
-              <MappingFragment StoreEntitySet="tLeaveBalanceForwarded">
-                <ScalarProperty Name="DateForwarded" ColumnName="DateForwarded" />
-                <ScalarProperty Name="EICForwardedBy" ColumnName="EICForwardedBy" />
-                <ScalarProperty Name="TotalBalanceForwarded" ColumnName="TotalBalanceForwarded" />
-                <ScalarProperty Name="SLBalanceForwarded" ColumnName="SLBalanceForwarded" />
-                <ScalarProperty Name="VLBalanceForwarded" ColumnName="VLBalanceForwarded" />
-                <ScalarProperty Name="AsOf" ColumnName="AsOf" />
-                <ScalarProperty Name="EIC" ColumnName="EIC" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="trefLeaveTypes">
-            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveType">
-              <MappingFragment StoreEntitySet="trefLeaveType">
-                <ScalarProperty Name="NumCode" ColumnName="NumCode" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="trefLeaveLedgerCodes">
-            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveLedgerCode">
-              <MappingFragment StoreEntitySet="trefLeaveLedgerCode">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tAttDTRs">
-            <EntityTypeMapping TypeName="HRISLeaveModel.tAttDTR">
-              <MappingFragment StoreEntitySet="tAttDTR">
-                <ScalarProperty Name="returnTag" ColumnName="returnTag" />
-                <ScalarProperty Name="statusName" ColumnName="statusName" />
-                <ScalarProperty Name="Undertime" ColumnName="Undertime" />
-                <ScalarProperty Name="Tardy" ColumnName="Tardy" />
-                <ScalarProperty Name="timesPassSlip" ColumnName="timesPassSlip" />
-                <ScalarProperty Name="timesAWOL" ColumnName="timesAWOL" />
-                <ScalarProperty Name="wTotUnder" ColumnName="wTotUnder" />
-                <ScalarProperty Name="wTotTardy" ColumnName="wTotTardy" />
-                <ScalarProperty Name="timesUnder" ColumnName="timesUnder" />
-                <ScalarProperty Name="timesTardy" ColumnName="timesTardy" />
-                <ScalarProperty Name="userEIC" ColumnName="userEIC" />
-                <ScalarProperty Name="dtStamp" ColumnName="dtStamp" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="statusID" ColumnName="statusID" />
-                <ScalarProperty Name="approveEIC" ColumnName="approveEIC" />
-                <ScalarProperty Name="Tag" ColumnName="Tag" />
-                <ScalarProperty Name="Period" ColumnName="Period" />
-                <ScalarProperty Name="Month" ColumnName="Month" />
-                <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="EIC" ColumnName="EIC" />
-                <ScalarProperty Name="DtrID" ColumnName="DtrID" />
-                <ScalarProperty Name="RecNo" ColumnName="RecNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tLeaveAppLedgers">
-            <EntityTypeMapping TypeName="HRISLeaveModel.tLeaveAppLedger">
-              <MappingFragment StoreEntitySet="tLeaveAppLedger">
-                <ScalarProperty Name="Referrence" ColumnName="Referrence" />
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="LedgerCode" ColumnName="LedgerCode" />
-                <ScalarProperty Name="DTRId" ColumnName="DTRId" />
-                <ScalarProperty Name="EIC" ColumnName="EIC" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tLeaveAppLedgerMasters">
-            <EntityTypeMapping TypeName="HRISLeaveModel.tLeaveAppLedgerMaster">
-              <MappingFragment StoreEntitySet="tLeaveAppLedgerMaster">
-                <ScalarProperty Name="Remark" ColumnName="Remark" />
-                <ScalarProperty Name="Reference" ColumnName="Reference" />
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
-                <ScalarProperty Name="SLCreditBalance" ColumnName="SLCreditBalance" />
-                <ScalarProperty Name="VLCreditBalance" ColumnName="VLCreditBalance" />
-                <ScalarProperty Name="DTRId" ColumnName="DTRId" />
-                <ScalarProperty Name="EIC" ColumnName="EIC" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="trefLeaveCreditForZeroVLCredits">
-            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveCreditForZeroVLCredit">
-              <MappingFragment StoreEntitySet="trefLeaveCreditForZeroVLCredit">
-                <ScalarProperty Name="LeaveCreditsEarned" ColumnName="LeaveCreditsEarned" />
-                <ScalarProperty Name="DaysLWOP" ColumnName="DaysLWOP" />
-                <ScalarProperty Name="DaysPresent" ColumnName="DaysPresent" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="trefLeaveCreditsEarneds">
-            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveCreditsEarned">
-              <MappingFragment StoreEntitySet="trefLeaveCreditsEarned">
-                <ScalarProperty Name="Num" ColumnName="Num" />
-                <ScalarProperty Name="Sick" ColumnName="Sick" />
-                <ScalarProperty Name="Vacation" ColumnName="Vacation" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="trefLeaveWorkHoursConversionMatrices">
-            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveWorkHoursConversionMatrix">
-              <MappingFragment StoreEntitySet="trefLeaveWorkHoursConversionMatrix">
-                <ScalarProperty Name="DayEquivalent" ColumnName="DayEquivalent" />
-                <ScalarProperty Name="Num" ColumnName="Num" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vLeaveMasterLedgers">
-            <EntityTypeMapping TypeName="HRISLeaveModel.vLeaveMasterLedger">
-              <MappingFragment StoreEntitySet="vLeaveMasterLedger">
-                <ScalarProperty Name="SLBalance" ColumnName="SLBalance" />
-                <ScalarProperty Name="VLBalance" ColumnName="VLBalance" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="Month" ColumnName="Month" />
-                <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="EIC" ColumnName="EIC" />
-                <ScalarProperty Name="DtrID" ColumnName="DtrID" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="trefHolidays">
-            <EntityTypeMapping TypeName="HRISLeaveModel.trefHoliday">
-              <MappingFragment StoreEntitySet="trefHoliday">
-                <ScalarProperty Name="dtStamp" ColumnName="dtStamp" />
-                <ScalarProperty Name="statusID" ColumnName="statusID" />
-                <ScalarProperty Name="remarks" ColumnName="remarks" />
-                <ScalarProperty Name="day" ColumnName="day" />
-                <ScalarProperty Name="month" ColumnName="month" />
-                <ScalarProperty Name="recNo" ColumnName="recNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vrefLeaveTypeAndAllotments">
-            <EntityTypeMapping TypeName="HRISLeaveModel.vrefLeaveTypeAndAllotment">
-              <MappingFragment StoreEntitySet="vrefLeaveTypeAndAllotment">
-                <ScalarProperty Name="IsCalendarDays" ColumnName="IsCalendarDays" />
-                <ScalarProperty Name="Allotment" ColumnName="Allotment" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="NumCode" ColumnName="NumCode" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tLogDashboards">
-            <EntityTypeMapping TypeName="HRISLeaveModel.tLogDashboard">
-              <MappingFragment StoreEntitySet="tLogDashboard">
-                <ScalarProperty Name="ReadMark" ColumnName="ReadMark" />
-                <ScalarProperty Name="DT" ColumnName="DT" />
-                <ScalarProperty Name="ActionEIC" ColumnName="ActionEIC" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CtrlNo" ColumnName="CtrlNo" />
-                <ScalarProperty Name="ModuleName" ColumnName="ModuleName" />
-                <ScalarProperty Name="RecNo" ColumnName="RecNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vDeptOfficers">
-            <EntityTypeMapping TypeName="HRISLeaveModel.vDeptOfficer">
-              <MappingFragment StoreEntitySet="vDeptOfficer">
-                <ScalarProperty Name="groupName" ColumnName="groupName" />
-                <ScalarProperty Name="fullnameLast" ColumnName="fullnameLast" />
-                <ScalarProperty Name="EIC" ColumnName="EIC" />
-                <ScalarProperty Name="fullnameFirst" ColumnName="fullnameFirst" />
-                <ScalarProperty Name="groupID" ColumnName="groupID" />
-                <ScalarProperty Name="recNo" ColumnName="recNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vApprvOfficers">
-            <EntityTypeMapping TypeName="HRISLeaveModel.vApprvOfficer">
-              <MappingFragment StoreEntitySet="vApprvOfficer">
-                <ScalarProperty Name="fullnameLast" ColumnName="fullnameLast" />
-                <ScalarProperty Name="empGroupCode" ColumnName="empGroupCode" />
-                <ScalarProperty Name="groupName" ColumnName="groupName" />
-                <ScalarProperty Name="fullnameFirst" ColumnName="fullnameFirst" />
-                <ScalarProperty Name="EIC" ColumnName="EIC" />
-                <ScalarProperty Name="recNo" ColumnName="recNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="trefLeaveAdministrators">
-            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveAdministrator">
-              <MappingFragment StoreEntitySet="trefLeaveAdministrators">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Role" ColumnName="Role" />
-                <ScalarProperty Name="EIC" ColumnName="EIC" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tLeaveApps">
-            <EntityTypeMapping TypeName="HRISLeaveModel.tLeaveApp">
-              <MappingFragment StoreEntitySet="tLeaveApp">
+          <EntitySetMapping Name="tleaveApps">
+            <EntityTypeMapping TypeName="HRISLeaveModel.tleaveApp">
+              <MappingFragment StoreEntitySet="tleaveApp">
                 <ScalarProperty Name="IsVLUsedAsSL" ColumnName="IsVLUsedAsSL" />
                 <ScalarProperty Name="DisapprovalRemark" ColumnName="DisapprovalRemark" />
                 <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
@@ -1442,11 +1214,255 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="vLeaveApps">
-            <EntityTypeMapping TypeName="HRISLeaveModel.vLeaveApp">
-              <MappingFragment StoreEntitySet="vLeaveApp">
+          <EntitySetMapping Name="tLeaveAppLedgers">
+            <EntityTypeMapping TypeName="HRISLeaveModel.tLeaveAppLedger">
+              <MappingFragment StoreEntitySet="tLeaveAppLedger">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="Referrence" ColumnName="Referrence" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="LedgerCode" ColumnName="LedgerCode" />
+                <ScalarProperty Name="DTRId" ColumnName="DTRId" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tLeaveAppLedgerMasters">
+            <EntityTypeMapping TypeName="HRISLeaveModel.tLeaveAppLedgerMaster">
+              <MappingFragment StoreEntitySet="tLeaveAppLedgerMaster">
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="Reference" ColumnName="Reference" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="SLCreditBalance" ColumnName="SLCreditBalance" />
+                <ScalarProperty Name="VLCreditBalance" ColumnName="VLCreditBalance" />
+                <ScalarProperty Name="DTRId" ColumnName="DTRId" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tLeaveBalanceForwardeds">
+            <EntityTypeMapping TypeName="HRISLeaveModel.tLeaveBalanceForwarded">
+              <MappingFragment StoreEntitySet="tLeaveBalanceForwarded">
+                <ScalarProperty Name="DateForwarded" ColumnName="DateForwarded" />
+                <ScalarProperty Name="EICForwardedBy" ColumnName="EICForwardedBy" />
+                <ScalarProperty Name="TotalBalanceForwarded" ColumnName="TotalBalanceForwarded" />
+                <ScalarProperty Name="SLBalanceForwarded" ColumnName="SLBalanceForwarded" />
+                <ScalarProperty Name="VLBalanceForwarded" ColumnName="VLBalanceForwarded" />
+                <ScalarProperty Name="AsOf" ColumnName="AsOf" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tLeaveInutangs">
+            <EntityTypeMapping TypeName="HRISLeaveModel.tLeaveInutang">
+              <MappingFragment StoreEntitySet="tLeaveInutang">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="DatePosted" ColumnName="DatePosted" />
+                <ScalarProperty Name="PostedByEIC" ColumnName="PostedByEIC" />
+                <ScalarProperty Name="EquivalentDays" ColumnName="EquivalentDays" />
+                <ScalarProperty Name="NumDays" ColumnName="NumDays" />
+                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
+                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tLogDashboards">
+            <EntityTypeMapping TypeName="HRISLeaveModel.tLogDashboard">
+              <MappingFragment StoreEntitySet="tLogDashboard">
+                <ScalarProperty Name="ReadMark" ColumnName="ReadMark" />
+                <ScalarProperty Name="DT" ColumnName="DT" />
+                <ScalarProperty Name="ActionEIC" ColumnName="ActionEIC" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CtrlNo" ColumnName="CtrlNo" />
+                <ScalarProperty Name="ModuleName" ColumnName="ModuleName" />
+                <ScalarProperty Name="RecNo" ColumnName="RecNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tmodUserModuleActivities">
+            <EntityTypeMapping TypeName="HRISLeaveModel.tmodUserModuleActivity">
+              <MappingFragment StoreEntitySet="tmodUserModuleActivity">
+                <ScalarProperty Name="orderID" ColumnName="orderID" />
+                <ScalarProperty Name="actionName" ColumnName="actionName" />
+                <ScalarProperty Name="activityName" ColumnName="activityName" />
+                <ScalarProperty Name="modulelD" ColumnName="modulelD" />
+                <ScalarProperty Name="activityID" ColumnName="activityID" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="recNo" ColumnName="recNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trefLeaveAdministrators">
+            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveAdministrator">
+              <MappingFragment StoreEntitySet="trefLeaveAdministrators">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trefLeaveAllotments">
+            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveAllotment">
+              <MappingFragment StoreEntitySet="trefLeaveAllotment">
+                <ScalarProperty Name="IsCalendarDays" ColumnName="IsCalendarDays" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="LeaveCode" ColumnName="LeaveCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trefLeaveCreditForZeroVLCredits">
+            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveCreditForZeroVLCredit">
+              <MappingFragment StoreEntitySet="trefLeaveCreditForZeroVLCredit">
+                <ScalarProperty Name="LeaveCreditsEarned" ColumnName="LeaveCreditsEarned" />
+                <ScalarProperty Name="DaysLWOP" ColumnName="DaysLWOP" />
+                <ScalarProperty Name="DaysPresent" ColumnName="DaysPresent" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trefLeaveCreditsEarneds">
+            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveCreditsEarned">
+              <MappingFragment StoreEntitySet="trefLeaveCreditsEarned">
+                <ScalarProperty Name="Num" ColumnName="Num" />
+                <ScalarProperty Name="Sick" ColumnName="Sick" />
+                <ScalarProperty Name="Vacation" ColumnName="Vacation" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trefLeaveEarns">
+            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveEarn">
+              <MappingFragment StoreEntitySet="trefLeaveEarn">
+                <ScalarProperty Name="earn" ColumnName="earn" />
+                <ScalarProperty Name="day" ColumnName="day" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trefLeaveLedgerCodes">
+            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveLedgerCode">
+              <MappingFragment StoreEntitySet="trefLeaveLedgerCode">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trefLeaveMinutes">
+            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveMinute">
+              <MappingFragment StoreEntitySet="trefLeaveMinute">
+                <ScalarProperty Name="day" ColumnName="day" />
+                <ScalarProperty Name="minute" ColumnName="minute" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trefLeaveTypes">
+            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveType">
+              <MappingFragment StoreEntitySet="trefLeaveType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="NumCode" ColumnName="NumCode" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trefLeaveWorkHoursConversionMatrices">
+            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveWorkHoursConversionMatrix">
+              <MappingFragment StoreEntitySet="trefLeaveWorkHoursConversionMatrix">
+                <ScalarProperty Name="DayEquivalent" ColumnName="DayEquivalent" />
+                <ScalarProperty Name="Num" ColumnName="Num" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vEmployeeCompleteFields">
+            <EntityTypeMapping TypeName="HRISLeaveModel.vEmployeeCompleteField">
+              <MappingFragment StoreEntitySet="vEmployeeCompleteField">
+                <ScalarProperty Name="chargeName" ColumnName="chargeName" />
+                <ScalarProperty Name="chargeCode" ColumnName="chargeCode" />
+                <ScalarProperty Name="oldItemNo" ColumnName="oldItemNo" />
+                <ScalarProperty Name="SchemeCode" ColumnName="SchemeCode" />
+                <ScalarProperty Name="salarySR" ColumnName="salarySR" />
+                <ScalarProperty Name="statusNameSR" ColumnName="statusNameSR" />
+                <ScalarProperty Name="DesignationSR" ColumnName="DesignationSR" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+                <ScalarProperty Name="branch" ColumnName="branch" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="officeCodeWarm" ColumnName="officeCodeWarm" />
+                <ScalarProperty Name="isPlantilla" ColumnName="isPlantilla" />
+                <ScalarProperty Name="empGroup" ColumnName="empGroup" />
+                <ScalarProperty Name="empGroupCode" ColumnName="empGroupCode" />
+                <ScalarProperty Name="sortTagSection" ColumnName="sortTagSection" />
+                <ScalarProperty Name="sortTagDivision" ColumnName="sortTagDivision" />
+                <ScalarProperty Name="groupName" ColumnName="groupName" />
+                <ScalarProperty Name="payGroupCode" ColumnName="payGroupCode" />
+                <ScalarProperty Name="sepCause" ColumnName="sepCause" />
+                <ScalarProperty Name="paySchemeCode" ColumnName="paySchemeCode" />
+                <ScalarProperty Name="dateTo" ColumnName="dateTo" />
+                <ScalarProperty Name="dateFrom" ColumnName="dateFrom" />
+                <ScalarProperty Name="rateDay" ColumnName="rateDay" />
+                <ScalarProperty Name="rateMonth" ColumnName="rateMonth" />
+                <ScalarProperty Name="step" ColumnName="step" />
+                <ScalarProperty Name="salaryCode" ColumnName="salaryCode" />
+                <ScalarProperty Name="accronymSection" ColumnName="accronymSection" />
+                <ScalarProperty Name="sectionName" ColumnName="sectionName" />
+                <ScalarProperty Name="sectionCode" ColumnName="sectionCode" />
+                <ScalarProperty Name="accronymDivision" ColumnName="accronymDivision" />
+                <ScalarProperty Name="divisionName" ColumnName="divisionName" />
+                <ScalarProperty Name="divisionCode" ColumnName="divisionCode" />
+                <ScalarProperty Name="sortTagOffice" ColumnName="sortTagOffice" />
+                <ScalarProperty Name="officeServiceRec" ColumnName="officeServiceRec" />
+                <ScalarProperty Name="accronymOffice" ColumnName="accronymOffice" />
+                <ScalarProperty Name="officeName" ColumnName="officeName" />
+                <ScalarProperty Name="officeCode" ColumnName="officeCode" />
+                <ScalarProperty Name="isGovService" ColumnName="isGovService" />
+                <ScalarProperty Name="groupID" ColumnName="groupID" />
+                <ScalarProperty Name="statusName" ColumnName="statusName" />
+                <ScalarProperty Name="statusCode" ColumnName="statusCode" />
+                <ScalarProperty Name="accronymSub" ColumnName="accronymSub" />
+                <ScalarProperty Name="shortPositionName" ColumnName="shortPositionName" />
+                <ScalarProperty Name="subPositionName" ColumnName="subPositionName" />
+                <ScalarProperty Name="positionCodeSub" ColumnName="positionCodeSub" />
+                <ScalarProperty Name="sg" ColumnName="sg" />
+                <ScalarProperty Name="accronym" ColumnName="accronym" />
+                <ScalarProperty Name="shortDescription" ColumnName="shortDescription" />
+                <ScalarProperty Name="fullDescription" ColumnName="fullDescription" />
+                <ScalarProperty Name="positionCode" ColumnName="positionCode" />
+                <ScalarProperty Name="isVacant" ColumnName="isVacant" />
+                <ScalarProperty Name="isFunded" ColumnName="isFunded" />
+                <ScalarProperty Name="sortTagPlantillia" ColumnName="sortTagPlantillia" />
+                <ScalarProperty Name="itemNo" ColumnName="itemNo" />
+                <ScalarProperty Name="staffingCode" ColumnName="staffingCode" />
+                <ScalarProperty Name="dateEncoded" ColumnName="dateEncoded" />
+                <ScalarProperty Name="userEIC" ColumnName="userEIC" />
+                <ScalarProperty Name="fullnameLast" ColumnName="fullnameLast" />
+                <ScalarProperty Name="fullnameFirst" ColumnName="fullnameFirst" />
+                <ScalarProperty Name="birthplace" ColumnName="birthplace" />
+                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
+                <ScalarProperty Name="extName" ColumnName="extName" />
+                <ScalarProperty Name="middleName" ColumnName="middleName" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="idNo" ColumnName="idNo" />
+                <ScalarProperty Name="recNo" ColumnName="recNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vLeaveApp2">
+            <EntityTypeMapping TypeName="HRISLeaveModel.vLeaveApp2">
+              <MappingFragment StoreEntitySet="vLeaveApp2">
                 <ScalarProperty Name="IsVLUsedAsSL" ColumnName="IsVLUsedAsSL" />
-                <ScalarProperty Name="controlNo" ColumnName="controlNo" />
                 <ScalarProperty Name="DisapprovalRemark" ColumnName="DisapprovalRemark" />
                 <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
                 <ScalarProperty Name="DateApprovedDisapproved" ColumnName="DateApprovedDisapproved" />
@@ -1478,6 +1494,7 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
                 <ScalarProperty Name="EIC" ColumnName="EIC" />
                 <ScalarProperty Name="dateFiled" ColumnName="dateFiled" />
                 <ScalarProperty Name="datePosted" ColumnName="datePosted" />
+                <ScalarProperty Name="controlNo" ColumnName="controlNo" />
                 <ScalarProperty Name="recNo" ColumnName="recNo" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1493,6 +1510,97 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
                 <ScalarProperty Name="officeName" ColumnName="officeName" />
                 <ScalarProperty Name="officeCode" ColumnName="officeCode" />
                 <ScalarProperty Name="recNo" ColumnName="recNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tAttDTRs">
+            <EntityTypeMapping TypeName="HRISLeaveModel.tAttDTR">
+              <MappingFragment StoreEntitySet="tAttDTR">
+                <ScalarProperty Name="returnTag" ColumnName="returnTag" />
+                <ScalarProperty Name="statusName" ColumnName="statusName" />
+                <ScalarProperty Name="Undertime" ColumnName="Undertime" />
+                <ScalarProperty Name="Tardy" ColumnName="Tardy" />
+                <ScalarProperty Name="timesPassSlip" ColumnName="timesPassSlip" />
+                <ScalarProperty Name="timesAWOL" ColumnName="timesAWOL" />
+                <ScalarProperty Name="wTotUnder" ColumnName="wTotUnder" />
+                <ScalarProperty Name="wTotTardy" ColumnName="wTotTardy" />
+                <ScalarProperty Name="timesUnder" ColumnName="timesUnder" />
+                <ScalarProperty Name="timesTardy" ColumnName="timesTardy" />
+                <ScalarProperty Name="userEIC" ColumnName="userEIC" />
+                <ScalarProperty Name="dtStamp" ColumnName="dtStamp" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="statusID" ColumnName="statusID" />
+                <ScalarProperty Name="approveEIC" ColumnName="approveEIC" />
+                <ScalarProperty Name="Tag" ColumnName="Tag" />
+                <ScalarProperty Name="Period" ColumnName="Period" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="DtrID" ColumnName="DtrID" />
+                <ScalarProperty Name="RecNo" ColumnName="RecNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trefHolidays">
+            <EntityTypeMapping TypeName="HRISLeaveModel.trefHoliday">
+              <MappingFragment StoreEntitySet="trefHoliday">
+                <ScalarProperty Name="dtStamp" ColumnName="dtStamp" />
+                <ScalarProperty Name="statusID" ColumnName="statusID" />
+                <ScalarProperty Name="remarks" ColumnName="remarks" />
+                <ScalarProperty Name="day" ColumnName="day" />
+                <ScalarProperty Name="month" ColumnName="month" />
+                <ScalarProperty Name="recNo" ColumnName="recNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vApprvOfficers">
+            <EntityTypeMapping TypeName="HRISLeaveModel.vApprvOfficer">
+              <MappingFragment StoreEntitySet="vApprvOfficer">
+                <ScalarProperty Name="fullnameLast" ColumnName="fullnameLast" />
+                <ScalarProperty Name="empGroupCode" ColumnName="empGroupCode" />
+                <ScalarProperty Name="groupName" ColumnName="groupName" />
+                <ScalarProperty Name="fullnameFirst" ColumnName="fullnameFirst" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="recNo" ColumnName="recNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vDeptOfficers">
+            <EntityTypeMapping TypeName="HRISLeaveModel.vDeptOfficer">
+              <MappingFragment StoreEntitySet="vDeptOfficer">
+                <ScalarProperty Name="groupName" ColumnName="groupName" />
+                <ScalarProperty Name="fullnameLast" ColumnName="fullnameLast" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="fullnameFirst" ColumnName="fullnameFirst" />
+                <ScalarProperty Name="groupID" ColumnName="groupID" />
+                <ScalarProperty Name="recNo" ColumnName="recNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vLeaveMasterLedgers">
+            <EntityTypeMapping TypeName="HRISLeaveModel.vLeaveMasterLedger">
+              <MappingFragment StoreEntitySet="vLeaveMasterLedger">
+                <ScalarProperty Name="SLBalance" ColumnName="SLBalance" />
+                <ScalarProperty Name="VLBalance" ColumnName="VLBalance" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="DtrID" ColumnName="DtrID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vrefLeaveTypeAndAllotments">
+            <EntityTypeMapping TypeName="HRISLeaveModel.vrefLeaveTypeAndAllotment">
+              <MappingFragment StoreEntitySet="vrefLeaveTypeAndAllotment">
+                <ScalarProperty Name="IsCalendarDays" ColumnName="IsCalendarDays" />
+                <ScalarProperty Name="Allotment" ColumnName="Allotment" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="NumCode" ColumnName="NumCode" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1545,45 +1653,19 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="fnLeaveLedgerGenerator" FunctionName="HRISLeaveModel.Store.fnLeaveLedgerGenerator">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="HRISLeaveModel.fnLeaveLedgerGenerator_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Period" ColumnName="Period" />
-                <ScalarProperty Name="DTRId" ColumnName="DTRId" />
-                <ScalarProperty Name="Particular" ColumnName="Particular" />
-                <ScalarProperty Name="SubParticular" ColumnName="SubParticular" />
-                <ScalarProperty Name="VLEarned" ColumnName="VLEarned" />
-                <ScalarProperty Name="VL_ABS_UND_WP" ColumnName="VL_ABS_UND_WP" />
-                <ScalarProperty Name="VL_ABS_UND_WOP" ColumnName="VL_ABS_UND_WOP" />
-                <ScalarProperty Name="SLEarned" ColumnName="SLEarned" />
-                <ScalarProperty Name="SL_ABS_UND_WP" ColumnName="SL_ABS_UND_WP" />
-                <ScalarProperty Name="SL_ABS_UND_WOP" ColumnName="SL_ABS_UND_WOP" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <EntitySetMapping Name="tLeaveInutangs">
-            <EntityTypeMapping TypeName="HRISLeaveModel.tLeaveInutang">
-              <MappingFragment StoreEntitySet="tLeaveInutang">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="DatePosted" ColumnName="DatePosted" />
-                <ScalarProperty Name="PostedByEIC" ColumnName="PostedByEIC" />
-                <ScalarProperty Name="EquivalentDays" ColumnName="EquivalentDays" />
-                <ScalarProperty Name="NumDays" ColumnName="NumDays" />
-                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
-                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+          <EntitySetMapping Name="tleaveRestores">
+            <EntityTypeMapping TypeName="HRISLeaveModel.tleaveRestore">
+              <MappingFragment StoreEntitySet="tleaveRestore">
+                <ScalarProperty Name="restoredByEIC" ColumnName="restoredByEIC" />
+                <ScalarProperty Name="isPosted" ColumnName="isPosted" />
+                <ScalarProperty Name="periodTo" ColumnName="periodTo" />
+                <ScalarProperty Name="periodFrom" ColumnName="periodFrom" />
+                <ScalarProperty Name="leaveID" ColumnName="leaveID" />
                 <ScalarProperty Name="EIC" ColumnName="EIC" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="trefLeaveAllotments">
-            <EntityTypeMapping TypeName="HRISLeaveModel.trefLeaveAllotment">
-              <MappingFragment StoreEntitySet="trefLeaveAllotment">
-                <ScalarProperty Name="IsCalendarDays" ColumnName="IsCalendarDays" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="LeaveCode" ColumnName="LeaveCode" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="dateFiled" ColumnName="dateFiled" />
+                <ScalarProperty Name="datePosted" ColumnName="datePosted" />
+                <ScalarProperty Name="controlNo" ColumnName="controlNo" />
+                <ScalarProperty Name="recNo" ColumnName="recNo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1601,7 +1683,7 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="true" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

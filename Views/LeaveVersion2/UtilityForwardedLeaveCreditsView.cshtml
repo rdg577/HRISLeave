@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Forwarded Leave Credits View";
+}
+
+<h2>Forwarded Leave Credits View</h2>
+<div id="app">
+	
+</div>
+@{
+	var controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+	var actionName = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
+}
+@Scripts.Render("~/Scripts/app/" + controllerName + "/vue-" + actionName + ".js")
+
