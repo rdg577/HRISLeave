@@ -37,7 +37,7 @@ namespace LeaveModule
 
 	        bundles.Add(new ScriptBundle("~/bundles/vendorJS").Include(
 				"~/Scripts/jquery-{version}.js",
-                "~/Scripts/angular.min.js",
+                //"~/Scripts/angular.min.js",
 				"~/Scripts/toastr.js",
 		        "~/Scripts/modernizr-*",
                 "~/Scripts/bootstrap.min.js",
@@ -54,7 +54,7 @@ namespace LeaveModule
                 "~/Scripts/jquery.slimscroll.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-                "~/Scripts/app/LeaveVersion2/utilities/angular.min.js"));
+                "~/Scripts/angular.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/vue").Include(
                 "~/Scripts/vue.js"));
@@ -89,6 +89,7 @@ namespace LeaveModule
                 "~/Content/bootstrap.css",
                 "~/Content/bootstrap-theme.css",
                 "~/Content/font-awesome.css",
+                "~/Content/toastr.min.css",
                 "~/Content/ionicons.css",
                 "~/kendo/css/kendo.common.min.css",
                 "~/kendo/css/kendo.common.min.css.map",

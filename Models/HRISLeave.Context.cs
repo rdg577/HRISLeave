@@ -29,7 +29,6 @@ namespace LeaveModule.Models
         }
     
         public DbSet<tapp212Image> tapp212Image { get; set; }
-        public DbSet<tleaveApp> tleaveApps { get; set; }
         public DbSet<tLeaveAppLedger> tLeaveAppLedgers { get; set; }
         public DbSet<tLeaveAppLedgerMaster> tLeaveAppLedgerMasters { get; set; }
         public DbSet<tLeaveBalanceForwarded> tLeaveBalanceForwardeds { get; set; }
@@ -55,6 +54,9 @@ namespace LeaveModule.Models
         public DbSet<vLeaveMasterLedger> vLeaveMasterLedgers { get; set; }
         public DbSet<vrefLeaveTypeAndAllotment> vrefLeaveTypeAndAllotments { get; set; }
         public DbSet<tleaveRestore> tleaveRestores { get; set; }
+        public DbSet<vLeaveForwardedLeaveBalance> vLeaveForwardedLeaveBalances { get; set; }
+        public DbSet<vEmpInformation> vEmpInformations { get; set; }
+        public DbSet<tleaveApp> tleaveApps { get; set; }
     
         public virtual ObjectResult<spEmployeeLeaveBalance_Result> spEmployeeLeaveBalance(string eIC, Nullable<System.DateTime> dateBegin, Nullable<System.DateTime> dateEnd, string sbl, string stl, string ml, string pl, string spl, string slp, string rl, string vawc, string sel, string mone, string fl, string magnacarta)
         {

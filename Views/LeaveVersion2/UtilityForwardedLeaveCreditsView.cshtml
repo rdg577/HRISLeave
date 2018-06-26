@@ -3,9 +3,61 @@
     ViewBag.Title = "Forwarded Leave Credits View";
 }
 
-<h2>Forwarded Leave Credits View</h2>
+<link href="~/Content/leave/leave-card.css" rel="stylesheet" />
+<style>
+	.avatar {
+		-ms-border-radius: 50%;
+		border-radius: 50%;
+	}
+</style>
+
 <div id="app">
-	
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<div class="panel-title">Forwarded Leave Credits View</div>
+		</div>
+		<div class="panel-body">
+			<div class="col-lg-12 col-md-12 col-sm-12 form-horizontal">
+				Search: <empleyado v-model="employee" v-once v-on:change="employee && search(employee.EIC)" style="width: 60%;"></empleyado>
+				<button class="btn btn-primary" v-on:click="retrieve">
+					<i class="fa fa-refresh"></i>
+				</button>
+				<button class="btn btn-primary" v-on:click="printPreview">
+					<i class="fa fa-print"></i>
+				</button>
+			</div>
+		</div>
+		<div style="padding: 5px;" v-show="leaveCreditForwardedBalances && leaveCreditForwardedBalances.length == 0">
+			<p>Found nothing...</p>
+		</div>
+
+		<table class="table table-responsive" id="forwarded-leave-credits" v-show="leaveCreditForwardedBalances && leaveCreditForwardedBalances.length > 0" style="overflow: auto; overflow-y: hidden;">
+			<thead>
+				<tr>
+					<th>ID #</th>
+					<th>Employee</th>
+					<th>As Of</th>
+					<th>VL Credit</th>
+					<th>SL Credit</th>
+					<th>Total</th>
+					<th>Forwarded By</th>
+					<th>Date Forwarded</th>
+				</tr>
+			</thead>
+			<tbody v-for="creditBalance in leaveCreditForwardedBalances">
+				<tr>
+					<td>{{ creditBalance.idNo }}</td>
+					<td>{{ creditBalance.fullnameLast }}</td>
+					<td>{{ creditBalance.AsOf | redenDateFormat2 }}</td>
+					<td>{{ creditBalance.VLBalanceForwarded | redenNumberFormat }}</td>
+					<td>{{ creditBalance.SLBalanceForwarded | redenNumberFormat }}</td>
+					<td>{{ creditBalance.TotalBalanceForwarded | redenNumberFormat }}</td>
+					<td>{{ creditBalance.ForwardedBy }}</td>
+					<td>{{ creditBalance.DateForwarded | redenDateFormat2 }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
 @{
 	var controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();

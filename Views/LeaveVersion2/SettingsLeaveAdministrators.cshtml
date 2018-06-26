@@ -2,12 +2,18 @@
 @{
     ViewBag.Title = "Settings Leave Administrators";
 }
+<link href="~/Scripts/app/LeaveVersion2/utilities/sweetalert2.min.css" rel="stylesheet" />
+<link href="~/Scripts/app/LeaveVersion2/utilities/toastr.min.css" rel="stylesheet" />
 <link href="~/Content/leave/utility2.min.css" rel="stylesheet" />
 
-<script src="~/Scripts/app/LeaveVersion2/utilities/app/app.js"></script>
-<script src="~/Scripts/app/LeaveVersion2/utilities/controller/adminCtrl.js"></script>
 
-<h2>Settings Leave Administrators</h2>
+<script src="~/Scripts/app/LeaveVersion2/utilities/angular.min.js"></script>
+<script src="~/Scripts/app/LeaveVersion2/utilities/app/app.min.js"></script>
+<script src="~/Scripts/app/LeaveVersion2/utilities/sweetalert2.min.js"></script>
+<script src="~/Scripts/app/LeaveVersion2/utilities/toastr.min.js"></script>
+<script src="~/Scripts/app/LeaveVersion2/utilities/controller/adminCtrl.min.js"></script>
+
+<h4>Settings Leave Administrators</h4>
 
 <div ng-app ="HRISLeaveForm" ng-controller="adminCtrl">
 
@@ -64,9 +70,9 @@
 					<h3 class="modal-title" id="myModalLabel2">{{titleHead}} Administrative User</h3>
 				</div>
 				<div class="modal-body" id="inSearch">
-
-					<tt style="font-family:inherit;font-size:16px;padding-right:10px;">Employee's Full Name</tt>
-					@(Html.Kendo().AutoComplete()
+					<tt style="font-family:inherit;font-size:16px;padding-right:10px;">
+						Employee's Full Name
+						@(Html.Kendo().AutoComplete()
 						  .Name("allEmp")
 						  .HtmlAttributes(new { maxlength = "20", style = "width:70%;", placeholder = "Search Name to Add... " })
 						  .Filter("contains")
@@ -75,11 +81,13 @@
 						  .Suggest(true)
 						  .MinLength(3)
 						  .Template("<img class=\"img-circle\" style=\"width: 50px; height: 50px; \" src=\"" + Url.Content("~/LeaveAdmin/RetrieveImage/#: data.Text #") + "\">" +
-						            "<span class=\"\" style=\"font-size:12px;\">  #: data.Value # </span>")
+									"<span class=\"\" style=\"font-size:12px;\">  #: data.Value # </span>")
 						  .DataSource(dt => dt.Read("loadAllEmp", "LeaveAdmin"))
 						  .Events(e => { e.Change("getInfo"); })
-                            
-						  )
+
+						)
+					</tt>
+
 				</div>
 				<div style="margin-top:5%;display:none;" id="hideNsHow">
 					<div class="row" style="margin-left:2px;">

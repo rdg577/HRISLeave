@@ -159,10 +159,10 @@ gulp.task('build', function () {
         //    compileJSVue2(scriptsPath + "//" + folder + "//vue-recommend-hr.js", "Scripts//app//" + folder, "vue-recommend-hr.js");
         //}
 
-        //// for leave recommendation @ HR Level
-        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-reports.js")) {
-        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-reports.js", "Scripts//app//" + folder, "vue-reports.js");
-        //}
+        // for leave recommendation @ HR Level
+        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-reports.js")) {
+            compileJSVue2(scriptsPath + "//" + folder + "//vue-reports.js", "Scripts//app//" + folder, "vue-reports.js");
+        }
 
         // for leave approval
         //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-approve.js")) {
@@ -181,18 +181,20 @@ gulp.task('build', function () {
         //if (fs.existsSync(scriptsPath + "//" + folder + "//utility.js")) {
         //    compileJSVue2(scriptsPath + "//" + folder + "//utility.js", "Scripts//app//" + folder, "utility.js");
         //}
-        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-utility.js")) {
-        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-utility.js", "Scripts//app//" + folder, "vue-utility.js");
-        //}
 
         ////  for edit
         //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-edit.js")) {
         //    compileJSVue2(scriptsPath + "//" + folder + "//vue-edit.js", "Scripts//app//" + folder, "vue-edit.js");
         //}
 
+        //// for restoration
+        //if (fs.existsSync(scriptsPath + "//" + folder + "//vue-restoration.js")) {
+        //    compileJSVue2(scriptsPath + "//" + folder + "//vue-restoration.js", "Scripts//app//" + folder, "vue-restoration.js");
+        //}
+
         // for restoration
-        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-restoration.js")) {
-            compileJSVue2(scriptsPath + "//" + folder + "//vue-restoration.js", "Scripts//app//" + folder, "vue-restoration.js");
+        if (fs.existsSync(scriptsPath + "//" + folder + "//vue-UtilityForwardedLeaveCreditsView.js")) {
+            compileJSVue2(scriptsPath + "//" + folder + "//vue-UtilityForwardedLeaveCreditsView.js", "Scripts//app//" + folder, "vue-UtilityForwardedLeaveCreditsView.js");
         }
     });
 });

@@ -72,7 +72,7 @@ $(document).ready(function () {
         dataValueField: "EIC",
         filter: "startswith",
         minLength: 3,
-        template: '<img class="avatar" src="../LeaveTool/UserImage/#= EIC #" width="60px" height="60px"><span data-recordid="#= EIC #"> #= fullnameLast #</span>',
+        template: '<img class="avatar" src="../LeaveTool/UserImage/#= EIC #" width="40px" height="40px"><span data-recordid="#= EIC #"> #= fullnameLast #</span>',
         placeholder: "Select employee...",
         select: function (e) {
             var dataItem = this.dataItem(e.item.index());
@@ -222,7 +222,7 @@ $(document).ready(function () {
         dataValueField: "EIC",
         filter: "startswith",
         minLength: 3,
-        template: '<img class="avatar" src="../LeaveTool/UserImage/#= EIC #" width="60px" height="60px"><span data-recordid="#= EIC #"> #= fullnameLast #</span>',
+        template: '<img class="avatar" src="../LeaveTool/UserImage/#= EIC #" width="40px" height="40px"><span data-recordid="#= EIC #"> #= fullnameLast #</span>',
         placeholder: "Select employee...",
         select: function (e) {
             var dataItem = this.dataItem(e.item.index());
@@ -340,8 +340,12 @@ $(document).ready(function () {
     });
 
     $("#btnRestoration").click(function () {
-        console.log ( "Restore leave" );
+        //console.log ( "Restore leave" );
         window.location.href = "Restoration";
+    });
+
+    $ ( "#btnViewLeaveBalanceForwarded" ).click ( function () {
+        window.location.href = "UtilityForwardedLeaveCreditsView";
     });
 
 }); // end of - $(document).ready

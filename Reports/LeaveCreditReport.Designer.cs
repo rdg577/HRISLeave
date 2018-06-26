@@ -265,9 +265,9 @@ namespace LeaveModule.Reports
 			// 
 			// sqlDSLeaveCredits
 			// 
-			this.sqlDSLeaveCredits.ConnectionString = "Data Source=172.16.130.78;Initial Catalog=HRIS;Persist Security Info=True;User ID" +
-    "=reden;Password=m@st3rk3y;MultipleActiveResultSets=True;Application Name=EntityF" +
-    "ramework";
+			this.sqlDSLeaveCredits.ConnectionString = "Data Source=127.0.0.1;Initial Catalog=HRIS;Persist Security Info=True;User ID=sa;" +
+    "Password=m@st3rk3y;MultipleActiveResultSets=True;Application Name=EntityFramewor" +
+    "k";
 			this.sqlDSLeaveCredits.Name = "sqlDSLeaveCredits";
 			this.sqlDSLeaveCredits.Parameters.AddRange(new Telerik.Reporting.SqlDataSourceParameter[] {
             new Telerik.Reporting.SqlDataSourceParameter("@EIC", System.Data.DbType.String, "=Parameters.EIC.Value"),

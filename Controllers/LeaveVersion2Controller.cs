@@ -11,8 +11,15 @@ namespace LeaveModule.Controllers
     {
         private HRISEntities db = new HRISEntities();
 
+        public JsonResult ForwardedLeaveBalances()
+        {
+            var list = db.vLeaveForwardedLeaveBalances.OrderBy(r => r.fullnameLast);
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult UtilityForwardedLeaveCreditsView()
         {
+            //01June2018
             try
             {
                 var EIC = Session["EIC"].ToString();
@@ -159,7 +166,8 @@ namespace LeaveModule.Controllers
                 var EIC = Session["EIC"].ToString();
 
                 // check if one of the HR BWD Officer
-                var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin") && r.IsActive).SingleOrDefault(r => r.EIC == EIC);
+                var HROfficer = db.trefLeaveAdministrators.Where(r =>
+                    r.EIC == EIC && (r.Role.Equals("ModuleAdmin") || r.Role.Equals("SystemAdmin")) && r.IsActive);
 
                 if (HROfficer != null) return View();
 
@@ -233,17 +241,23 @@ namespace LeaveModule.Controllers
 	    public ActionResult MonetaryValue(double leaveCredit)
 	    {
             //if (Session["EIC"] == null) return RedirectToAction("Index", "Home");
+	        try
+	        {
+	            var eic = Session["EIC"].ToString();
+	            var emp = db.vEmpInformations.SingleOrDefault(r => r.EIC == eic);
+	            if (emp == null) return Content("Employee not found...");
 
-		    var eic = Session["EIC"].ToString();
-		    var emp = db.vEmployeeCompleteFields.SingleOrDefault(r => r.EIC == eic);
-		    if (emp == null) return Content("Employee not found...");
+	            var monthlySalary = Convert.ToDouble(emp.rateMonth ?? 0);
+	            const double workingDays = 22.0;
+	            var moneyValue = (monthlySalary / workingDays) * leaveCredit;
+	            moneyValue = Math.Round(moneyValue, 2);
 
-			var monthlySalary = Convert.ToDouble(emp.rateMonth ?? 0);
-		    const double workingDays = 22.0;
-		    var moneyValue = (monthlySalary / workingDays) * leaveCredit;
-		    moneyValue = Math.Round(moneyValue, 2);
-
-		    return Json(new { moneyValue = moneyValue}, JsonRequestBehavior.AllowGet);
+	            return Json(new { moneyValue = moneyValue }, JsonRequestBehavior.AllowGet);
+	        }
+	        catch (Exception e)
+	        {
+	            return Content(e.Message);
+	        }
 	    }
 		
 	    public ActionResult UnauthorizedAccess()
@@ -794,7 +808,7 @@ namespace LeaveModule.Controllers
                                 r.IsApproved,
                                 r.ApprovalEIC,
                                 r.IsVLUsedAsSL,
-                                profile = db.vEmployeeCompleteFields.FirstOrDefault(g => g.EIC == r.EIC)
+                                profile = db.vEmpInformations.FirstOrDefault(g => g.EIC == r.EIC)
                             })
                             .OrderBy(r=>r.IsApproved)
                             .ThenBy(r => r.dateFiled)
@@ -1146,7 +1160,7 @@ namespace LeaveModule.Controllers
 
 	        if (hadForwardedHisBalance == null && leaveModuleAdmin == null)
 	        {
-		        Session["DeniedAccessMsg"] = "Oops! Your leave credit balance has not yet been forwarded, please contact HR.";
+		        Session["DeniedAccessMsg"] = "Oops! Your leave credit balance has NOT YET been Forwarded or Set, please contact HR Office Leave Administrator.";
 		        return RedirectToAction("UnauthorizedAccess", "LeaveVersion2");
 	        }
 
@@ -1224,6 +1238,8 @@ namespace LeaveModule.Controllers
                     t.DateForwarded = petsaKaron;
 
                     db.tLeaveBalanceForwardeds.Add(t);
+                    db.SaveChanges();
+
 
                     // STORE FORWARDED BALANCE IN THE MASTER LEDGER
                     var m = new tLeaveAppLedgerMaster();
@@ -1251,7 +1267,14 @@ namespace LeaveModule.Controllers
                     d.Timestamp = Convert.ToDateTime(AsOf);
                     db.tLeaveAppLedgers.Add(d);
 
-                    db.SaveChanges();
+                    if (db.SaveChanges() > 0)
+                    {
+                        
+                        // Posting Leave Ledger Data
+                        LedgerPostingByEic(EIC);
+
+                    }
+
                 }
                 catch (Exception e)
                 {
@@ -1330,15 +1353,16 @@ namespace LeaveModule.Controllers
             // 2. Tardy and Undertime
             // 3. Leave
 
-            var DTRsAtLeaveLedger = db.tLeaveAppLedgers.Where(r => r.EIC.Equals(_EIC)).Select(r => r.DTRId).Distinct();
-            var EICsWithForwardedLeaveCredits = db.tLeaveBalanceForwardeds.Where(r => r.EIC.Equals(_EIC)).Select(r => r.EIC);
-            var DTRs = db.tAttDTRs.Where(r => EICsWithForwardedLeaveCredits.Contains(r.EIC) && r.EIC.Equals(_EIC));
-
-            // select all DTRs that is not yet processed
-            var DTRsForPosting = DTRs.Where(r => !DTRsAtLeaveLedger.Contains(r.DtrID)).OrderBy(r => r.Year).ThenBy(r => r.Month).ThenBy(r => r.Period);
-
             try
             {
+
+                var DTRsAtLeaveLedger = db.tLeaveAppLedgers.Where(r => r.EIC.Equals(_EIC)).Select(r => r.DTRId).Distinct();
+                var EICsWithForwardedLeaveCredits = db.tLeaveBalanceForwardeds.Where(r => r.EIC.Equals(_EIC)).Select(r => r.EIC);
+                var DTRs = db.tAttDTRs.Where(r => EICsWithForwardedLeaveCredits.Contains(r.EIC) && r.EIC.Equals(_EIC));
+
+                // select all DTRs that is not yet processed
+                var DTRsForPosting = DTRs.Where(r => !DTRsAtLeaveLedger.Contains(r.DtrID)).OrderBy(r => r.Year).ThenBy(r => r.Month).ThenBy(r => r.Period);
+                
                 // get a list of EICs
                 var EICs = EICsWithForwardedLeaveCredits.Distinct().ToList();
                 foreach (var EIC in EICs)

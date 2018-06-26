@@ -105,7 +105,7 @@ namespace LeaveModule.Controllers
         {
             var q = db.trefLeaveAdministrators.Where(r => r.Id != a.Id && (r.EIC == a.EIC));
 
-            if (q.Count() > 0)
+            if (q.Any())
             {
                 return Json("error", JsonRequestBehavior.AllowGet);
             }
@@ -124,6 +124,7 @@ namespace LeaveModule.Controllers
         }
         public ActionResult updateAdmin(trefLeaveAdministrator a)
         {
+            //a.Role = a.Role.Replace(" ", "");
             db.Entry(a).State = System.Data.EntityState.Modified;
             db.SaveChanges();
 

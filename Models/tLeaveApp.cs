@@ -24,12 +24,13 @@ namespace LeaveModule.Models
         public Nullable<System.DateTime> periodFrom { get; set; }
         public Nullable<System.DateTime> periodTo { get; set; }
         public Nullable<double> applyDay { get; set; }
-        public string place { get; set; }
-        public string location { get; set; }
         public string recommendEIC { get; set; }
         public string approveEIC { get; set; }
+        public Nullable<bool> IsApproved { get; set; }
         public Nullable<int> isPosted { get; set; }
         public string remarks { get; set; }
+        public string place { get; set; }
+        public string location { get; set; }
         public Nullable<bool> isWithPay { get; set; }
         public string OfficeRecommendedByEIC { get; set; }
         public Nullable<System.DateTime> DateAtOfficeRecommended { get; set; }
@@ -39,7 +40,6 @@ namespace LeaveModule.Models
         public Nullable<bool> IsRecommendedAtHR { get; set; }
         public string ApprovalEIC { get; set; }
         public Nullable<System.DateTime> DateApprovedDisapproved { get; set; }
-        public Nullable<bool> IsApproved { get; set; }
         public string DisapprovalRemark { get; set; }
         public Nullable<bool> IsVLUsedAsSL { get; set; }
     }

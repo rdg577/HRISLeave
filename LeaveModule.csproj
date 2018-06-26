@@ -234,10 +234,16 @@
     <Compile Include="Models\vDeptOfficer.cs">
       <DependentUpon>HRISLeave.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\vEmpInformation.cs">
+      <DependentUpon>HRISLeave.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\vEmployeeCompleteField.cs">
       <DependentUpon>HRISLeave.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vLeaveApp2.cs">
+      <DependentUpon>HRISLeave.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vLeaveForwardedLeaveBalance.cs">
       <DependentUpon>HRISLeave.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vLeaveMasterLedger.cs">
@@ -258,6 +264,13 @@
     </Compile>
     <Compile Include="Reports\LeaveCreditReport.Designer.cs">
       <DependentUpon>LeaveCreditReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReportWebForms\ForwardedLeaveBalancesReport.aspx.cs">
+      <DependentUpon>ForwardedLeaveBalancesReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportWebForms\ForwardedLeaveBalancesReport.aspx.designer.cs">
+      <DependentUpon>ForwardedLeaveBalancesReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="ReportWebForms\LeaveRequestReport.aspx.cs">
       <DependentUpon>LeaveRequestReport.aspx</DependentUpon>
@@ -1336,6 +1349,7 @@
       <DependentUpon>GENERAL.edmx</DependentUpon>
       <LastGenOutput>GENERAL.cs</LastGenOutput>
     </Content>
+    <Content Include="ReportWebForms\ForwardedLeaveBalancesReport.aspx" />
     <Content Include="ReportWebForms\LeaveRequestReport.aspx" />
     <Content Include="ReportWebForms\LeaveCreditReport.aspx" />
     <Content Include="Scripts\angular-mocks.js" />
@@ -2088,22 +2102,47 @@
     <Content Include="kendo\js\messages\kendo.messages.zh-TW.min.js.map" />
     <None Include="Properties\PublishProfiles\HRISLeaveProfile.pubxml" />
     <Content Include="Scripts\app\LeaveVersion2\utilities\angular.min.js" />
-    <Content Include="Scripts\app\LeaveVersion2\utilities\app\app.js" />
     <Content Include="Scripts\app\LeaveVersion2\utilities\app\app.min.js.map" />
     <Content Include="Scripts\app\LeaveVersion2\utilities\controller\adminCtrl.js" />
-    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\adminCtrl.min.js.map" />
     <Content Include="Scripts\app\LeaveVersion2\utilities\controller\allotmentCtrl.js" />
-    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\allotmentCtrl.min.js.map" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\allotmentCtrl.min.js.map">
+      <DependentUpon>allotmentCtrl.min.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\app\LeaveVersion2\utilities\controller\conversionMatrixDPCtrl.js" />
-    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\conversionMatrixDPCtrl.min.js.map" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\conversionMatrixDPCtrl.min.js.map">
+      <DependentUpon>conversionMatrixDPCtrl.min.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\app\LeaveVersion2\utilities\controller\conversionMatrixWHCtrl.js" />
-    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\conversionMatrixWHCtrl.min.js.map" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\conversionMatrixWHCtrl.min.js.map">
+      <DependentUpon>conversionMatrixWHCtrl.min.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\app\LeaveVersion2\utilities\controller\creditsEarnedCtrl.js" />
-    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\creditsEarnedCtrl.min.js.map" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\creditsEarnedCtrl.min.js.map">
+      <DependentUpon>creditsEarnedCtrl.min.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\app\LeaveVersion2\utilities\controller\leaveTypeCtrl.js" />
-    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\leaveTypeCtrl.min.js.map" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\leaveTypeCtrl.min.js.map">
+      <DependentUpon>leaveTypeCtrl.min.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\app\LeaveVersion2\utilities\controller\ledgerDescriptionCtrl.js" />
-    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\ledgerDescriptionCtrl.min.js.map" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\ledgerDescriptionCtrl.min.js.map">
+      <DependentUpon>ledgerDescriptionCtrl.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\app\LeaveVersion2\utilities\controller\adminCtrl.min.js.map">
+      <DependentUpon>adminCtrl.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\app\LeaveVersion2\utilities\angular.min.js.map" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\sweetalert2.all.js" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\sweetalert2.all.min.js" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\sweetalert2.css" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\sweetalert2.js" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\sweetalert2.min.css" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\sweetalert2.min.js" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\toastr.css" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\toastr.min.css" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\toastr.min.js.map" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\toastr.less" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\toastr.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\app\LeaveVersion2\utilities\app\app.min.js" />
     <Content Include="Scripts\app\LeaveVersion2\utilities\controller\adminCtrl.min.js" />
@@ -2113,6 +2152,8 @@
     <Content Include="Scripts\app\LeaveVersion2\utilities\controller\creditsEarnedCtrl.min.js" />
     <Content Include="Scripts\app\LeaveVersion2\utilities\controller\leaveTypeCtrl.min.js" />
     <Content Include="Scripts\app\LeaveVersion2\utilities\controller\ledgerDescriptionCtrl.min.js" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\toastr.js" />
+    <Content Include="Scripts\app\LeaveVersion2\utilities\toastr.min.js" />
     <Content Include="Scripts\axios.js" />
     <Content Include="Scripts\axios.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -2141,23 +2182,6 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="ViewModels\LeaveVersion2\create.js" />
     <Content Include="ViewModels\LeaveVersion2\leave-card.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\angular.min.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\app\app.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\app\app.min.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\adminCtrl.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\adminCtrl.min.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\allotmentCtrl.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\allotmentCtrl.min.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\conversionMatrixDPCtrl.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\conversionMatrixDPCtrl.min.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\conversionMatrixWHCtrl.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\conversionMatrixWHCtrl.min.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\creditsEarnedCtrl.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\creditsEarnedCtrl.min.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\leaveTypeCtrl.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\leaveTypeCtrl.min.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\ledgerDescriptionCtrl.js" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\ledgerDescriptionCtrl.min.js" />
     <Content Include="ViewModels\LeaveVersion2\utility.js" />
     <Content Include="ViewModels\LeaveVersion2\main.js" />
     <Content Include="ViewModels\Home\main.js" />
@@ -2171,6 +2195,7 @@
     <Content Include="ViewModels\LeaveVersion2\vue-edit.js" />
     <Content Include="ViewModels\LeaveVersion2\vue-leave-card.js" />
     <Content Include="ViewModels\LeaveVersion2\vue-main.js" />
+    <Content Include="ViewModels\LeaveVersion2\vue-UtilityForwardedLeaveCreditsView.js" />
     <Content Include="Views\LeaveVersion2\Recommend.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -2217,15 +2242,10 @@
     <Content Include="Views\LeaveVersion2\SettingsLeaveCreditsEarned.cshtml" />
     <Content Include="Views\LeaveVersion2\SettingsLeaveLedgerCodes.cshtml" />
     <Content Include="Views\LeaveVersion2\SettingsLeaveTypes.cshtml" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\app\app.min.js.map" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\adminCtrl.min.js.map" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\allotmentCtrl.min.js.map" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\conversionMatrixDPCtrl.min.js.map" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\conversionMatrixWHCtrl.min.js.map" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\creditsEarnedCtrl.min.js.map" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\leaveTypeCtrl.min.js.map" />
-    <Content Include="ViewModels\LeaveVersion2\utilities\controller\ledgerDescriptionCtrl.min.js.map" />
     <Content Include="Views\LeaveVersion2\UtilityForwardedLeaveCreditsView.cshtml" />
+    <Content Include="Scripts\toastr.min.js.map">
+      <DependentUpon>toastr.min.js</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

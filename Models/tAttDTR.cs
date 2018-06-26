@@ -36,5 +36,6 @@ namespace LeaveModule.Models
         public Nullable<int> Undertime { get; set; }
         public string statusName { get; set; }
         public Nullable<int> returnTag { get; set; }
+        public Nullable<int> timesOfficialPS { get; set; }
     }
 }

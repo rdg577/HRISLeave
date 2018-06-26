@@ -52,6 +52,7 @@
           <Property Name="Undertime" Type="int" />
           <Property Name="statusName" Type="nvarchar" MaxLength="20" />
           <Property Name="returnTag" Type="int" />
+          <Property Name="timesOfficialPS" Type="int" />
         </EntityType>
         <EntityType Name="tleaveApp">
           <Key>
@@ -67,12 +68,13 @@
           <Property Name="periodFrom" Type="date" />
           <Property Name="periodTo" Type="date" />
           <Property Name="applyDay" Type="float" />
-          <Property Name="place" Type="nvarchar" MaxLength="10" />
-          <Property Name="location" Type="nchar" MaxLength="30" />
           <Property Name="recommendEIC" Type="nvarchar" MaxLength="20" />
           <Property Name="approveEIC" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsApproved" Type="bit" />
           <Property Name="isPosted" Type="int" />
           <Property Name="remarks" Type="nvarchar" MaxLength="150" />
+          <Property Name="place" Type="nvarchar" MaxLength="10" />
+          <Property Name="location" Type="nchar" MaxLength="30" />
           <Property Name="isWithPay" Type="bit" />
           <Property Name="OfficeRecommendedByEIC" Type="nvarchar" MaxLength="20" />
           <Property Name="DateAtOfficeRecommended" Type="datetime" />
@@ -80,9 +82,8 @@
           <Property Name="HRRecommendedByEIC" Type="nvarchar" MaxLength="20" />
           <Property Name="HRDateRecommended" Type="datetime" />
           <Property Name="IsRecommendedAtHR" Type="bit" />
-          <Property Name="ApprovalEIC" Type="nvarchar" MaxLength="20" />
+          <Property Name="ApprovalEIC" Type="nvarchar" MaxLength="150" />
           <Property Name="DateApprovedDisapproved" Type="datetime" />
-          <Property Name="IsApproved" Type="bit" />
           <Property Name="DisapprovalRemark" Type="nvarchar" MaxLength="250" />
           <Property Name="IsVLUsedAsSL" Type="bit" />
         </EntityType>
@@ -295,6 +296,31 @@ warning 6002: The table/view 'HRIS.dbo.vDeptOfficer' does not have a primary key
           <Property Name="groupName" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'HRIS.dbo.vEmpInformation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vEmpInformation">
+          <Key>
+            <PropertyRef Name="EIC" />
+          </Key>
+          <Property Name="EIC" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="designation" Type="varchar" MaxLength="100" />
+          <Property Name="subpositionName" Type="varchar" MaxLength="100" />
+          <Property Name="dateFrom" Type="date" />
+          <Property Name="officeCode" Type="varchar" MaxLength="8" />
+          <Property Name="staffingCode" Type="varchar" MaxLength="40" />
+          <Property Name="fullnameLast" Type="nvarchar" MaxLength="60" />
+          <Property Name="groupName" Type="nvarchar" MaxLength="100" />
+          <Property Name="sg" Type="int" />
+          <Property Name="step" Type="int" />
+          <Property Name="statusCode" Type="varchar" MaxLength="10" />
+          <Property Name="rateMonth" Type="money" />
+          <Property Name="rateDay" Type="money" />
+          <Property Name="empGroupCode" Type="varchar" MaxLength="8" />
+          <Property Name="SchemeCode" Type="nvarchar" MaxLength="25" />
+          <Property Name="fullnameFirst" Type="nvarchar" MaxLength="60" />
+          <Property Name="idNo" Type="nvarchar" MaxLength="8" />
+          <Property Name="officeName" Type="varchar" MaxLength="150" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'HRIS.dbo.vEmployeeCompleteField' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vEmployeeCompleteField">
           <Key>
@@ -407,12 +433,37 @@ warning 6002: The table/view 'HRIS.dbo.vLeaveApp2' does not have a primary key d
           <Property Name="HRRecommender" Type="nvarchar" MaxLength="60" />
           <Property Name="HRDateRecommended" Type="datetime" />
           <Property Name="IsRecommendedAtHR" Type="bit" />
-          <Property Name="ApprovalEIC" Type="nvarchar" MaxLength="20" />
+          <Property Name="ApprovalEIC" Type="nvarchar" MaxLength="150" />
           <Property Name="ApprovingOfficer" Type="nvarchar" MaxLength="60" />
           <Property Name="DateApprovedDisapproved" Type="datetime" />
           <Property Name="IsApproved" Type="bit" />
           <Property Name="DisapprovalRemark" Type="nvarchar" MaxLength="250" />
           <Property Name="IsVLUsedAsSL" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'HRIS.dbo.vLeaveForwardedLeaveBalances' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vLeaveForwardedLeaveBalances">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="EIC" />
+            <PropertyRef Name="VLBalanceForwarded" />
+            <PropertyRef Name="SLBalanceForwarded" />
+            <PropertyRef Name="TotalBalanceForwarded" />
+            <PropertyRef Name="AsOf" />
+            <PropertyRef Name="DateForwarded" />
+            <PropertyRef Name="EICForwardedBy" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="fullnameLast" Type="nvarchar" MaxLength="60" />
+          <Property Name="EIC" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="idNo" Type="nvarchar" MaxLength="8" />
+          <Property Name="VLBalanceForwarded" Type="float" Nullable="false" />
+          <Property Name="SLBalanceForwarded" Type="float" Nullable="false" />
+          <Property Name="TotalBalanceForwarded" Type="float" Nullable="false" />
+          <Property Name="AsOf" Type="date" Nullable="false" />
+          <Property Name="DateForwarded" Type="datetime" Nullable="false" />
+          <Property Name="EICForwardedBy" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ForwardedBy" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'HRIS.dbo.vLeaveMasterLedger' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -507,6 +558,28 @@ FROM [dbo].[vApprvOfficer] AS [vApprvOfficer]</DefiningQuery>
 [vDeptOfficer].[fullnameLast] AS [fullnameLast], 
 [vDeptOfficer].[groupName] AS [groupName]
 FROM [dbo].[vDeptOfficer] AS [vDeptOfficer]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vEmpInformation" EntityType="Self.vEmpInformation" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[vEmpInformation].[EIC] AS [EIC], 
+[vEmpInformation].[designation] AS [designation], 
+[vEmpInformation].[subpositionName] AS [subpositionName], 
+[vEmpInformation].[dateFrom] AS [dateFrom], 
+[vEmpInformation].[officeCode] AS [officeCode], 
+[vEmpInformation].[staffingCode] AS [staffingCode], 
+[vEmpInformation].[fullnameLast] AS [fullnameLast], 
+[vEmpInformation].[groupName] AS [groupName], 
+[vEmpInformation].[sg] AS [sg], 
+[vEmpInformation].[step] AS [step], 
+[vEmpInformation].[statusCode] AS [statusCode], 
+[vEmpInformation].[rateMonth] AS [rateMonth], 
+[vEmpInformation].[rateDay] AS [rateDay], 
+[vEmpInformation].[empGroupCode] AS [empGroupCode], 
+[vEmpInformation].[SchemeCode] AS [SchemeCode], 
+[vEmpInformation].[fullnameFirst] AS [fullnameFirst], 
+[vEmpInformation].[idNo] AS [idNo], 
+[vEmpInformation].[officeName] AS [officeName]
+FROM [dbo].[vEmpInformation] AS [vEmpInformation]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vEmployeeCompleteField" EntityType="Self.vEmployeeCompleteField" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -618,6 +691,21 @@ FROM [dbo].[vEmployeeCompleteField] AS [vEmployeeCompleteField]</DefiningQuery>
 [vLeaveApp2].[IsVLUsedAsSL] AS [IsVLUsedAsSL]
 FROM [dbo].[vLeaveApp2] AS [vLeaveApp2]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="vLeaveForwardedLeaveBalances" EntityType="Self.vLeaveForwardedLeaveBalances" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[vLeaveForwardedLeaveBalances].[Id] AS [Id], 
+[vLeaveForwardedLeaveBalances].[fullnameLast] AS [fullnameLast], 
+[vLeaveForwardedLeaveBalances].[EIC] AS [EIC], 
+[vLeaveForwardedLeaveBalances].[idNo] AS [idNo], 
+[vLeaveForwardedLeaveBalances].[VLBalanceForwarded] AS [VLBalanceForwarded], 
+[vLeaveForwardedLeaveBalances].[SLBalanceForwarded] AS [SLBalanceForwarded], 
+[vLeaveForwardedLeaveBalances].[TotalBalanceForwarded] AS [TotalBalanceForwarded], 
+[vLeaveForwardedLeaveBalances].[AsOf] AS [AsOf], 
+[vLeaveForwardedLeaveBalances].[DateForwarded] AS [DateForwarded], 
+[vLeaveForwardedLeaveBalances].[EICForwardedBy] AS [EICForwardedBy], 
+[vLeaveForwardedLeaveBalances].[ForwardedBy] AS [ForwardedBy]
+FROM [dbo].[vLeaveForwardedLeaveBalances] AS [vLeaveForwardedLeaveBalances]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="vLeaveMasterLedger" EntityType="Self.vLeaveMasterLedger" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
 [vLeaveMasterLedger].[Id] AS [Id], 
@@ -648,7 +736,6 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
       <Schema Namespace="HRISLeaveModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="HRISEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="tapp212Image" EntityType="HRISLeaveModel.tapp212Image" />
-          <EntitySet Name="tleaveApps" EntityType="HRISLeaveModel.tleaveApp" />
           <EntitySet Name="tLeaveAppLedgers" EntityType="HRISLeaveModel.tLeaveAppLedger" />
           <EntitySet Name="tLeaveAppLedgerMasters" EntityType="HRISLeaveModel.tLeaveAppLedgerMaster" />
           <EntitySet Name="tLeaveBalanceForwardeds" EntityType="HRISLeaveModel.tLeaveBalanceForwarded" />
@@ -694,6 +781,9 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Parameter Name="EIC" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="tleaveRestores" EntityType="HRISLeaveModel.tleaveRestore" />
+          <EntitySet Name="vLeaveForwardedLeaveBalances" EntityType="HRISLeaveModel.vLeaveForwardedLeaveBalance" />
+          <EntitySet Name="vEmpInformations" EntityType="HRISLeaveModel.vEmpInformation" />
+          <EntitySet Name="tleaveApps" EntityType="HRISLeaveModel.tleaveApp" />
         </EntityContainer>
         <EntityType Name="tapp212Image">
           <Key>
@@ -702,39 +792,6 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="RecNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="imageData" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="tleaveApp">
-          <Key>
-            <PropertyRef Name="recNo" />
-          </Key>
-          <Property Name="recNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="controlNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="datePosted" Type="DateTime" Precision="3" />
-          <Property Name="dateFiled" Type="DateTime" Precision="3" />
-          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="leaveID" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
-          <Property Name="commutation" Type="Int32" />
-          <Property Name="periodFrom" Type="DateTime" Precision="0" />
-          <Property Name="periodTo" Type="DateTime" Precision="0" />
-          <Property Name="applyDay" Type="Double" />
-          <Property Name="place" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="location" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
-          <Property Name="recommendEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="approveEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="isPosted" Type="Int32" />
-          <Property Name="remarks" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="isWithPay" Type="Boolean" />
-          <Property Name="OfficeRecommendedByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="DateAtOfficeRecommended" Type="DateTime" Precision="3" />
-          <Property Name="IsRecommendedAtOffice" Type="Boolean" />
-          <Property Name="HRRecommendedByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="HRDateRecommended" Type="DateTime" Precision="3" />
-          <Property Name="IsRecommendedAtHR" Type="Boolean" />
-          <Property Name="ApprovalEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="DateApprovedDisapproved" Type="DateTime" Precision="3" />
-          <Property Name="IsApproved" Type="Boolean" />
-          <Property Name="DisapprovalRemark" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="IsVLUsedAsSL" Type="Boolean" />
         </EntityType>
         <EntityType Name="tLeaveAppLedger">
           <Key>
@@ -1001,7 +1058,7 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="HRRecommender" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
           <Property Name="HRDateRecommended" Type="DateTime" Precision="3" />
           <Property Name="IsRecommendedAtHR" Type="Boolean" />
-          <Property Name="ApprovalEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovalEIC" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="ApprovingOfficer" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
           <Property Name="DateApprovedDisapproved" Type="DateTime" Precision="3" />
           <Property Name="IsApproved" Type="Boolean" />
@@ -1047,6 +1104,7 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="Undertime" Type="Int32" />
           <Property Name="statusName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="returnTag" Type="Int32" />
+          <Property Name="timesOfficialPS" Type="Int32" />
         </EntityType>
         <EntityType Name="trefHoliday">
           <Key>
@@ -1165,6 +1223,85 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <Property Name="isPosted" Type="Int32" />
           <Property Name="restoredByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="vLeaveForwardedLeaveBalance">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="EIC" />
+            <PropertyRef Name="VLBalanceForwarded" />
+            <PropertyRef Name="SLBalanceForwarded" />
+            <PropertyRef Name="TotalBalanceForwarded" />
+            <PropertyRef Name="AsOf" />
+            <PropertyRef Name="DateForwarded" />
+            <PropertyRef Name="EICForwardedBy" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="fullnameLast" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="idNo" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="VLBalanceForwarded" Type="Double" Nullable="false" />
+          <Property Name="SLBalanceForwarded" Type="Double" Nullable="false" />
+          <Property Name="TotalBalanceForwarded" Type="Double" Nullable="false" />
+          <Property Name="AsOf" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateForwarded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EICForwardedBy" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ForwardedBy" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vEmpInformation">
+          <Key>
+            <PropertyRef Name="EIC" />
+          </Key>
+          <Property Name="EIC" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="designation" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="subpositionName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="dateFrom" Type="DateTime" Precision="0" />
+          <Property Name="officeCode" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="staffingCode" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="fullnameLast" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="groupName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="sg" Type="Int32" />
+          <Property Name="step" Type="Int32" />
+          <Property Name="statusCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="rateMonth" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="rateDay" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="empGroupCode" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="SchemeCode" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="fullnameFirst" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="idNo" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="officeName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tleaveApp">
+          <Key>
+            <PropertyRef Name="recNo" />
+          </Key>
+          <Property Name="recNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="controlNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="datePosted" Type="DateTime" Precision="3" />
+          <Property Name="dateFiled" Type="DateTime" Precision="3" />
+          <Property Name="EIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="leaveID" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="commutation" Type="Int32" />
+          <Property Name="periodFrom" Type="DateTime" Precision="0" />
+          <Property Name="periodTo" Type="DateTime" Precision="0" />
+          <Property Name="applyDay" Type="Double" />
+          <Property Name="recommendEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="approveEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsApproved" Type="Boolean" />
+          <Property Name="isPosted" Type="Int32" />
+          <Property Name="remarks" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="place" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="location" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="isWithPay" Type="Boolean" />
+          <Property Name="OfficeRecommendedByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DateAtOfficeRecommended" Type="DateTime" Precision="3" />
+          <Property Name="IsRecommendedAtOffice" Type="Boolean" />
+          <Property Name="HRRecommendedByEIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HRDateRecommended" Type="DateTime" Precision="3" />
+          <Property Name="IsRecommendedAtHR" Type="Boolean" />
+          <Property Name="ApprovalEIC" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="DateApprovedDisapproved" Type="DateTime" Precision="3" />
+          <Property Name="DisapprovalRemark" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="IsVLUsedAsSL" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1177,40 +1314,6 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
                 <ScalarProperty Name="imageData" ColumnName="imageData" />
                 <ScalarProperty Name="EIC" ColumnName="EIC" />
                 <ScalarProperty Name="RecNo" ColumnName="RecNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tleaveApps">
-            <EntityTypeMapping TypeName="HRISLeaveModel.tleaveApp">
-              <MappingFragment StoreEntitySet="tleaveApp">
-                <ScalarProperty Name="IsVLUsedAsSL" ColumnName="IsVLUsedAsSL" />
-                <ScalarProperty Name="DisapprovalRemark" ColumnName="DisapprovalRemark" />
-                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
-                <ScalarProperty Name="DateApprovedDisapproved" ColumnName="DateApprovedDisapproved" />
-                <ScalarProperty Name="ApprovalEIC" ColumnName="ApprovalEIC" />
-                <ScalarProperty Name="IsRecommendedAtHR" ColumnName="IsRecommendedAtHR" />
-                <ScalarProperty Name="HRDateRecommended" ColumnName="HRDateRecommended" />
-                <ScalarProperty Name="HRRecommendedByEIC" ColumnName="HRRecommendedByEIC" />
-                <ScalarProperty Name="IsRecommendedAtOffice" ColumnName="IsRecommendedAtOffice" />
-                <ScalarProperty Name="DateAtOfficeRecommended" ColumnName="DateAtOfficeRecommended" />
-                <ScalarProperty Name="OfficeRecommendedByEIC" ColumnName="OfficeRecommendedByEIC" />
-                <ScalarProperty Name="isWithPay" ColumnName="isWithPay" />
-                <ScalarProperty Name="remarks" ColumnName="remarks" />
-                <ScalarProperty Name="isPosted" ColumnName="isPosted" />
-                <ScalarProperty Name="approveEIC" ColumnName="approveEIC" />
-                <ScalarProperty Name="recommendEIC" ColumnName="recommendEIC" />
-                <ScalarProperty Name="location" ColumnName="location" />
-                <ScalarProperty Name="place" ColumnName="place" />
-                <ScalarProperty Name="applyDay" ColumnName="applyDay" />
-                <ScalarProperty Name="periodTo" ColumnName="periodTo" />
-                <ScalarProperty Name="periodFrom" ColumnName="periodFrom" />
-                <ScalarProperty Name="commutation" ColumnName="commutation" />
-                <ScalarProperty Name="leaveID" ColumnName="leaveID" />
-                <ScalarProperty Name="EIC" ColumnName="EIC" />
-                <ScalarProperty Name="dateFiled" ColumnName="dateFiled" />
-                <ScalarProperty Name="datePosted" ColumnName="datePosted" />
-                <ScalarProperty Name="controlNo" ColumnName="controlNo" />
-                <ScalarProperty Name="recNo" ColumnName="recNo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1516,6 +1619,7 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
           <EntitySetMapping Name="tAttDTRs">
             <EntityTypeMapping TypeName="HRISLeaveModel.tAttDTR">
               <MappingFragment StoreEntitySet="tAttDTR">
+                <ScalarProperty Name="timesOfficialPS" ColumnName="timesOfficialPS" />
                 <ScalarProperty Name="returnTag" ColumnName="returnTag" />
                 <ScalarProperty Name="statusName" ColumnName="statusName" />
                 <ScalarProperty Name="Undertime" ColumnName="Undertime" />
@@ -1660,6 +1764,81 @@ FROM [dbo].[vrefLeaveTypeAndAllotment] AS [vrefLeaveTypeAndAllotment]</DefiningQ
                 <ScalarProperty Name="isPosted" ColumnName="isPosted" />
                 <ScalarProperty Name="periodTo" ColumnName="periodTo" />
                 <ScalarProperty Name="periodFrom" ColumnName="periodFrom" />
+                <ScalarProperty Name="leaveID" ColumnName="leaveID" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="dateFiled" ColumnName="dateFiled" />
+                <ScalarProperty Name="datePosted" ColumnName="datePosted" />
+                <ScalarProperty Name="controlNo" ColumnName="controlNo" />
+                <ScalarProperty Name="recNo" ColumnName="recNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vLeaveForwardedLeaveBalances">
+            <EntityTypeMapping TypeName="HRISLeaveModel.vLeaveForwardedLeaveBalance">
+              <MappingFragment StoreEntitySet="vLeaveForwardedLeaveBalances">
+                <ScalarProperty Name="ForwardedBy" ColumnName="ForwardedBy" />
+                <ScalarProperty Name="EICForwardedBy" ColumnName="EICForwardedBy" />
+                <ScalarProperty Name="DateForwarded" ColumnName="DateForwarded" />
+                <ScalarProperty Name="AsOf" ColumnName="AsOf" />
+                <ScalarProperty Name="TotalBalanceForwarded" ColumnName="TotalBalanceForwarded" />
+                <ScalarProperty Name="SLBalanceForwarded" ColumnName="SLBalanceForwarded" />
+                <ScalarProperty Name="VLBalanceForwarded" ColumnName="VLBalanceForwarded" />
+                <ScalarProperty Name="idNo" ColumnName="idNo" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+                <ScalarProperty Name="fullnameLast" ColumnName="fullnameLast" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vEmpInformations">
+            <EntityTypeMapping TypeName="HRISLeaveModel.vEmpInformation">
+              <MappingFragment StoreEntitySet="vEmpInformation">
+                <ScalarProperty Name="officeName" ColumnName="officeName" />
+                <ScalarProperty Name="idNo" ColumnName="idNo" />
+                <ScalarProperty Name="fullnameFirst" ColumnName="fullnameFirst" />
+                <ScalarProperty Name="SchemeCode" ColumnName="SchemeCode" />
+                <ScalarProperty Name="empGroupCode" ColumnName="empGroupCode" />
+                <ScalarProperty Name="rateDay" ColumnName="rateDay" />
+                <ScalarProperty Name="rateMonth" ColumnName="rateMonth" />
+                <ScalarProperty Name="statusCode" ColumnName="statusCode" />
+                <ScalarProperty Name="step" ColumnName="step" />
+                <ScalarProperty Name="sg" ColumnName="sg" />
+                <ScalarProperty Name="groupName" ColumnName="groupName" />
+                <ScalarProperty Name="fullnameLast" ColumnName="fullnameLast" />
+                <ScalarProperty Name="staffingCode" ColumnName="staffingCode" />
+                <ScalarProperty Name="officeCode" ColumnName="officeCode" />
+                <ScalarProperty Name="dateFrom" ColumnName="dateFrom" />
+                <ScalarProperty Name="subpositionName" ColumnName="subpositionName" />
+                <ScalarProperty Name="designation" ColumnName="designation" />
+                <ScalarProperty Name="EIC" ColumnName="EIC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tleaveApps">
+            <EntityTypeMapping TypeName="HRISLeaveModel.tleaveApp">
+              <MappingFragment StoreEntitySet="tleaveApp">
+                <ScalarProperty Name="IsVLUsedAsSL" ColumnName="IsVLUsedAsSL" />
+                <ScalarProperty Name="DisapprovalRemark" ColumnName="DisapprovalRemark" />
+                <ScalarProperty Name="DateApprovedDisapproved" ColumnName="DateApprovedDisapproved" />
+                <ScalarProperty Name="ApprovalEIC" ColumnName="ApprovalEIC" />
+                <ScalarProperty Name="IsRecommendedAtHR" ColumnName="IsRecommendedAtHR" />
+                <ScalarProperty Name="HRDateRecommended" ColumnName="HRDateRecommended" />
+                <ScalarProperty Name="HRRecommendedByEIC" ColumnName="HRRecommendedByEIC" />
+                <ScalarProperty Name="IsRecommendedAtOffice" ColumnName="IsRecommendedAtOffice" />
+                <ScalarProperty Name="DateAtOfficeRecommended" ColumnName="DateAtOfficeRecommended" />
+                <ScalarProperty Name="OfficeRecommendedByEIC" ColumnName="OfficeRecommendedByEIC" />
+                <ScalarProperty Name="isWithPay" ColumnName="isWithPay" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="place" ColumnName="place" />
+                <ScalarProperty Name="remarks" ColumnName="remarks" />
+                <ScalarProperty Name="isPosted" ColumnName="isPosted" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="approveEIC" ColumnName="approveEIC" />
+                <ScalarProperty Name="recommendEIC" ColumnName="recommendEIC" />
+                <ScalarProperty Name="applyDay" ColumnName="applyDay" />
+                <ScalarProperty Name="periodTo" ColumnName="periodTo" />
+                <ScalarProperty Name="periodFrom" ColumnName="periodFrom" />
+                <ScalarProperty Name="commutation" ColumnName="commutation" />
                 <ScalarProperty Name="leaveID" ColumnName="leaveID" />
                 <ScalarProperty Name="EIC" ColumnName="EIC" />
                 <ScalarProperty Name="dateFiled" ColumnName="dateFiled" />

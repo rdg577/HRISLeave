@@ -67,7 +67,7 @@ Vue.component('empleyado', {
             value: value,
             filter: "startswith",
             minLength: 3,
-            template: '<img class="avatar" src="../LeaveTool/UserImage/#= EIC #" width="60px" height="60px"><span data-recordid="#= EIC #"> #= fullnameLast #</span>',
+            template: '<img class="avatar" src="../LeaveTool/UserImage/#= EIC #" width="40px" height="40px"><span data-recordid="#= EIC #"> #= fullnameLast #</span>',
             placeholder: "Employee lastname",
             select: function (e) {
                 // this is how you grab the id from the item selected

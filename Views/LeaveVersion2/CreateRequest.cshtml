@@ -197,7 +197,7 @@
 					<div class="modal-footer">
 						<button id="btnAddToLeaveRequest" type="button" class="btn btn-primary" v-if="!editMode" v-on:click="addToLeaveRequest" title="Add this item to list">ADD TO LIST</button>
 						<button id="btnEdit" type="button" class="btn btn-primary" v-if="editMode" v-on:click="updateLeaveRequest" title="Update this selected item">UPDATE</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="closeForm" title="Close this form">CLOSE</button>
+						<button type="button" class="btn btn-default" @*data-dismiss="modal"*@ v-on:click="closeForm" title="Close this form">CLOSE</button>
 					</div>
 				</div>
 

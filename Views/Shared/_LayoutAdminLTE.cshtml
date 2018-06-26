@@ -9,14 +9,26 @@
 
 	@Styles.Render("~/Content/css")
 
-	@Scripts.Render("~/bundles/jquery")
+	<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+	<script src="~/Scripts/bootstrap.min.js"></script>
+	<script src="~/Scripts/modernizr-2.6.2.js"></script>
+	<script src="~/Scripts/respond.min.js"></script>
+	<script src="~/Scripts/sweetalert.min.js"></script>
+	<script src="~/Scripts/tether.min.js"></script>
+	<script src="~/Scripts/toastr.min.js"></script>
+	@*<script src="~/Scripts/angular.min.js"></script>*@
+	@*<script src="~/Scripts/angular-route.min.js"></script>*@
+	<script src="~/kendo/js/kendo.all.min.js"></script>
+	<script src="~/admin-lte/js/adminlte.min.js"></script>
+
+	@*@Scripts.Render("~/bundles/jquery")
 	@Scripts.Render("~/bundles/bootstrap")
 	@Scripts.Render("~/bundles/modernizr")
 	@Scripts.Render("~/bundles/vendor-js")
 	@Scripts.Render("~/bundles/angular")
-@*	@Scripts.Render("~/bundles/vue")*@
+	@Scripts.Render("~/bundles/vue")
 	@Scripts.Render("~/bundles/kendo")
-	@Scripts.Render("~/bundles/adminlte")
+	@Scripts.Render("~/bundles/adminlte")*@
 
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -248,13 +260,13 @@
 			<!-- User Account: style can be found in dropdown.less -->
 			<li class="dropdown user user-menu">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-					<img src="@Url.Action("UserImage", "LeaveTool")" class="user-image" alt="User Image">
+					<img src="@Url.Action("UserImageUrl", "LeaveTool")" class="user-image" alt="User Image">
 					<span class="hidden-xs">Alexander Pierce</span>
 				</a>
 				<ul class="dropdown-menu">
 					<!-- User image -->
 					<li class="user-header">
-						<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+						<img src="@Url.Action("UserImageUrl", "LeaveTool")" class="img-circle" alt="User Image">
 
 						<p>
 							Alexander Pierce - Web Developer
@@ -302,7 +314,7 @@
 		<!-- Sidebar user panel -->
 		<div class="user-panel">
 			<div class="pull-left image">
-				<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+				<img src="@Url.Action("UserImageUrl", "LeaveTool")" class="img-circle" alt="User Image">
 			</div>
 			<div class="pull-left info">
 				<p>Alexander Pierce</p>
@@ -336,7 +348,7 @@
 				</ul>
 			</li>*@
 
-			<li class="treeview">
+			<li class="active treeview">
 				<a href="#">
 					<i class="fa fa-share"></i> <span>Leave</span>
 					<span class="pull-right-container">
@@ -366,14 +378,14 @@
 							<li><a href="#"><i class="fa fa-circle-o"></i> View Restored Leave</a></li>
 						</ul>*@
 					</li>
-					<li class="treeview">
+					<li @*class="active treeview"*@>
 						<a href="@Url.Action("Settings","LeaveVersion2")">
 							<i class="fa fa-circle-o"></i> Settings
-							<span class="pull-right-container">
+							@*<span class="pull-right-container">
 								<i class="fa fa-angle-left pull-right"></i>
-							</span>
+							</span>*@
 						</a>
-						<ul class="treeview-menu">
+						@*<ul class="treeview-menu">
 							<li><a href="@Url.Action("SettingsLeaveAllotments","LeaveVersion2")"><i class="fa fa-circle-o"></i> Leave Allotment</a></li>
 							<li><a href="@Url.Action("SettingsLeaveTypes","LeaveVersion2")"><i class="fa fa-circle-o"></i> Leave Types</a></li>
 							<li><a href="@Url.Action("SettingsLeaveAdministrators","LeaveVersion2")"><i class="fa fa-circle-o"></i> Administrators</a></li>
@@ -381,7 +393,7 @@
 							<li><a href="@Url.Action("SettingsLeaveConversionMatrixWH","LeaveVersion2")"><i class="fa fa-circle-o"></i> Conversion WH</a></li>
 							<li><a href="@Url.Action("SettingsLeaveLedgerCodes","LeaveVersion2")"><i class="fa fa-circle-o"></i> Ledger Codes</a></li>
 							<li><a href="@Url.Action("SettingsLeaveCreditsEarned","LeaveVersion2")"><i class="fa fa-circle-o"></i> Credits Table</a></li>
-						</ul>
+						</ul>*@
 					</li>
 				</ul>
 			</li>

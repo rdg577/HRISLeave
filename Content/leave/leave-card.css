@@ -29,6 +29,11 @@ div.panel {
         overflow-y: hidden;
     }
 
+    #forwarded-leave-credits {
+        overflow: auto;
+        overflow-y: hidden;
+    }
+
     div.panel {
         -webkit-font-size-adjust: .30;
         -ms-font-size-adjust: .30;

@@ -55,7 +55,7 @@ const v = new Vue({
                 type: 'POST',
                 data: { recNo : recNo },
                 success: function ( result ) {
-                    if(result===0)
+                    if(result==0)
                         window.open("../ReportWebForms/LeaveCreditReport.aspx");
                     else
                         swal ( {

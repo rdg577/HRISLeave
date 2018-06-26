@@ -2,12 +2,18 @@
 @{
     ViewBag.Title = "Settings Leave Allotments";
 }
+<link href="~/Scripts/app/LeaveVersion2/utilities/sweetalert2.min.css" rel="stylesheet" />
+<link href="~/Scripts/app/LeaveVersion2/utilities/toastr.min.css" rel="stylesheet" />
 <link href="~/Content/leave/utility2.min.css" rel="stylesheet" />
 
-<script src="~/Scripts/app/LeaveVersion2/utilities/app/app.js"></script>
-<script src="~/Scripts/app/LeaveVersion2/utilities/controller/allotmentCtrl.js"></script>
 
-<h2>Settings Leave Allotments</h2>
+<script src="~/Scripts/app/LeaveVersion2/utilities/angular.min.js"></script>
+<script src="~/Scripts/app/LeaveVersion2/utilities/app/app.min.js"></script>
+<script src="~/Scripts/app/LeaveVersion2/utilities/sweetalert2.min.js"></script>
+<script src="~/Scripts/app/LeaveVersion2/utilities/toastr.min.js"></script>
+<script src="~/Scripts/app/LeaveVersion2/utilities/controller/allotmentCtrl.min.js"></script>
+
+<h4>Settings Leave Allotments</h4>
 
 <div ng-app="HRISLeaveForm" ng-controller="allotmentCtrl">
 	<div class="box">
@@ -97,7 +103,7 @@
 
 	</div>
 
-	<div class="modal fade bs-example-modal-md in" tabindex="-1" role="dialog" aria-hidden="true" style="display:none; padding-right: 16px;" data-backdrop="static" data-keyboard="false">
+	<div id="myModalAllotment" class="modal fade bs-example-modal-md in" tabindex="-1" role="dialog" aria-hidden="true" style="display:none; padding-right: 16px;" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog modal-md">
 			<div class="modal-content">
 				<div class="modal-header" style="background-color:#357ca5;color:white">

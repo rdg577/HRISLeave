@@ -247,6 +247,7 @@ const v = new Vue({
         closeForm: function () {
             this.resetFields();
             this.editMode = false;
+            $ ( "#myModal" ).modal ( "toggle" );
         },
         addToLeaveRequest: function () {
             var yelemError = true;
@@ -465,7 +466,7 @@ const v = new Vue({
                 // reset all fields
                 this.resetFields();
 
-                //$("#myModal").modal("toggle");
+                $("#myModal").modal("toggle");
 
                 return yelemError;
             }
@@ -501,7 +502,7 @@ const v = new Vue({
             // update leave balance
             this.updateLeaveBalance(item.leaveTypeId, this.itemToEdit.daysAbsent * -1);
 
-            //$("#myModal").modal("toggle");
+            $("#myModal").modal("toggle");
         },
         updateLeaveRequest: function () {
             const noError = true;

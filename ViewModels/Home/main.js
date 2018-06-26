@@ -16,6 +16,7 @@
         dataTextField: "fullnameLast",
         dataValueField: "EIC",
         filter: "startswith",
+        minLength: 3,
         template: '<img class="avatar" src="LeaveTool/UserImage/#= EIC #" width="50px" height="50px"><span data-recordid="#= EIC #"> #= fullnameLast #</span>',
         placeholder: "Select employee...",
         select: function (e) {

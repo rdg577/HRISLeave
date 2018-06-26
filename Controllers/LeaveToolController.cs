@@ -180,6 +180,20 @@ namespace LeaveModule.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult UserImageUrl()
+        {
+            string id = null;
+
+            if (Session["EIC"] != null)
+            {
+                id = Session["EIC"].ToString();
+            }
+            else return null;
+
+            var cover = GetImageFromDataBase(id);
+            return cover != null ? File(cover, "image/jpeg") : null;
+        }
+
         public ActionResult UserImage(string id)
         {
             var cover = GetImageFromDataBase(id);
