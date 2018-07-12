@@ -17,7 +17,7 @@
 				<thead>
 					<tr>
 						<td rowspan="2" width="200px" style="vertical-align: middle;">Period</td>
-						<td rowspan="2" width="390px" style="vertical-align: middle;">DTR Period</td>
+						@*<td rowspan="2" width="390px" style="vertical-align: middle;">DTR Period</td>*@
 						<td rowspan="2" width="200px" style="vertical-align: middle;">Particulars</td>
 						<td colspan="4" style="vertical-align: middle;">Vacation Leave</td>
 						<td colspan="4" style="vertical-align: middle;">Sick Leave</td>
@@ -36,8 +36,8 @@
 				</thead>
 				<tbody>
 					<tr v-for="(itemObjKey, data) in leavecard">
-						<td>{{data.Period | dateFormat}}</td>
-						<td>{{data.DTRPeriod}}</td>
+						<td>{{data.DTRPeriod}} <div v-if="data.DTRPeriod==null">{{data.Period | dateFormat}}</div></td>
+						@*<td>{{data.DTRPeriod}}</td>*@
 						<td>{{data.Particular}} {{data.SubParticular}}</td>
 						<td class="text-right">{{data.VLEarned | redenNumberFormat}}</td>
 						<td class="text-right">{{data.VL_ABS_UND_WP | redenNumberFormat}}</td>

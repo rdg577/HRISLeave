@@ -32,5 +32,7 @@ namespace LeaveModule.Models
         public string fullnameFirst { get; set; }
         public string idNo { get; set; }
         public string officeName { get; set; }
+        public long row { get; set; }
+        public string statusName { get; set; }
     }
 }

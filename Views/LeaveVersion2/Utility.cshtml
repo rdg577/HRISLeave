@@ -43,7 +43,7 @@
 
 	<div id="promptArea"></div>
 	<div class="row clearfix">
-		<div class="col-lg-4 col-md-6 col-sm-12">
+		<div class="col-lg-4 col-md-12 col-sm-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<a href="#leave-balances-body" data-toggle="collapse">Forward Leave Balances</a>
@@ -82,10 +82,10 @@
 			</div>
 		</div>
 
-		<div class="col-lg-4 col-md-6 col-sm-12">
+		<div class="col-lg-4 col-md-12 col-sm-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<a href="#advance-leave-crediting" data-toggle="collapse">Advance Leave Crediting - UTANG</a>
+					<a href="#advance-leave-crediting" data-toggle="collapse">Partial Leave Crediting</a>
 				</div>
 				<div id="advance-leave-crediting" class="panel-collapse collapse">
 					<div class="panel-body">
@@ -140,7 +140,7 @@
 			</div>
 		</div>
 
-		<div class="col-lg-4 col-md-6 col-sm-12">
+		<div class="col-lg-4 col-md-12 col-sm-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<a href="#posting-leave-credits" data-toggle="collapse">Leave Ledger Updating</a>
@@ -158,17 +158,38 @@
 	</div>
 
 	<div class="row clearfix">
-		<div class="col-lg-4 col-md-6 col-sm-12" style="padding-bottom: 20px;">
+		<div class="col-lg-4 col-md-12 col-sm-12" style="padding-bottom: 20px;">
 			<button type="button" class="menu btn btn-default btn-block" id="btnEdit">View Approved Leave</button>
 		</div>
 
-		<div class="col-lg-4 col-md-6 col-sm-12" style="padding-bottom: 20px;">
+		<div class="col-lg-4 col-md-12 col-sm-12" style="padding-bottom: 20px;">
 			<button type="button" class="menu btn btn-default btn-block" id="btnRestoration">Leave Restoration</button>
 		</div>
 
-		<div class="col-lg-4 col-md-6 col-sm-12" style="padding-bottom: 20px;">
+		<div class="col-lg-4 col-md-12 col-sm-12" style="padding-bottom: 20px;">
 			<button type="button" class="menu btn btn-default btn-block" id="btnViewLeaveBalanceForwarded">View Forwarded Leave Credits</button>
 		</div>
+	</div>
+	
+	<div class="row">
+
+		<div class="col-lg-4 col-md-12 col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<a href="#forfeit-unused-fl" data-toggle="collapse">Forfeit All Unused Forced Leaves</a>
+				</div>
+				<div id="forfeit-unused-fl" class="panel-collapse collapse">
+					<div class="panel-body">
+					
+						<input id="yearForfeit" />
+						<button type="button" class="btn btn-primary" id="btnForfeit">Submit</button>
+						<a class="btn btn-default" href="#forfeit-unused-fl" data-toggle="collapse">Close</a>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 
 </div>

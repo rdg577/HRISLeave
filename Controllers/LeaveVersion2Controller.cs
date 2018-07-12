@@ -11,6 +11,105 @@ namespace LeaveModule.Controllers
     {
         private HRISEntities db = new HRISEntities();
 
+        public ActionResult ForfeitUnusedForcedLeave(int year)
+        {
+            if (Session["EIC"] == null)
+            {
+                //Session["DeniedAccessMsg"] = "Oops! Something goes wrong...";
+                //return RedirectToAction("UnauthorizedAccess", "LeaveVersion2");
+                return Json(new { msg = "Oops! Something goes wrong..." }, JsonRequestBehavior.AllowGet);
+            }
+
+            // check the validity of selected year
+            var lastYear = DateTime.UtcNow.Year - 1;
+            if (year != lastYear)
+            {
+                return Json(new {msg = "Invalid year...cannot proceed with forfeiture."}, JsonRequestBehavior.AllowGet);
+            }
+
+            // check for redundant attempt of forfeiture
+            var log = db.tLeaveForfeitureLogs.SingleOrDefault(r => r.Year == year);
+            if (log != null) return Json(new { msg = "Forfeiture already been done on that year." }, JsonRequestBehavior.AllowGet);
+
+            try
+            {
+                
+
+                var EICs = db.tLeaveBalanceForwardeds.Select(r => r.EIC).ToList();
+                
+                // 14jan2017 2200hrs
+                var dateBegin = new DateTime(year, 1, 1);
+                var dateEnd = new DateTime(year, 12, 31);
+
+                foreach (var EIC in EICs)
+                {
+                    // uses the store procedure that computes leave balances for the on-the-fly checking
+                    var data = db.spEmployeeLeaveBalance(EIC, dateBegin, dateEnd,
+                        "40303", "40304", "40306", "40307", "40308", "40309",
+                        "40310", "40311", "40312", "40313", "40314", "40315").ToList();
+
+                    var forfeitedDays = Convert.ToInt16(data[0].ForcedLeave);
+                    if (forfeitedDays > 0)
+                    {
+                        var petsaKaron = DateTime.Now;
+
+                        // set balances to 0 in every employee
+                        double VLBalance = 0.0, SLBalance = 0.0;
+
+                        // get the standing credit balance
+                        var lastBalanceRecord = db.tLeaveAppLedgerMasters.OrderByDescending(r => r.Id).First(r=>r.EIC == EIC);
+                        VLBalance = lastBalanceRecord.VLCreditBalance;
+                        SLBalance = lastBalanceRecord.SLCreditBalance;
+
+                        // make entry to ledger details
+                        var ledgerDetail = new tLeaveAppLedger
+                        {
+                            EIC = EIC,
+                            LedgerCode = "108",
+                            Value = forfeitedDays,
+                            Referrence = null,
+                            Timestamp = petsaKaron
+                        };
+                        db.tLeaveAppLedgers.Add(ledgerDetail);
+                        db.SaveChanges();
+
+                        var ledgerDetailId = ledgerDetail.Id;
+
+                        // deduct forfeited days
+                        VLBalance -= forfeitedDays;
+
+                        db.tLeaveAppLedgerMasters.Add(new tLeaveAppLedgerMaster
+                        {
+                            EIC = EIC,
+                            VLCreditBalance = Math.Round(VLBalance, 4),
+                            SLCreditBalance = Math.Round(SLBalance, 4),
+                            Reference = ledgerDetailId.ToString(),
+                            Remark = "FORFEITED UNUSED FL",
+                            Timestamp = petsaKaron
+                        });
+                        db.SaveChanges();
+                    }
+                }
+
+                // log the year where forfeiture has been done
+                var loggedEIC = Session["EIC"].ToString();
+                db.tLeaveForfeitureLogs.Add(new tLeaveForfeitureLog
+                {
+                    Year = year,
+                    ByEIC = loggedEIC,
+                    DateTimeUsed = DateTime.UtcNow
+                });
+                db.SaveChanges();
+
+                return Json(new { msg = "Done." }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception e)
+            {
+                return Json(new { msg = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public JsonResult ForwardedLeaveBalances()
         {
             var list = db.vLeaveForwardedLeaveBalances.OrderBy(r => r.fullnameLast);
@@ -65,11 +164,11 @@ namespace LeaveModule.Controllers
                 var EIC = Session["EIC"].ToString();
 
                 // check if one of the HR BWD Officer
-                var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("ModuleAdmin") && r.IsActive).SingleOrDefault(r => r.EIC == EIC);
+                var HROfficer = db.trefLeaveAdministrators.Where(r => r.Role.Equals("SystemAdmin") && r.IsActive).SingleOrDefault(r => r.EIC == EIC);
 
                 if (HROfficer != null) return View();
 
-                Session["DeniedAccessMsg"] = "Oops! You have limited access on this page, please contact HR.";
+                Session["DeniedAccessMsg"] = "Oops! You have limited access on this page, please contact System Admin.";
             }
             catch (Exception e)
             {
@@ -248,8 +347,8 @@ namespace LeaveModule.Controllers
 	            if (emp == null) return Content("Employee not found...");
 
 	            var monthlySalary = Convert.ToDouble(emp.rateMonth ?? 0);
-	            const double workingDays = 22.0;
-	            var moneyValue = (monthlySalary / workingDays) * leaveCredit;
+	            const double workingDaysPerMonth = 20.916667; // or cf=0.478087
+	            var moneyValue = (monthlySalary / workingDaysPerMonth) * leaveCredit;
 	            moneyValue = Math.Round(moneyValue, 2);
 
 	            return Json(new { moneyValue = moneyValue }, JsonRequestBehavior.AllowGet);
@@ -1451,7 +1550,9 @@ namespace LeaveModule.Controllers
                             }
                             else if (DTR.Period == 2)
                             {   // 2ND HALF MONTH
-                                var dateEnd = new DateTime(year, month, 30);
+                                //var dateEnd = new DateTime(year, month, 30);
+                                var lastDayOfMonth = dateStarted.AddMonths(1).AddDays(-1).Day;
+                                var dateEnd = new DateTime(year, month, lastDayOfMonth);
 
                                 totalDays = (int)(dateEnd - dateStarted).TotalDays;
                             }
@@ -1793,8 +1894,9 @@ namespace LeaveModule.Controllers
 
             var EIC = Session["EIC"].ToString();
             // uses the store procedure that computes leave balances for the on-the-fly checking
-            var data = db.spEmployeeLeaveBalance(EIC, dateBegin, dateEnd, "40303", "40304", "40306", "40307", "40308",
-                "40309", "40310", "40311", "40312", "40313", "40314", "40315");
+            var data = db.spEmployeeLeaveBalance(EIC, dateBegin, dateEnd, "40303", "40304", "40306", 
+                "40307", "40308", "40309", "40310", "40311", "40312", "40313", "40314", "40315");
+
             return Json(data.ToList(), JsonRequestBehavior.AllowGet);
         }
 

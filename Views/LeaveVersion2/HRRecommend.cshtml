@@ -140,7 +140,7 @@
 										<button class="btn btn-danger btn-sm" v-on:click="denyHR(leave)" v-if="leave.IsRecommendedAtHR==true || leave.IsRecommendedAtHR==null">
 											<span class="glyphicon glyphicon-thumbs-down"></span> DENY
 										</button>
-										<button class="btn btn-success btn-sm" data-toggle="modal" data-target="#leaveRecommendationModal" v-on:click="recommendHR(leave)" v-if="leave.IsRecommendedAtHR==false || leave.IsRecommendedAtHR==null">
+										<button class="btn btn-success btn-sm" data-toggle="modal" @*data-target="#leaveRecommendationModal"*@ v-on:click="recommendHR(leave)" v-if="leave.IsRecommendedAtHR==false || leave.IsRecommendedAtHR==null">
 											<span class="glyphicon glyphicon-thumbs-up"></span> POST IT
 										</button>
 									</p>

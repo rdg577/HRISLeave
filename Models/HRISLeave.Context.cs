@@ -57,6 +57,17 @@ namespace LeaveModule.Models
         public DbSet<vLeaveForwardedLeaveBalance> vLeaveForwardedLeaveBalances { get; set; }
         public DbSet<vEmpInformation> vEmpInformations { get; set; }
         public DbSet<tleaveApp> tleaveApps { get; set; }
+        public DbSet<tLeaveForfeitureLog> tLeaveForfeitureLogs { get; set; }
+        public DbSet<tAttDTR2> tAttDTR2 { get; set; }
+    
+        public virtual ObjectResult<spLeaveCardGenerate_Result> spLeaveCardGenerate(string eIC)
+        {
+            var eICParameter = eIC != null ?
+                new ObjectParameter("EIC", eIC) :
+                new ObjectParameter("EIC", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spLeaveCardGenerate_Result>("spLeaveCardGenerate", eICParameter);
+        }
     
         public virtual ObjectResult<spEmployeeLeaveBalance_Result> spEmployeeLeaveBalance(string eIC, Nullable<System.DateTime> dateBegin, Nullable<System.DateTime> dateEnd, string sbl, string stl, string ml, string pl, string spl, string slp, string rl, string vawc, string sel, string mone, string fl, string magnacarta)
         {
@@ -123,13 +134,14 @@ namespace LeaveModule.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spEmployeeLeaveBalance_Result>("spEmployeeLeaveBalance", eICParameter, dateBeginParameter, dateEndParameter, sblParameter, stlParameter, mlParameter, plParameter, splParameter, slpParameter, rlParameter, vawcParameter, selParameter, moneParameter, flParameter, magnacartaParameter);
         }
     
-        public virtual ObjectResult<spLeaveCardGenerate_Result> spLeaveCardGenerate(string eIC)
+        [EdmFunction("HRISEntities", "fnMergedDTR")]
+        public virtual IQueryable<fnMergedDTR_Result> fnMergedDTR(string eIC)
         {
             var eICParameter = eIC != null ?
                 new ObjectParameter("EIC", eIC) :
                 new ObjectParameter("EIC", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spLeaveCardGenerate_Result>("spLeaveCardGenerate", eICParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<fnMergedDTR_Result>("[HRISEntities].[fnMergedDTR](@EIC)", eICParameter);
         }
     }
 }

@@ -11,7 +11,7 @@ toastr.options = {
     "debug": false,
     "newestOnTop": false,
     "progressBar": false,
-    "positionClass": "toast-top-full-width",
+    "positionClass": "toast-top-right",
     "preventDuplicates": true,
     "showDuration": "300",
     "hideDuration": "1000",
@@ -127,6 +127,7 @@ const v = new Vue({
                 .then(response => {
                     // JSON responses are automatically parsed.
                     this.$data.leaveBalances = response.data.length > 0 ? response.data[0] : [];
+                    console.log ( response.data );
                 })
                 .catch(e => {
                     console.log(e);

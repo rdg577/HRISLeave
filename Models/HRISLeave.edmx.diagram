@@ -4,36 +4,38 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8442d14611914b828564cb43af8816f7" Name="Diagram1" ZoomLevel="89">
+      <Diagram DiagramId="8442d14611914b828564cb43af8816f7" Name="Diagram1" ZoomLevel="22">
         <EntityTypeShape EntityType="HRISLeaveModel.tapp212Image" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.tLeaveAppLedger" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="HRISLeaveModel.tLeaveAppLedgerMaster" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="HRISLeaveModel.tLeaveAppLedgerMaster" Width="1.5" PointX="4.625" PointY="3.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.tLeaveBalanceForwarded" Width="1.5" PointX="6.75" PointY="0.75" />
-        <EntityTypeShape EntityType="HRISLeaveModel.tLeaveInutang" Width="1.5" PointX="6.75" PointY="4.75" />
+        <EntityTypeShape EntityType="HRISLeaveModel.tLeaveInutang" Width="1.5" PointX="6.75" PointY="3.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.tLogDashboard" Width="1.5" PointX="8.75" PointY="0.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.tmodUserModuleActivity" Width="1.5" PointX="0.75" PointY="8.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveAdministrator" Width="1.5" PointX="2.75" PointY="8.75" />
-        <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveAllotment" Width="1.5" PointX="8.75" PointY="4.75" />
+        <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveAllotment" Width="1.5" PointX="8.75" PointY="3.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveCreditForZeroVLCredit" Width="1.5" PointX="4.75" PointY="8.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveCreditsEarned" Width="1.5" PointX="6.75" PointY="8.75" />
-        <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveEarn" Width="1.5" PointX="8.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveEarn" Width="1.5" PointX="8.75" PointY="8.875" />
         <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveLedgerCode" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveMinute" Width="1.5" PointX="10.75" PointY="3.75" />
-        <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveType" Width="1.5" PointX="10.75" PointY="6.75" />
-        <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveWorkHoursConversionMatrix" Width="1.5" PointX="8.75" PointY="10.75" />
+        <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveType" Width="1.5" PointX="10.75" PointY="9" />
+        <EntityTypeShape EntityType="HRISLeaveModel.trefLeaveWorkHoursConversionMatrix" Width="1.5" PointX="16.5" PointY="10.875" />
         <EntityTypeShape EntityType="HRISLeaveModel.vEmployeeCompleteField" Width="1.5" PointX="3.375" PointY="11.75" />
-        <EntityTypeShape EntityType="HRISLeaveModel.vLeaveApp2" Width="1.5" PointX="5.375" PointY="11.75" />
-        <EntityTypeShape EntityType="HRISLeaveModel.tappOffice" Width="1.5" PointX="11.75" PointY="9.75" />
+        <EntityTypeShape EntityType="HRISLeaveModel.vLeaveApp2" Width="1.5" PointX="2.625" PointY="0.75" />
+        <EntityTypeShape EntityType="HRISLeaveModel.tappOffice" Width="1.5" PointX="16.375" PointY="7.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.tAttDTR" Width="1.5" PointX="0.75" PointY="12.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.trefHoliday" Width="1.5" PointX="13.75" PointY="0.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.vApprvOfficer" Width="1.5" PointX="13.75" PointY="3.75" />
         <EntityTypeShape EntityType="HRISLeaveModel.vDeptOfficer" Width="1.5" PointX="13.75" PointY="6.75" />
-        <EntityTypeShape EntityType="HRISLeaveModel.vLeaveMasterLedger" Width="1.5" PointX="7.75" PointY="13.75" />
+        <EntityTypeShape EntityType="HRISLeaveModel.vLeaveMasterLedger" Width="1.5" PointX="5.375" PointY="12" />
         <EntityTypeShape EntityType="HRISLeaveModel.vrefLeaveTypeAndAllotment" Width="1.5" PointX="13.75" PointY="9.75" />
-        <EntityTypeShape EntityType="HRISLeaveModel.tleaveRestore" Width="1.5" PointX="10.375" PointY="13.75" />
-        <EntityTypeShape EntityType="HRISLeaveModel.vLeaveForwardedLeaveBalance" Width="1.5" PointX="12.375" PointY="13.75" />
-        <EntityTypeShape EntityType="HRISLeaveModel.vEmpInformation" Width="1.5" PointX="14.375" PointY="13.75" />
+        <EntityTypeShape EntityType="HRISLeaveModel.tleaveRestore" Width="1.5" PointX="7.5" PointY="12.125" />
+        <EntityTypeShape EntityType="HRISLeaveModel.vLeaveForwardedLeaveBalance" Width="1.5" PointX="9.375" PointY="12" />
+        <EntityTypeShape EntityType="HRISLeaveModel.vEmpInformation" Width="1.5" PointX="11.25" PointY="12.125" />
         <EntityTypeShape EntityType="HRISLeaveModel.tleaveApp" Width="1.5" PointX="16.375" PointY="0.75" />
+        <EntityTypeShape EntityType="HRISLeaveModel.tLeaveForfeitureLog" Width="1.5" PointX="13.375" PointY="13.75" />
+        <EntityTypeShape EntityType="HRISLeaveModel.tAttDTR2" Width="1.5" PointX="15.375" PointY="13.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

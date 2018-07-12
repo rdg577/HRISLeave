@@ -343,6 +343,8 @@ const v = new Vue({
             else if (leaveTypeId == "40301" && this.isLateFiled && this.remark == "") {
                 yelemError = false;
 
+                $("#remarkSection").show();
+
                 swal ( {
                     title: 'Late Filing of Vacation Leave! Please explain why at remark field.',
                     type: 'warning'
@@ -353,6 +355,8 @@ const v = new Vue({
             else if (leaveTypeId == "40302" && this.isLateFiled==true && this.remark == "") {
                 yelemError = false;
 
+                $("#remarkSection").show();
+
                 swal ( {
                     title: 'Late Filing of Sick Leave! Please explain why at remark field.',
                     type: 'warning'
@@ -362,6 +366,8 @@ const v = new Vue({
             // remark has not been filled when it is filed in advance on SL
             else if (leaveTypeId == "40302" && this.isAdvanceFiled==true && this.remark == "") {
                 yelemError = false;
+
+                $("#remarkSection").show();
 
                 swal ( {
                     title: 'Advance Filing of Sick Leave! Please explain why at remark field.',

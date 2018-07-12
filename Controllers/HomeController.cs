@@ -13,6 +13,21 @@ namespace LeaveModule.Controllers
     {
         GENERALEntities dbGeneral = new GENERALEntities();
 
+        public ActionResult Logout()
+        {
+            try
+            {
+                // strore EIC to session
+                Session["EIC"] = null;
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }
+        }
+
         [HttpPost]
         public ActionResult LoginEIC(string EIC)
         {

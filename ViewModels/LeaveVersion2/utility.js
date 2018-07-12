@@ -1,6 +1,7 @@
 ﻿const businessMoment = require ( "moment-business-days" );
 const moment = require('moment');
 const swal = require('sweetalert2');
+const axios = require ( 'axios' );
 
 const swalWithBootstrapButtons = swal.mixin({
     confirmButtonClass: 'btn btn-success',
@@ -52,6 +53,7 @@ function GetCalendarDays(begin, end) {
 var recommendingOfficerEIC;
 
 $(document).ready(function () {
+
     var selectedEmpEIC;
     var selectedAdvEmpEIC;
 
@@ -347,5 +349,56 @@ $(document).ready(function () {
     $ ( "#btnViewLeaveBalanceForwarded" ).click ( function () {
         window.location.href = "UtilityForwardedLeaveCreditsView";
     });
+
+    $("#yearForfeit").kendoDatePicker(
+        {
+        // defines the start view
+        start: "decade",
+
+        // defines when the calendar should return date
+        depth: "decade",
+
+        // display month and year in the input
+        format: "yyyy",    //"MMMM yyyy"
+
+        // specifies that DateInput is used for masking the input element
+        dateInput: false
+        }
+    );
+
+    $ ( "#btnForfeit" ).click ( function () {
+        let year = $("#yearForfeit").val();
+
+        swal ( {
+            title: 'Continue Forfeit Unused Forced Leaves?',
+            html: `<h1 style='color: teal;'>For Year ${year}</h1>`,
+            type: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Continue',
+            showLoaderOnConfirm: true,
+            preConfirm: (login) => {
+
+                return axios.post ( "../LeaveVersion2/ForfeitUnusedForcedLeave", { year: year } ).then ( response => {
+                    if (response.status !== 200) {
+                        throw new Error ( response.statusText );
+                    }
+                    return response.data;
+                } ).catch ( error => {
+                    swal.showValidationError (
+                        `Request failed: ${error}`
+                    );
+                } );
+
+            },
+            allowOutsideClick: () => !swal.isLoading ()
+        } ).then ( (result) => {
+            swal ( {
+                title: `Result`,
+                html: result.value.msg,
+                type: 'info'
+            } );
+            
+        } );
+    } );
 
 }); // end of - $(document).ready

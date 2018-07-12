@@ -10,6 +10,49 @@ namespace LeaveModule.Controllers
     {
         private HRISEntities db = new HRISEntities();
 
+        public bool CheckIfLeaveValidAgainstDTR(string EIC, DateTime periodFrom, DateTime periodTo)
+        {
+            // returns TRUE if leave is valid for posting
+
+            dynamic list = null;
+            bool isPlantilla = false;
+
+            try
+            {
+                var employee = db.vEmpInformations.SingleOrDefault(r => r.EIC == EIC);
+                if (employee != null)
+                {
+                    if (employee.statusName.Equals("PERMANENT")) isPlantilla = true;
+
+                    if (isPlantilla)
+                    {
+                        var dtr =
+                            db.tAttDTRs.Where(r => r.EIC == EIC && ((periodFrom.Month == r.Month && periodFrom.Year == r.Year) || (periodTo.Month == r.Month && periodTo.Year == r.Year)));
+                        if (dtr.Any())
+                        {
+                            list = dtr.ToList();
+                        }
+                    }
+                    else
+                    {
+                        var dtr = db.tAttDTR2.Where(r => r.EIC == EIC && ((periodFrom >= r.periodFrom && periodFrom <= r.periodTo) || (periodTo >= r.periodFrom && periodTo <= r.periodTo)));
+                        if (dtr.Any())
+                        {
+                            list = dtr.ToList();
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            //return Json(list, JsonRequestBehavior.AllowGet);
+            return list == null;
+        }
+
         public JsonResult GetLeaveCredit(int days)
         {
             // 15Mar2018@0524

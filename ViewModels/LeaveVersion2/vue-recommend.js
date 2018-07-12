@@ -68,55 +68,75 @@ const v = new Vue({
         },
         recommend: function(leave, bolFlag, $this) {
             // 28May2018
+            // 09Jul2018 @ 1635
+            console.log ( leave );
+            axios.post("../LeaveTool/CheckIfLeaveValidAgainstDTR",
+                    {
+                        EIC: leave.EIC, 
+                        periodFrom: moment(leave.periodFrom).format("YYYY-MM-DD"), 
+                        periodTo: moment(leave.periodTo).format("YYYY-MM-DD")
+                    })
+                .then(response => {
+                    if (response.data === "True") {
+                        swalWithBootstrapButtons ( {
+                            title: 'CONFIRM ACTION',
+                            text: "Continue to " + (bolFlag == true ? "RECOMMEND" : "DENY") + " this request?",
+                            type: 'question',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes!',
+                            cancelButtonText: 'No.',
+                            reverseButtons: true
+                        } ).then ( (result) => {
+                            if (result.value) {
+                                $.ajax({
+                                    url: "../LeaveVersion2/OfficeLevelRecommendation",
+                                    type: "POST",
+                                    data: {
+                                        recNo : leave.recNo,
+                                        isRecommended : bolFlag
+                                    },
+                                    error: function (response) {
+                                        console.log(response.responseText);
+                                    },
+                                    success: function (response) {
+                                        if (response == 0) {
+                                            // remove from dialog view
+                                            $this.spliceItemView(leave);
 
-            swalWithBootstrapButtons ( {
-                title: 'CONFIRM ACTION',
-                text: "Continue to " + (bolFlag == true ? "RECOMMEND" : "DENY") + " this request?",
-                type: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Yes!',
-                cancelButtonText: 'No.',
-                reverseButtons: true
-            } ).then ( (result) => {
-                if (result.value) {
-                    $.ajax({
-                        url: "../LeaveVersion2/OfficeLevelRecommendation",
-                        type: "POST",
-                        data: {
-                            recNo : leave.recNo,
-                            isRecommended : bolFlag
-                        },
-                        error: function (response) {
-                            console.log(response.responseText);
-                        },
-                        success: function (response) {
-                            if (response == 0) {
-                                // remove from dialog view
-                                $this.spliceItemView(leave);
-
-                                toast ( {
-                                    title: 'YOU JUST ' +
-                                        (bolFlag == true ? "RECOMMENDED" : "DENIED") +
-                                        ' A LEAVE REQUEST!',
-                                    type: 'info'
-                                } );
+                                            toast ( {
+                                                title: 'YOU JUST ' +
+                                                    (bolFlag == true ? "RECOMMENDED" : "DENIED") +
+                                                    ' A LEAVE REQUEST!',
+                                                type: 'info'
+                                            } );
 
                                                                 
-                            } else {
+                                        } else {
 
-                                swal ( {
-                                    title: response,
-                                    type: 'info'
-                                } );
+                                            swal ( {
+                                                title: response,
+                                                type: 'info'
+                                            } );
 
+                                        }
+                                    }
+                                });
+
+                            } else if ( result.dismiss == swal.DismissReason.cancel ) {
+                                console.log ( 'action is cancelled' );
                             }
-                        }
-                    });
-
-                } else if ( result.dismiss == swal.DismissReason.cancel ) {
-                    console.log ( 'action is cancelled' );
-                }
-            } );
+                        } );
+                    } else {
+                        swal ( {
+                            type: 'info',
+                            title: 'Oops...Leave CANNOT BE RECOMMENDED',
+                            text: 'Because DTR has already been generated! Deny this leave.'
+                        } );
+                    }
+                })
+                .catch(e => {
+                    console.log(e);
+                });
         }
     }
 });

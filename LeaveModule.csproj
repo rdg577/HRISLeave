@@ -171,6 +171,9 @@
     <Compile Include="Models\tAttDTR.cs">
       <DependentUpon>HRISLeave.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tAttDTR2.cs">
+      <DependentUpon>HRISLeave.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tleaveApp.cs">
       <DependentUpon>HRISLeave.tt</DependentUpon>
     </Compile>
@@ -181,6 +184,9 @@
       <DependentUpon>HRISLeave.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tLeaveBalanceForwarded.cs">
+      <DependentUpon>HRISLeave.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tLeaveForfeitureLog.cs">
       <DependentUpon>HRISLeave.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tLeaveInutang.cs">

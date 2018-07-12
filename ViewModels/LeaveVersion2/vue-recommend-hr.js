@@ -68,7 +68,28 @@ const v = new Vue({
         },
         recommendHR: function(item) {
             // 31Jan2018@0958
-            this.itemActiveForRecommendation = item;
+            // 09Jul2018@1457 - modify
+            axios.post("../LeaveTool/CheckIfLeaveValidAgainstDTR",
+                    {
+                        EIC: item.EIC, 
+                        periodFrom: moment(item.periodFrom).format("YYYY-MM-DD"), 
+                        periodTo: moment(item.periodTo).format("YYYY-MM-DD")
+                    })
+                .then(response => {
+                    if (response.data === "True") {
+                        this.itemActiveForRecommendation = item;
+                        $ ( '#leaveRecommendationModal' ).modal ( 'toggle' );
+                    } else {
+                        swal ( {
+                            type: 'info',
+                            title: 'Oops...Leave CANNOT BE POSTED',
+                            text: 'Because DTR has already been generated!!!'
+                        } );
+                    }
+                })
+                .catch(e => {
+                    console.log(e);
+                });
         },
         submitRecommendation: function() {
 
